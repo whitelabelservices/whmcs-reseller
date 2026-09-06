@@ -1,0 +1,28 @@
+{
+    "schema": "1.0",
+    "type": "whmcs-servers",
+    "name": "WhiteLabelServices",
+    "license": "Proprietary",
+    "category": "Server/VPS",
+    "description": {
+        "name": "WhiteLabelServices VPS Module",
+        "tagline": "Complete VPS Service Management",
+        "long": "WhiteLabelServices VPS Module provides complete integration for managing VPS services. Features include automated provisioning, SSO login, admin dashboard with statistics, support ticket management, and pricing synchronization."
+    },
+    "logo": {
+        "filename": "logo.png"
+    },
+    "support": {
+        "homepage": "https://whitelabelservices.us",
+        "learn_more": "https://whitelabelservices.us",
+        "email": "support@whitelabelservices.us",
+        "docs_url": "https://whitelabelservices.us/docs"
+    },
+    "authors": [
+        {
+            "name": "WhiteLabelServices",
+            "homepage": "https://whitelabelservices.us"
+        }
+    ],
+    "version": "1.1.0"
+}

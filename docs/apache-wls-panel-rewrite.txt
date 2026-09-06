@@ -1,0 +1,17 @@
+# =============================================================================
+# WLS Panel — kısa URL (ör. https://alanadiniz.com/wls/)
+# =============================================================================
+# Bu satırları WHMCS kurulumunun KÖK dizinindeki .htaccess dosyasına ekleyin.
+# Konum: RewriteEngine On satırından sonra, WHMCS’in genel "front controller" kuralından ÖNCE.
+#
+# Apache’de mod_rewrite açık olmalı.
+# Modül klasör adı farklıysa "WhiteLabelServices" kısmını kendi dizininizle değiştirin.
+#
+# WLS Panel → Ayarlar: "Kısa URL segmenti" alanına aynı kelimeyi yazın (örn. wls).
+# =============================================================================
+
+RewriteRule ^wls/?$ modules/servers/WhiteLabelServices/admin/index.php [L,QSA]
+RewriteRule ^wls/(.+)$ modules/servers/WhiteLabelServices/admin/$1 [L,QSA]
+
+# Farklı segment kullanmak için hem burada ^wls yerine ^panel gibi yazın
+# hem de WLS Ayarlar’daki segmenti aynı yapın.
