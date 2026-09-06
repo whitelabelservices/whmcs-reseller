@@ -1,7 +1,7 @@
 <?php
-/**
- * WhiteLabelServices Admin — Bağlı Hizmetler (senkron takılan / provisioning kalan WLS hizmetleri)
- */
+ 
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -28,7 +28,7 @@ if (isset($_GET['lang'])) {
 
 $adminBase = '../../../../admin';
 
-// fetch için mutlak URL (iframe / göreli yol / proxy senaryolarında "Request failed" önlemi)
+ 
 $wlsTriggerAjaxUrl = '';
 if (!empty($_SERVER['HTTP_HOST'])) {
     $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')

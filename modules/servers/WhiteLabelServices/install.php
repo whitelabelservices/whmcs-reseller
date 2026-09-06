@@ -7,7 +7,7 @@ if (!defined("WHMCS")) {
 use WHMCS\Database\Capsule;
 require_once __DIR__ . '/lib/TokenManager.php';
 
-// Tablo oluşturma fonksiyonu
+ 
 function WhiteLabelServices_createTokensTable() {
     try {
         if (!Capsule::schema()->hasTable('mod_wls_tokens')) {
@@ -27,7 +27,7 @@ function WhiteLabelServices_createTokensTable() {
     }
 }
 
-// Modül aktivasyon fonksiyonu
+ 
 function WhiteLabelServices_activate() {
     try {
         WLSTokenManager::createTablesIfNotExists();
@@ -43,7 +43,7 @@ function WhiteLabelServices_activate() {
     }
 }
 
-// Modül deaktivasyon fonksiyonu
+ 
 function WhiteLabelServices_deactivate() {
     try {
         if (Capsule::schema()->hasTable('mod_wls_tokens')) {
@@ -64,7 +64,7 @@ function WhiteLabelServices_deactivate() {
     }
 }
 
-// Modül yükseltme fonksiyonu
+ 
 function WhiteLabelServices_upgrade($vars) {
     try {
         WLSTokenManager::createTablesIfNotExists();

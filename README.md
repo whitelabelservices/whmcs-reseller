@@ -93,7 +93,7 @@ RewriteRule ^wls/?$ modules/servers/WhiteLabelServices/admin/index.php [L,QSA]
 RewriteRule ^wls/(.+)$ modules/servers/WhiteLabelServices/admin/$1 [L,QSA]
 ```
 
-Aynı kayıt [`docs/apache-wls-panel-rewrite.txt`](docs/apache-wls-panel-rewrite.txt) dosyasında da bulunur. Farklı bir segment kullanılacaksa hem kurallardaki `wls` değeri hem de WLS Panel ayarlarındaki **Kısa URL segmenti** aynı olmalıdır.
+Aynı kayıt [`docs/apache-wls-panel-rewrite.txt`](docs/apache-wls-panel-rewrite.txt) dosyasında da bulunur. Kuralları değiştirmeden kullanın.
 
 Nginx veya IIS bu `.htaccess` kurallarını kullanmaz; eşdeğer yönlendirme web sunucusu yapılandırmasına ayrıca eklenmelidir.
 

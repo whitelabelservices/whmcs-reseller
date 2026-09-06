@@ -1,10 +1,10 @@
 <?php
-/**
- * WLS Dashboard - Get Statistics
- * AJAX Only - Direct access blocked
- */
+ 
 
-// AJAX güvenlik kontrolü
+
+
+
+ 
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
     http_response_code(403);
     die(json_encode(['status' => 'error', 'message' => 'Direct access not allowed']));
@@ -19,12 +19,12 @@ if ($whmcsRoot === null || !is_file($initPath)) {
     die(json_encode(['status' => 'error', 'message' => 'WHMCS not found']));
 }
 
-// ADMINAREA tanımlamadan yükle
+ 
 require $initPath;
 
 use WHMCS\Database\Capsule;
 
-// Session kontrolü - WHMCS zaten session başlatmış olabilir
+ 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -61,7 +61,7 @@ try {
 
     $apiBaseUrl = WLSTokenManager::getApiBaseUrl();
 
-    // WHMCS Aktif Hizmet
+     
     $whmcsActive = Capsule::table('tblhosting')
         ->join('tblproducts', 'tblhosting.packageid', '=', 'tblproducts.id')
         ->where('tblproducts.servertype', 'WhiteLabelServices')
@@ -74,7 +74,7 @@ try {
     $currency = 'USD';
     $pendingTickets = 0;
 
-    // Kredi ve Borç
+     
     try {
         $balanceData = wls_api_call($apiBaseUrl . '/api/balance', $token);
         if (isset($balanceData['details'])) {
@@ -84,7 +84,7 @@ try {
         }
     } catch (Exception $e) {}
 
-    // Servisler
+     
     try {
         $servicesData = wls_api_call($apiBaseUrl . '/api/service', $token);
         if (isset($servicesData['services'])) {
@@ -94,7 +94,7 @@ try {
         }
     } catch (Exception $e) {}
 
-    // Ticketlar
+     
     try {
         $ticketsData = wls_api_call($apiBaseUrl . '/api/tickets', $token);
         if (isset($ticketsData['tickets'])) {
@@ -104,7 +104,7 @@ try {
         }
     } catch (Exception $e) {}
 
-    // Endpoint URL'i hesapla (https://hostname/clientarea/ formatında)
+     
     $endpointUrl = 'https://' . $server->hostname;
 
     echo json_encode([

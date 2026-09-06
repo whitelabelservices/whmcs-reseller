@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Admin - İptal Yönetimi
- * WLS hizmetine acilan iptal taleplerinin portal API'ye gonderim durumu (mod_wls_cancel_tasks)
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 

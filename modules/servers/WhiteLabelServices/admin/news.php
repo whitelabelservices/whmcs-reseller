@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices News Page
- * Using shared sidebar layout
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -75,7 +75,7 @@ $extraStyles = '
     .empty-state { text-align: center; padding: 60px 20px; color: #64748b; }
     .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #475569; }
     
-    /* Mobile Responsive */
+     
     @media (max-width: 768px) {
         .news-card { margin-bottom: 15px; }
         .news-header { padding: 15px; }

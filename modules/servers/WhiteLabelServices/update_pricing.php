@@ -1,17 +1,17 @@
 ﻿<?php
 
-// WHMCS'yi yükle
+ 
 require_once('../../../init.php');
 require_once('WhiteLabelServices.php');
 
-// Admin yetkisi kontrolü
+ 
 if (!isset($_SESSION['adminid'])) {
     http_response_code(403);
     echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;
 }
 
-// POST kontrolü
+ 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['success' => false, 'error' => 'Method not allowed']);
@@ -26,7 +26,7 @@ try {
         exit;
     }
     
-    // Ürünün WLS ürünü olduğunu kontrol et
+     
     $product = WHMCS\Database\Capsule::table('tblproducts')
         ->where('id', $productId)
         ->where('servertype', 'WhiteLabelServices')
@@ -37,7 +37,7 @@ try {
         exit;
     }
     
-    // Manuel fiyat güncelleme fonksiyonunu çağır
+     
     $result = WhiteLabelServices_ManualPriceUpdate($productId);
     
     if ($result !== false) {

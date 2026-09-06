@@ -1,18 +1,18 @@
 <?php
-/**
- * WhiteLabelServices Admin Dashboard Hook
- * 
- * Uyumluluk: WHMCS 6.x, 7.x, 8.x
- * 
- * Kurulum: includes/hooks/wls_admin_dashboard.php
- */
+ 
+
+
+
+
+
+
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
 }
 
 add_hook('AdminAreaHeaderOutput', 1, function($vars) {
-    // Dil çevirileri
+     
     $lang = [
         'english' => [
             'wls_dashboard' => 'WLS Dashboard',
@@ -37,7 +37,7 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
     $(document).ready(function() {
         var wlsMenuAdded = false;
         
-        // Menu HTML
+
         var wlsMenuHtml = \'<li role="separator" class="divider" style="margin:5px 0;border-top:1px solid rgba(0,0,0,0.1);"></li>\' +
             \'<li class="dropdown-header" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:10px 15px;font-weight:bold;"><i class="fas fa-server fa-fw"></i> ' . addslashes($activeLang['wls_dashboard']) . '</li>\' +
             \'<li><a href="' . $baseLink . 'index.php"><i class="fas fa-tachometer-alt fa-fw"></i> ' . addslashes($activeLang['wls_main_panel']) . '</a></li>\' +
@@ -53,8 +53,8 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
             }
         }
         
-        // ========== WHMCS 8.x (Bootstrap 4/5) ==========
-        // Yöntem 1: Addons menü linkinden parent bul
+
+
         var addonsLink8 = $("a.nav-link:contains(\'Addons\'), a.nav-link:contains(\'Eklentiler\')").first();
         if (addonsLink8.length) {
             var menu8 = addonsLink8.siblings(".dropdown-menu").first();
@@ -63,7 +63,7 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
             addWLSMenu(menu8);
         }
         
-        // Yöntem 2: Apps & Integrations linkinden ul bul
+
         if (!wlsMenuAdded) {
             var appsLink = $("a:contains(\'Apps & Integrations\')").first();
             if (appsLink.length) {
@@ -71,7 +71,7 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
             }
         }
         
-        // ========== WHMCS 7.x (Bootstrap 3) ==========
+
         if (!wlsMenuAdded) {
             $(".navbar-nav > li.dropdown").each(function() {
                 var trigger = $(this).find("> a");
@@ -82,7 +82,7 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
             });
         }
         
-        // ========== WHMCS 6.x (Legacy) ==========
+
         if (!wlsMenuAdded) {
             $("ul.nav > li").each(function() {
                 var link = $(this).find("> a").first();
@@ -94,7 +94,7 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
             });
         }
         
-        // ========== Fallback: Tüm dropdown menüleri tara ==========
+
         if (!wlsMenuAdded) {
             $(".dropdown-menu, ul.dropdown").each(function() {
                 var hasApps = $(this).find("a:contains(\'Apps\'), a:contains(\'Marketplace\')").length > 0;
@@ -104,7 +104,7 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
             });
         }
         
-        // ========== Son Fallback: İlk uygun menüye ekle ==========
+
         if (!wlsMenuAdded) {
             var anyDropdown = $(".navbar .dropdown-menu, .nav .dropdown-menu").first();
             if (anyDropdown.length) {

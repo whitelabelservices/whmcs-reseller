@@ -1,8 +1,8 @@
 <?php
-/**
- * WebSocket relay: browser (noVNC) -> WHMCS -> Proxmox VNC.
- * Requires the web server to pass WebSocket upgrades to PHP (nginx: fastcgi_buffering off).
- */
+ 
+
+
+
 
 chdir(dirname(__DIR__, 4));
 require_once 'init.php';

@@ -1,14 +1,14 @@
 <?php
-/**
- * Embedded noVNC console — server-side Proxmox API, client-side direct WebSocket.
- *
- * Flow:
- * 1. GET portal /api/service/{id} → VM credentials (+ @pve)
- * 2. POST /access/ticket → PVEAuthCookie + CSRF
- * 3. GET  /cluster/resources?type=vm → node
- * 4. POST /nodes/{node}/qemu/{vmid}/vncproxy → vncticket + password
- * 5. Render noVNC page (password sent to RFB, WebSocket → Proxmox)
- */
+ 
+
+
+
+
+
+
+
+
+
 
 $whmcsRoot = dirname(__DIR__, 3);
 if (!is_file($whmcsRoot . DIRECTORY_SEPARATOR . 'init.php')) {

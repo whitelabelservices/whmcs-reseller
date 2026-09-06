@@ -1,9 +1,9 @@
 <?php
-/**
- * WLS Admin — takılı provisioning / senkron için manuel tetik
- * Not: X-Requested-With bazı proxy’lerde silinir; güvenlik admin oturumu ile sağlanır (pricing.php ile aynı yaklaşım).
- * ADMINAREA tanımlanmaz — init bu yoldan yüklendiğinde redirect/ek çıktı riskini azaltır.
- */
+ 
+
+
+
+
 
 require_once dirname(__DIR__) . '/includes/wls_bootstrap.php';
 

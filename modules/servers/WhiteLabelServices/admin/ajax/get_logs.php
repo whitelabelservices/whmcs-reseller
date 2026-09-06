@@ -1,10 +1,10 @@
 <?php
-/**
- * WLS Dashboard - Get Logs
- * AJAX Only
- */
+ 
 
-// AJAX güvenlik kontrolü
+
+
+
+ 
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
     http_response_code(403);
     die(json_encode(['status' => 'error', 'message' => 'Direct access not allowed']));
@@ -23,7 +23,7 @@ require $initPath;
 
 use WHMCS\Database\Capsule;
 
-// Session kontrolü - WHMCS zaten session başlatmış olabilir
+ 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

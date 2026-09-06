@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Notifications Page
- * Using shared sidebar layout
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -104,7 +104,7 @@ $extraStyles = '
     .empty-state { text-align: center; padding: 60px 20px; color: #64748b; }
     .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #475569; }
     
-    /* Modal */
+     
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; }
     .modal-content {
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -126,7 +126,7 @@ $extraStyles = '
     .modal-body .content { line-height: 1.7; color: #94a3b8; }
     .modal-footer { padding: 15px 25px; border-top: 1px solid rgba(255,255,255,0.1); text-align: right; }
     
-    /* Mobile Responsive */
+     
     @media (max-width: 768px) {
         .filter-tabs { flex-wrap: wrap; gap: 8px; }
         .filter-tab { padding: 8px 15px; font-size: 0.85rem; flex: 1; min-width: 100px; text-align: center; justify-content: center; }
@@ -179,7 +179,7 @@ $extraStyles = '
         </div>
     </main>
 
-<!-- Modal -->
+ 
 <div class="modal-overlay" id="notifModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">

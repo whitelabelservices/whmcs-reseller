@@ -6,9 +6,9 @@ if (!defined('WHMCS')) {
 
 use WHMCS\Database\Capsule;
 
-/**
- * Load main module (WLS_debugLog, API helpers, etc.).
- */
+ 
+
+
 function wls_require_module() {
     static $loaded = false;
     if ($loaded) {
@@ -22,11 +22,11 @@ function wls_require_module() {
     $loaded = true;
 }
 
-/**
- * Ensure the current WHMCS client session owns a WLS hosting service.
- *
- * @return object|null mod_wls_vps row (may lack wls_service_id if not provisioned yet)
- */
+ 
+
+
+
+
 function wls_assert_client_owns_wls_service($serviceId) {
     wls_require_module();
     require_once __DIR__ . '/TokenManager.php';
@@ -61,9 +61,9 @@ function wls_assert_client_owns_wls_service($serviceId) {
     return WLSTokenManager::getVPSDetails($serviceId);
 }
 
-/**
- * @param mixed $data API response array
- */
+ 
+
+
 function wls_is_api_auth_error_response($data) {
     if (!function_exists('WhiteLabelServices_IsApiAuthErrorResponse')) {
         wls_require_module();
@@ -71,13 +71,13 @@ function wls_is_api_auth_error_response($data) {
     return WhiteLabelServices_IsApiAuthErrorResponse($data);
 }
 
-/**
- * Refresh API token and retry a callable once when the response indicates auth failure.
- *
- * @param array $apiParams serverid, serverusername, serverpassword
- * @param callable $fetcher function(string $token): mixed
- * @return mixed
- */
+ 
+
+
+
+
+
+
 function wls_api_call_with_token_refresh(array $apiParams, callable $fetcher) {
     wls_require_module();
     $token = WhiteLabelServices_getToken($apiParams);

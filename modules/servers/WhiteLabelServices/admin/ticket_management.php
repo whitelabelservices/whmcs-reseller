@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Admin - Ticket Yönetimi
- * Iliskili WLS hizmetine acilan taleplerin portal API'ye gonderim durumu (mod_wls_ticket_tasks)
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
