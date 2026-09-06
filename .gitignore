@@ -1,0 +1,16 @@
+.env
+.env.*
+*.log
+*.rar
+Thumbs.db
+.DS_Store
+.idea/
+.vscode/
+
+# Yerel/çalışma zamanı çıktıları
+modules/servers/WhiteLabelServices/admin.zip
+modules/servers/WhiteLabelServices/notif.json
+modules/servers/WhiteLabelServices/notif_output.json
+modules/servers/WhiteLabelServices/notif_output.txt
+
+
