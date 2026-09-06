@@ -48,7 +48,7 @@ docs/
 
 `whitelabelservices_loader.php`, WHMCS tarafından hook olarak yüklenir ve sunucu modülündeki `hooks.php` dosyasını çağırır. Bu dosya özellikle `{WHMCS_ROOT}/includes/hooks/` altında kalmalıdır.
 
-## Sunucu bağlantısı
+## Sunucu bağlantısı (bir kez)
 
 1. WHMCS yönetim alanında **System Settings > Servers** bölümünü açın.
 2. Yeni sunucu ekleyin ve modül olarak **WhiteLabelServices** seçin.
@@ -58,14 +58,7 @@ docs/
 
 Gerçek kullanıcı adı, parola, erişim tokenı veya yenileme tokenı kaynak dosyalara ve Git deposuna yazılmamalıdır. Kimlik bilgileri WHMCS sunucu yapılandırması üzerinden sağlanır; API tokenları modül tarafından çalışma zamanında alınır ve yönetilir.
 
-## WHMCS ürünü oluşturma
-
-1. **System Settings > Products/Services** bölümünde bir ürün oluşturun veya mevcut ürünü açın.
-2. **Module Settings** altında modül olarak **WhiteLabelServices** seçin.
-3. İlgili sunucuyu veya sunucu grubunu seçin.
-4. API’den gelen ürünü **API Product** alanından seçin.
-5. Gerekliyse ürün promosyon kodunu tanımlayın; form yapılandırma alanı modül tarafından doldurulur.
-6. Önce test müşterisi ve test siparişiyle oluşturma, askıya alma, yeniden etkinleştirme ve sonlandırma akışlarını doğrulayın.
+Sunucu bağlantısı yalnızca bir kez tanımlanır. Ürünler için ayrıca API adresi, kullanıcı bilgisi veya token girilmez; portal bu bağlantıyı kullanır ve token işlemlerini otomatik yürütür.
 
 ## WLS yönetim paneli
 
@@ -74,6 +67,20 @@ Paket, `modules/addons/wlsportal` altında bir yönetim paneli kısayolu içerir
 1. **System Settings > Addon Modules** bölümünden **WLS Panel** eklentisini etkinleştirin.
 2. Yönetici rollerine eklenti erişim yetkisi verin.
 3. Paneli WHMCS addon sayfasından açın.
+
+## Ürünleri WLS Admin Portal'dan içe aktarma
+
+WHMCS tarafında elle ürün açmanız veya ürünün modül alanlarını tek tek doldurmanız gerekmez.
+
+1. **WLS Admin Portal > Ürün Fiyatlandırma** ekranını açın.
+2. **Eşleşmemiş Ürünler** sekmesine geçin. Portal, WLS API'deki ürünleri otomatik olarak listeler.
+3. Kullanılacak kâr marjını belirleyin.
+4. İçe aktarmak istediğiniz ürünün yanındaki **Ürün Oluştur** düğmesine basın. Bu düğme portal arayüzündeki ürün içe aktarma işlemidir.
+5. Ürünün **Eşleşmiş Ürünler** sekmesine geçtiğini doğrulayın.
+
+İçe aktarma işlemi WHMCS ürününü ve gerekirse `Cloud VPS` ürün grubunu oluşturur; ürünü **WhiteLabelServices** sunucu modülüne ve WLS ürün kimliğine bağlar. Fiyat dönemleri, sunucu grubu bağlantısı ve API'den gelen yapılandırılabilir seçenekler otomatik hazırlanır. Ürün başına manuel API bağlantısı yapılmaz.
+
+İlk içe aktarmadan sonra bir test müşterisi ve test siparişiyle oluşturma, askıya alma, yeniden etkinleştirme ve sonlandırma akışlarını doğrulayın.
 
 ## Apache kısa URL ayarı
 
@@ -93,7 +100,8 @@ Nginx veya IIS bu `.htaccess` kurallarını kullanmaz; eşdeğer yönlendirme we
 ## Kurulum kontrolü
 
 - **Test Connection** başarılı oluyor.
-- WLS API ürünleri WHMCS ürün ayarlarında listeleniyor.
+- WLS API ürünleri **Ürün Fiyatlandırma > Eşleşmemiş Ürünler** altında listeleniyor.
+- İçe aktarılan ürün **Eşleşmiş Ürünler** sekmesine geçiyor ve WHMCS ürün kaydı otomatik oluşuyor.
 - `includes/hooks/whitelabelservices_loader.php` yerinde ve okunabilir.
 - WHMCS cron görevi hatasız tamamlanıyor.
 - Addon modülü yetkili yönetici hesabıyla açılıyor.
@@ -113,5 +121,3 @@ Nginx veya IIS bu `.htaccess` kurallarını kullanmaz; eşdeğer yönlendirme we
 ## Güncelleme
 
 Güncelleme öncesinde dosya ve veritabanı yedeği alın. Yeni `modules` ve `includes` içeriklerini aynı yolları koruyarak yükleyin. Mevcut `.htaccess` dosyanızı paketle değiştirmeyin; gerekiyorsa rewrite bloğunu elle birleştirin. Ardından bağlantı testi ve test siparişi akışını yeniden çalıştırın.
-
-
