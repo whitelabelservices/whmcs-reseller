@@ -6,29 +6,29 @@ if (!defined("WHMCS")) {
 
 use WHMCS\Database\Capsule;
 
-// TokenManager sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±fÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± dahil et
+ 
 if (!class_exists('WLSTokenManager')) {
     require_once __DIR__ . '/lib/TokenManager.php';
 }
 
 
-// Queue result sabitleri - check_vm_status iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemi iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
-define('WLS_RESULT_SUCCESS', 'wls_success');           // ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lem tamamen bitti
-define('WLS_RESULT_RESCHEDULED', 'wls_rescheduled');   // Yeniden zamanlandÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±, task silmeyin
-define('WLS_RESULT_FAILED', 'wls_failed');             // Hata oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tu
+ 
+define('WLS_RESULT_SUCCESS', 'wls_success');            
+define('WLS_RESULT_RESCHEDULED', 'wls_rescheduled');    
+define('WLS_RESULT_FAILED', 'wls_failed');              
 
-// NOT: hooks.php dosyasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± /includes/hooks/ dizininde olmalÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±, modÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼lden dahil edilmemeli
+ 
 
-/**
- * WLS Debug Log Helper
- * Only logs when debug mode is enabled in WLS Admin Settings
- * @param string $message Log message
- * @param bool $force Force log even if debug mode is off (for critical errors)
- */
+ 
+
+
+
+
+
 function WLS_debugLog($message, $force = false) {
     static $debugMode = null;
     
-    // Cache debug mode setting
+     
     if ($debugMode === null) {
         try {
             $setting = Capsule::table('mod_wls_settings')
@@ -40,7 +40,7 @@ function WLS_debugLog($message, $force = false) {
         }
     }
     
-    // Only log if debug mode is enabled or force is true
+     
     if ($debugMode || $force) {
         logActivity("WLS: " . $message);
     }
@@ -63,7 +63,7 @@ function WhiteLabelServices_MetaData()
         'NoSSLOption' => true,
         'NoEditHostname' => false,
         'ServiceFeatures' => array(
-            'changePassword' => false, // Disable Change Password button
+            'changePassword' => false,  
         ),
         'Description' => 'WhiteLabelServices VPS Module provides complete integration for managing VPS services. <br><br><strong>Features:</strong><br>- Service Provisioning<br>- SSO Login<br>- Integrated Admin Dashboard (Statistics, Tickets, Pricing)<br>- API Driven',
         'Author' => 'WhiteLabelServices',
@@ -123,9 +123,9 @@ function WhiteLabelServices_getToken($params, $forceRefresh = false) {
     return WLSTokenManager::getToken($params, $forceRefresh);
 }
 
-/**
- * Build portal clientarea URL with JWT for reseller SSO (HostBill User API pattern).
- */
+ 
+
+
 function WhiteLabelServices_buildPortalSsoRedirectUrl(array $params, $wlsServiceId = null) {
     $token = WLSTokenManager::getToken($params);
     if (!$token) {
@@ -171,14 +171,14 @@ function WhiteLabelServices_AdminSingleSignOn(array $params) {
     }
 }
 
-// API base URL'ini sunucu yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rmasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+ 
 function WhiteLabelServices_getApiBaseUrl($params = null) {
-    // params varsa ve hostname doluysa kullan
+     
     if ($params && !empty($params['serverhostname'])) {
         return 'https://' . $params['serverhostname'];
     }
     
-    // Fallback: veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan aktif sunucuyu al
+     
     try {
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
@@ -192,31 +192,31 @@ function WhiteLabelServices_getApiBaseUrl($params = null) {
         WLS_debugLog("getApiBaseUrl Error: " . $e->getMessage());
     }
     
-    // Son fallback
+     
     return 'https://portal.WLS.com';
 }
 
-// ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n ID'sini seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ilen dropdown deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸erinden ayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±kla
+ 
 function WhiteLabelServices_ExtractProductId($selectedOption) {
-    // BoÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ kontrolÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼
+     
     if (empty($selectedOption)) {
         WLS_debugLog("Debug - ExtractProductId: Empty input");
         return false;
     }
     
-    // Format 1: "ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n AdÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± (123)" formatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+     
     if (preg_match('/\((\d+)\)/', $selectedOption, $matches)) {
         WLS_debugLog("Debug - ExtractProductId found ID from parentheses: " . $matches[1]);
         return $matches[1];
     }
     
-    // Format 2: Sadece sayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± (ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶rn: "12" veya 12)
+     
     if (is_numeric($selectedOption)) {
         WLS_debugLog("Debug - ExtractProductId found numeric ID: " . $selectedOption);
         return intval($selectedOption);
     }
     
-    // Format 3: "ID:123" veya "id:123" formatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+     
     if (preg_match('/id[:\s]*(\d+)/i', $selectedOption, $matches)) {
         WLS_debugLog("Debug - ExtractProductId found ID from prefix: " . $matches[1]);
         return $matches[1];
@@ -226,9 +226,9 @@ function WhiteLabelServices_ExtractProductId($selectedOption) {
     return false;
 }
 
-/**
- * Modul urun ayari semantik anahtarlari — WhiteLabelServices_ConfigOptions() donus dizisi ile ayni sira (configoption1 = ilk alan).
- */
+ 
+
+
 function WhiteLabelServices_ModuleSemanticConfigKeys() {
     return array('wls_api_product', 'wls_promo_code', 'wls_form_config');
 }
@@ -415,9 +415,9 @@ function WhiteLabelServices_ParamsMergeProductConfigOptions($product, array $bas
     return $base;
 }
 
-/**
- * tblhosting ID için modül parametreleri (admin tetikleyicileri, SyncVMFromAPI, vb.).
- */
+ 
+
+
 function WhiteLabelServices_BuildModuleParamsFromHostingId($serviceId) {
     $serviceId = (int) $serviceId;
     if ($serviceId < 1) {
@@ -473,10 +473,10 @@ function WhiteLabelServices_FormConfigStorageColumnName() {
     return $n === null ? 'configoption3' : WhiteLabelServices_ConfigOptionFieldName($n);
 }
 
-// ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rma seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§enekleri - WHMCS Product Module Settings
+ 
 function WhiteLabelServices_ConfigOptions() {
     try {
-        // API'den ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n listesini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -504,7 +504,7 @@ function WhiteLabelServices_ConfigOptions() {
                 WLS_debugLog("ConfigOptions - Token retrieved successfully");
                 $apiBaseUrl = 'https://' . $server->hostname;
                 
-                // Kategorileri ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+                 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $apiBaseUrl . '/api/category');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -526,7 +526,7 @@ function WhiteLabelServices_ConfigOptions() {
                 if ($categories && isset($categories['categories'])) {
                     WLS_debugLog("ConfigOptions - Found " . count($categories['categories']) . " categories");
                     
-                    // Sadece VPS/Cloud kategorilerini slug ile filtrele (dinamik)
+                     
                     $allowedSlugs = ['clouds', 'vps', 'cloud', 'cloud-server', 'cloud-vps'];
                     
                     foreach ($categories['categories'] as $cat) {
@@ -534,12 +534,12 @@ function WhiteLabelServices_ConfigOptions() {
                         $catName = $cat['name'];
                         $catSlug = $cat['slug'] ?? '';
                         
-                        // Sadece izin verilen slug'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+                         
                         if (!in_array($catSlug, $allowedSlugs)) {
                             continue;
                         }
                         
-                        // Her kategori iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼nleri ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+                         
                         $ch2 = curl_init();
                         curl_setopt($ch2, CURLOPT_URL, $apiBaseUrl . '/api/category/' . $catId . '/product');
                         curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
@@ -551,7 +551,7 @@ function WhiteLabelServices_ConfigOptions() {
                         
                         $prodData = json_decode($prodResponse, true);
                         
-                        // FarklÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± API yanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±t formatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kontrol et
+                         
                         $products = [];
                         if ($prodData && isset($prodData['products'])) {
                             $products = $prodData['products'];
@@ -575,10 +575,10 @@ function WhiteLabelServices_ConfigOptions() {
         
         WLS_debugLog("ConfigOptions - Total products found: " . count($options));
         
-        // Dil ayarlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± - WHMCS admin dili al
+         
         $adminLang = $_SESSION['adminlang'] ?? 'english';
         
-        // Multilingual metinler
+         
         $lang = [
             'english' => [
                 'select_product' => 'API Product',
@@ -602,20 +602,20 @@ function WhiteLabelServices_ConfigOptions() {
             ],
         ];
         
-        // VarsayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lan dil English
+         
         $t = $lang['english'];
         if (isset($lang[$adminLang])) {
             $t = $lang[$adminLang];
         }
         
-        // Options boÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸sa varsayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lan mesaj
+         
         if (empty($options)) {
             $options = ['' => $t['no_server']];
         } else {
             $options = ['' => $t['select_placeholder']] + $options;
         }
 
-        // UYARI: Asagidaki alan sirasi WhiteLabelServices_ModuleSemanticConfigKeys() ile ayni kalmali (configoption1,2,3).
+         
         
         return [
             $t['select_product'] => [
@@ -650,9 +650,9 @@ function WhiteLabelServices_ConfigOptions() {
     }
 }
 
-/**
- * GET /api/order/{wlsProductId} — ürün sipariş formu (OS Template items, custom alanları).
- */
+ 
+
+
 function WhiteLabelServices_FetchOrderProductConfig($apiBaseUrl, $token, $wlsProductId) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, rtrim($apiBaseUrl, '/') . '/api/order/' . $wlsProductId);
@@ -747,9 +747,9 @@ function WhiteLabelServices_ResolveOsTemplateItemIdFromForm($form, $customerOsLa
 }
 
 
-/**
- * GET /api/order form satirini generateFieldName() icin sarar (metadata / variable).
- */
+ 
+
+
 function WhiteLabelServices_generateFieldNameFromApiForm($form) {
     if (!is_array($form)) {
         return '';
@@ -767,9 +767,9 @@ function WhiteLabelServices_generateFieldNameFromApiForm($form) {
     return WhiteLabelServices_generateFieldName($sim);
 }
 
-/**
- * tblproducts form JSON satirini (WhiteLabelServices_FormConfigStorageColumnName / legacy tarama) API formu ile ayni yapida sarar.
- */
+ 
+
+
 function WhiteLabelServices_StoredFormConfigToApiFormShape($row) {
     if (!is_array($row)) {
         return array('id' => 0, 'type' => '', 'title' => '', 'metadata' => array());
@@ -792,9 +792,9 @@ function WhiteLabelServices_ConfigOptionKeyExactMatchOrderForm($form, $optionNam
     return ($opt !== '' && $title !== '' && $opt === $title);
 }
 
-/**
- * API basligi ile WHMCS optionname farkli olabilir (or. "Snapshots" vs "Additional Snapshots"); sync sonrasi kopya custom field da configurable ile tutarsiz olabilir.
- */
+ 
+
+
 function WhiteLabelServices_ConfigOptionKeyFuzzyMatchOrderForm($form, $optionName) {
     if (WhiteLabelServices_ConfigOptionKeyExactMatchOrderForm($form, $optionName)) {
         return false;
@@ -836,9 +836,9 @@ function WhiteLabelServices_ConfigOptionKeyMatchesOrderForm($form, $optionName) 
         || WhiteLabelServices_ConfigOptionKeyFuzzyMatchOrderForm($form, $optionName);
 }
 
-/**
- * Slider/qty: once configurable options (faturalanan deger), sonra custom fields. Tam baslik eslesmesi bulaniktan once.
- */
+ 
+
+
 function WhiteLabelServices_CollectOrderFormRawValueCandidates($form, $params) {
     $out = array();
     if (!is_array($params)) {
@@ -886,9 +886,9 @@ function WhiteLabelServices_ParseQuantityFromWhmcsOption($raw) {
     return null;
 }
 
-/**
- * Slider/qty form icin API item id (firstItemId veya tek item).
- */
+ 
+
+
 function WhiteLabelServices_GetOrderFormLineItemId($form) {
     if (!is_array($form)) {
         return '';
@@ -933,9 +933,9 @@ function WhiteLabelServices_ClampOrderFormQty($form, $qty) {
     return $qty;
 }
 
-/**
- * Slider/qty: degerler custom field ve configurable option isimleriyle bulunur (sabit configoption index kullanilmaz).
- */
+ 
+
+
 function WhiteLabelServices_GetQtyForSliderOrQtyForm($form, $params) {
     foreach (WhiteLabelServices_CollectOrderFormRawValueCandidates($form, $params) as $raw) {
         $q = WhiteLabelServices_ParseQuantityFromWhmcsOption($raw);
@@ -946,9 +946,9 @@ function WhiteLabelServices_GetQtyForSliderOrQtyForm($form, $params) {
     return null;
 }
 
-/**
- * @param array|null $productConfig GET /api/order/{id} yaniti (OS form basligi ile configoptions eslemesi icin)
- */
+ 
+
+
 function WhiteLabelServices_GetCustomerOsSelectionLabelForOrder($params, $productConfig = null) {
     if (!empty($params['customfields']) && is_array($params['customfields']) && isset($params['customfields']['os'])) {
         $v = trim((string) $params['customfields']['os']);
@@ -1069,18 +1069,18 @@ function WhiteLabelServices_MergeOrderCustomFromOrderConfig(&$orderPayload, $pro
     }
 }
 
-/**
- * Provision a new VPS service via the WLS API
- * Called when Create button is clicked in WHMCS admin
- * 
- * @param array $params WHMCS service parameters
- * @return string "success" or error message
- */
+ 
+
+
+
+
+
+
 function WhiteLabelServices_CreateAccount(array $params) {
     try {
         WLS_debugLog("CreateAccount - Starting provisioning for service: " . $params['serviceid']);
         
-        // Get API token
+         
         $token = WLSTokenManager::getToken($params);
         if (!$token) {
             throw new Exception("Failed to obtain API token");
@@ -1094,10 +1094,10 @@ function WhiteLabelServices_CreateAccount(array $params) {
         
         WLS_debugLog("CreateAccount - WLS Product ID: " . $wlsProductId);
         
-        // Build API base URL
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         
-        // Get billing cycle in API format
+         
         $cycleMap = [
             'Monthly' => 'm',
             'Quarterly' => 'q',
@@ -1110,7 +1110,7 @@ function WhiteLabelServices_CreateAccount(array $params) {
         ];
         $cycle = $cycleMap[$params['billingcycle']] ?? 'm';
         
-        // Build order payload (product_id + custom OS item id from GET /order response — updates.MD)
+         
         $domainVal = $params['domain'] ?: 'vps-' . $params['serviceid'] . '-' . time();
         $orderPayload = [
             'product_id' => (int) $wlsProductId,
@@ -1137,7 +1137,7 @@ function WhiteLabelServices_CreateAccount(array $params) {
         
         WLS_debugLog("CreateAccount - Order payload: " . json_encode($orderPayload));
         
-        // Make API request with JSON body (not form data)
+         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiBaseUrl . '/api/order/' . $wlsProductId);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -1165,7 +1165,7 @@ function WhiteLabelServices_CreateAccount(array $params) {
         
         $result = json_decode($response, true);
         
-        // Check for API error
+         
         if (isset($result['error'])) {
             $errorMsg = is_array($result['error']) ? json_encode($result['error']) : $result['error'];
             throw new Exception("API Error: " . $errorMsg);
@@ -1175,16 +1175,16 @@ function WhiteLabelServices_CreateAccount(array $params) {
             throw new Exception("Invalid API response - missing items");
         }
         
-        // Extract service ID from response - items can be array or object
+         
         $wlsServiceId = null;
         $items = $result['items'];
         
-        // If items is an object (single item), convert to array format
+         
         if (isset($items['id'])) {
             $items = [$items];
         }
         
-        // Find Hosting type item
+         
         foreach ($items as $item) {
             if (isset($item['type']) && $item['type'] === 'Hosting') {
                 $wlsServiceId = $item['id'];
@@ -1192,7 +1192,7 @@ function WhiteLabelServices_CreateAccount(array $params) {
             }
         }
         
-        // Fallback to first item
+         
         if (!$wlsServiceId && !empty($items)) {
             $firstItem = reset($items);
             $wlsServiceId = $firstItem['id'] ?? null;
@@ -1204,13 +1204,13 @@ function WhiteLabelServices_CreateAccount(array $params) {
         
         WLS_debugLog("CreateAccount - Order created! Order #" . ($result['order_num'] ?? 'N/A') . ", Service ID: " . $wlsServiceId);
 
-        // Service label'i WHMCS HİZMET ID'si ile güncelle
+         
         try {
             if (!empty($params['serviceid'])) {
-                $labelValue = (string) $params['serviceid']; // WHMCS service ID
+                $labelValue = (string) $params['serviceid'];  
                 $labelUrl   = rtrim($apiBaseUrl, '/') . '/api/service/' . $wlsServiceId . '/label?label=' . urlencode($labelValue);
 
-                // Hem query, hem body'de label gönder
+                 
                 $labelResponse = WhiteLabelServices_APIRequest($labelUrl, $token, 'POST', ['label' => $labelValue]);
                 WLS_debugLog("CreateAccount - Service label set to WHMCS service ID: " . $labelValue);
             } else {
@@ -1220,7 +1220,7 @@ function WhiteLabelServices_CreateAccount(array $params) {
             WLS_debugLog("CreateAccount - Failed to set service label: " . $e->getMessage());
         }
         
-        // Save WLS details to mod_wls_vps table
+         
         Capsule::table('mod_wls_vps')->updateOrInsert(
             ['id' => $params['serviceid']],
             [
@@ -1232,17 +1232,17 @@ function WhiteLabelServices_CreateAccount(array $params) {
             ]
         );
         
-        // Update WHMCS service with username
+         
         Capsule::table('tblhosting')
             ->where('id', $params['serviceid'])
             ->update([
                 'username' => 'wls_' . $wlsServiceId,
             ]);
         
-        // Schedule VM status check
+         
         WhiteLabelServices_ScheduleVMCheck($params, $wlsServiceId, $token, $apiBaseUrl);
         
-        // Update order status to Active if order exists
+         
         try {
             $service = Capsule::table('tblhosting')
                 ->where('id', $params['serviceid'])
@@ -1255,7 +1255,7 @@ function WhiteLabelServices_CreateAccount(array $params) {
                 WLS_debugLog("CreateAccount - Order #" . $service->orderid . " marked as Active");
             }
         } catch (Exception $e) {
-            // Order gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncellemesi opsiyonel - hata logla ama iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemi durma
+             
             WLS_debugLog("CreateAccount - Order status update failed: " . $e->getMessage());
         }
         
@@ -1267,17 +1267,17 @@ function WhiteLabelServices_CreateAccount(array $params) {
     }
 }
 
-/**
- * Schedule VM status check - polls service until active, then gets VM details
- */
+ 
+
+
 function WhiteLabelServices_ScheduleVMCheck($params, $wlsServiceId, $token, $apiBaseUrl) {
-    // Add to queue for async processing (will be handled by cron)
+     
     try {
         WhiteLabelServices_AddToQueue('check_vm_status', [
             'service_id' => $params['serviceid'],
             'wls_service_id' => $wlsServiceId,
             'api_base_url' => $apiBaseUrl,
-        ], 1); // Priority 1 = high
+        ], 1);  
         
         WLS_debugLog("- Scheduled VM status check for service: " . $wlsServiceId);
     } catch (Exception $e) {
@@ -1285,14 +1285,14 @@ function WhiteLabelServices_ScheduleVMCheck($params, $wlsServiceId, $token, $api
     }
 }
 
-/**
- * Process queued VM status checks
- * Full workflow:
- * 1. Check service status - wait until Active
- * 2. Get VM list and VM ID
- * 3. Get VM details - wait until built=true and status=running
- * 4. Sync username, password, IP to WHMCS
- */
+ 
+
+
+
+
+
+
+
 function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
     try {
         $token = WLSTokenManager::getToken($params);
@@ -1308,7 +1308,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
         
         WLS_debugLog("VMCheck - Stage: $stage, Retry: $retryCount, WLS Service: $wlsServiceId");
         
-        // Max 60 retries (approx 1 hour if run every minute)
+         
         if ($retryCount >= 60) {
             WLS_debugLog("VMCheck - FAILED after 60 attempts for service: $wlsServiceId", true);
             sendAdminNotification('system', 'WLS Service Provisioning Failed', 
@@ -1319,7 +1319,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             return "Provisioning failed after $retryCount attempts. Please check provider panel.";
         }
         
-        // STAGE 1: Check service status
+         
         if ($stage === 'check_service') {
             $serviceData = WhiteLabelServices_ApiRequestWithTokenRefresh($apiBaseUrl . '/api/service/' . $wlsServiceId, $token, $params);
             
@@ -1333,7 +1333,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             WLS_debugLog("VMCheck - Service status: $status");
             
             if ($status !== 'Active') {
-                // Update queue data for next attempt
+                 
                 if (isset($params['queueid'])) {
                     WLSTokenManager::addQueueData($params['queueid'], array_merge($queueData, [
                         'retry_count' => $retryCount,
@@ -1343,7 +1343,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
                 return WLS_RESULT_RESCHEDULED;
             }
             
-            // Service is Active - activate in WHMCS and move to next stage
+             
             Capsule::table('tblhosting')
                 ->where('id', $whmcsServiceId)
                 ->update([
@@ -1354,17 +1354,17 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             
             WLS_debugLog("VMCheck - Service Active, WHMCS service $whmcsServiceId activated");
             
-            // Move to next stage immediately
+             
             $queueData['stage'] = 'get_vm_id';
             $queueData['retry_count'] = 0;
         }
         
-        // STAGE 2: Get VM ID from VMs list
+         
         if ($stage === 'get_vm_id' || $queueData['stage'] === 'get_vm_id') {
             $vmsData = WhiteLabelServices_ApiRequestWithTokenRefresh($apiBaseUrl . '/api/service/' . $wlsServiceId . '/vms', $token, $params);
             
             if (!$vmsData || !isset($vmsData['vms']) || empty($vmsData['vms'])) {
-                // VM not yet created, update queue and exit
+                 
                 if (isset($params['queueid'])) {
                     WLSTokenManager::addQueueData($params['queueid'], array_merge($queueData, [
                         'retry_count' => $retryCount,
@@ -1374,7 +1374,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
                 return WLS_RESULT_RESCHEDULED;
             }
             
-            // Get first VM's ID
+             
             $firstVm = reset($vmsData['vms']);
             $vmId = $firstVm['vmid'] ?? $firstVm['id'] ?? null;
             
@@ -1384,24 +1384,24 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             
             WLS_debugLog("VMCheck - Found VM ID: $vmId");
             
-            // Move to next stage
+             
             $queueData['wls_vm_id'] = $vmId;
             $queueData['stage'] = 'check_vm_details';
             $queueData['retry_count'] = 0;
         }
         
-        // STAGE 3: Get VM details and wait for built + running
+         
         if ($queueData['stage'] === 'check_vm_details') {
             $vmId = $queueData['wls_vm_id'] ?? null;
             
-            // If VM ID is missing, try to discover it from VMs list
+             
             if (!$vmId) {
                 WLS_debugLog("VMCheck - No VM ID in queue, fetching from VMs API...");
                 
                 $vmsData = WhiteLabelServices_ApiRequestWithTokenRefresh($apiBaseUrl . '/api/service/' . $wlsServiceId . '/vms', $token, $params);
                 
                 if ($vmsData && isset($vmsData['vms']) && !empty($vmsData['vms'])) {
-                    // Get first VM's ID
+                     
                     $firstVmKey = array_key_first($vmsData['vms']);
                     $firstVm = $vmsData['vms'][$firstVmKey];
                     $vmId = $firstVm['id'] ?? $firstVmKey ?? null;
@@ -1409,12 +1409,12 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
                     if ($vmId) {
                         WLS_debugLog("VMCheck - Discovered VM ID: $vmId, saving to database");
                         
-                        // Save VM ID to database
+                         
                         Capsule::table('mod_wls_vps')
                             ->where('id', $whmcsServiceId)
                             ->update(['wls_vm_id' => $vmId]);
                         
-                        // Update queue data
+                         
                         $queueData['wls_vm_id'] = $vmId;
                     }
                 }
@@ -1438,14 +1438,14 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             
             WLS_debugLog("VMCheck - API Response: " . substr(json_encode($vmData), 0, 500));
             
-            // API returns vms[vmId] not vm - handle both formats
+             
             $vm = null;
             if (isset($vmData['vm'])) {
                 $vm = $vmData['vm'];
             } elseif (isset($vmData['vms'][$vmId])) {
                 $vm = $vmData['vms'][$vmId];
             } elseif (isset($vmData['vms']) && is_array($vmData['vms'])) {
-                // Get first VM if exists
+                 
                 $vm = reset($vmData['vms']);
             }
             
@@ -1476,9 +1476,9 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             
             WLS_debugLog("VMCheck - VM $vmId: built=$vmBuilt, status=$vmStatus, locked=$vmLocked");
             
-            // Check if VM is fully ready
+             
             if (!$vmBuilt || $vmStatus !== 'running') {
-                // VM not ready, update queue and exit
+                 
                 if (isset($params['queueid'])) {
                     WLSTokenManager::addQueueData($params['queueid'], array_merge($queueData, [
                         'retry_count' => $retryCount,
@@ -1488,7 +1488,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
                 return WLS_RESULT_RESCHEDULED;
             }
             
-            // VM is ready - extract all details
+             
             $username = $vm['username'] ?? 'root';
             $password = $vm['password'] ?? '';
             $ipv4 = $vm['ipv4'] ?? '';
@@ -1501,7 +1501,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             
             WLS_debugLog("VMCheck - VM Ready! IP: $ipv4, Username: $username");
             
-            // Save VM details to mod_wls_vps table
+             
             Capsule::table('mod_wls_vps')->updateOrInsert(
                 ['id' => $whmcsServiceId],
                 [
@@ -1526,8 +1526,8 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
                 ]
             );
             
-            // Update WHMCS service with VM access info
-            // Use localAPI to properly encrypt the password
+             
+             
             $updateResult = localAPI('UpdateClientProduct', [
                 'serviceid' => $whmcsServiceId,
                 'serviceusername' => $username,
@@ -1538,7 +1538,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
             
             if ($updateResult['result'] !== 'success') {
                 WLS_debugLog("VMCheck - Failed to update service via localAPI: " . ($updateResult['message'] ?? 'Unknown error'));
-                // Fallback to direct update (password won't be encrypted properly but at least data is saved)
+                 
                 Capsule::table('tblhosting')
                     ->where('id', $whmcsServiceId)
                     ->update([
@@ -1558,7 +1558,7 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
     } catch (\Throwable $e) {
         WLS_debugLog("VMCheck ERROR (Service $whmcsServiceId): " . $e->getMessage(), true);
         
-        // Save error reason to queue if possible
+         
         if (isset($params['queueid'])) {
             Capsule::table('tblmodulequeue')
                 ->where('id', $params['queueid'])
@@ -1569,9 +1569,9 @@ function WhiteLabelServices_ProcessVMStatusCheck($params, $queueData) {
     }
 }
 
-/**
- * Ensure $params has serverid / credentials for token refresh (VMCheck cron may only pass serviceid).
- */
+ 
+
+
 function WhiteLabelServices_WlsEnsureApiServerParams(&$params) {
     if (!empty($params['serverid']) && !empty($params['serverusername']) && !empty($params['serverpassword'])) {
         return true;
@@ -1589,9 +1589,9 @@ function WhiteLabelServices_WlsEnsureApiServerParams(&$params) {
     return true;
 }
 
-/**
- * Portal JSON: {"error":["unauthorized"]} or token_expired (HTTP 200 ile de gelebilir).
- */
+ 
+
+
 function WhiteLabelServices_IsApiAuthErrorResponse($decoded) {
     if (!is_array($decoded) || empty($decoded['error'])) {
         return false;
@@ -1612,9 +1612,9 @@ function WhiteLabelServices_IsApiAuthErrorResponse($decoded) {
     return false;
 }
 
-/**
- * API istegi; unauthorized / bos yanit (or. HTTP 401) ise token silinir, login ile yenilenir, bir kez tekrarlanir.
- */
+ 
+
+
 function WhiteLabelServices_ApiRequestWithTokenRefresh($url, &$token, &$params, $method = 'GET', $data = null) {
     $decoded = WhiteLabelServices_APIRequest($url, $token, $method, $data);
     if (WhiteLabelServices_IsApiAuthErrorResponse($decoded)) {
@@ -1641,9 +1641,9 @@ function WhiteLabelServices_ApiRequestWithTokenRefresh($url, &$token, &$params, 
     return $decoded;
 }
 
-/**
- * Helper function for API requests
- */
+ 
+
+
 function WhiteLabelServices_APIRequest($url, $token, $method = 'GET', $data = null, $returnErrorBody = false) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -1667,7 +1667,7 @@ function WhiteLabelServices_APIRequest($url, $token, $method = 'GET', $data = nu
     $curlError = curl_error($ch);
     curl_close($ch);
     
-    // Debug log
+     
     if ($curlError) {
         WLS_debugLog("API Request Error - CURL Error: " . $curlError);
     }
@@ -1686,7 +1686,7 @@ function WhiteLabelServices_APIRequest($url, $token, $method = 'GET', $data = nu
         return null;
     }
     
-    // Log raw response for debugging
+     
     WLS_debugLog("API Request Success - Raw Response (first 500 chars): " . substr($response, 0, 500));
     
     $decoded = json_decode($response, true);
@@ -1697,7 +1697,7 @@ function WhiteLabelServices_APIRequest($url, $token, $method = 'GET', $data = nu
     return $decoded;
 }
 
-// Ana fonksiyon - FormlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸turur
+ 
 function WhiteLabelServices_ApiCall($url, $token, $method = 'GET', $data = null) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -1817,13 +1817,13 @@ function WhiteLabelServices_pveApiRequest($host, $port, $method, $path, $options
     ];
 }
 
-/**
- * Proxmox console flow:
- * 0. GET portal /api/service/{id} → username + password (append @pve to username)
- * 1. POST /api2/json/access/ticket
- * 2. GET  /api2/json/cluster/resources?type=vm  (Cookie: PVEAuthCookie)
- * 3. Redirect to console proxy: ?ticket=&vmid=&node= (nginx sets cookie → Proxmox noVNC)
- */
+ 
+
+
+
+
+
+
 function WhiteLabelServices_ensureConsoleParams(array $params) {
     $serviceId = (int) ($params['serviceid'] ?? 0);
     if ($serviceId > 0 && empty($params['serverpassword'])) {
@@ -1884,10 +1884,10 @@ function WhiteLabelServices_buildProxmoxConsoleUrl($pveHost, $pvePort, $vmid, $n
         . '&resize=off&cmd=';
 }
 
-/**
- * Console proxy redirect (nginx sets PVEAuthCookie, 302 to Proxmox noVNC).
- * ticket must be rawurlencode()'d — ticket value may contain +, =, : etc.
- */
+ 
+
+
+
 function WhiteLabelServices_buildConsoleRedirectUrl($ticket, $vmid, $node) {
     $base = trim(WhiteLabelServices_getModuleSetting(
         'pve_console_redirect_url',
@@ -1945,7 +1945,7 @@ function WhiteLabelServices_prepareVmConsole(array $params) {
     $pveUser = $creds['username'];
     $pvePass = $creds['password'];
 
-    // Step 1 — Login with VM portal credentials, get API ticket + CSRF
+     
     $login = WhiteLabelServices_pveApiRequest($pveHost, $pvePort, 'POST', '/api2/json/access/ticket', [
         'body' => http_build_query(['username' => $pveUser, 'password' => $pvePass]),
         'content_type' => 'application/x-www-form-urlencoded',
@@ -1959,7 +1959,7 @@ function WhiteLabelServices_prepareVmConsole(array $params) {
     $ticket = $login['body']['data']['ticket'];
     $csrf = $login['body']['data']['CSRFPreventionToken'] ?? '';
 
-    // Step 2 — Resolve node for VM (Cookie: PVEAuthCookie={ticket})
+     
     $resources = WhiteLabelServices_pveApiRequest($pveHost, $pvePort, 'GET', '/api2/json/cluster/resources?type=vm', [
         'cookie' => $ticket,
         'csrf' => $csrf,
@@ -2053,7 +2053,7 @@ function WhiteLabelServices_getWhmcsHostname() {
             }
         }
     } catch (Exception $e) {
-        // fall through to request host
+         
     }
 
     if ($host === '') {
@@ -2105,11 +2105,11 @@ function WhiteLabelServices_getVmConsoleUrl(array $params) {
     return WhiteLabelServices_getEmbeddedConsoleUrl($params);
 }
 
-/**
- * Longest common domain suffix of two hostnames (min. 2 labels),
- * usable as a cookie Domain attribute shared by both hosts.
- * Returns null when hosts don't share a registrable parent domain.
- */
+ 
+
+
+
+
 function WhiteLabelServices_sharedCookieDomain($hostA, $hostB) {
     if ($hostA === '' || $hostB === ''
         || filter_var($hostA, FILTER_VALIDATE_IP) || filter_var($hostB, FILTER_VALIDATE_IP)) {
@@ -2143,7 +2143,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
             return;
         }
 
-        // ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n bilgilerini al
+         
         $product = Capsule::table('tblproducts')
             ->where('id', $vars['pid'])
             ->first();
@@ -2153,7 +2153,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
             return;
         }
 
-        // WLS modÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ kontrol et
+         
         if ($product->servertype !== 'WhiteLabelServices') {
             WLS_debugLog("Debug - Product is not WLS type: " . $product->servertype);
             return;
@@ -2177,7 +2177,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
         }
         WLS_debugLog("Debug - Extracted product ID: " . $productId);
 
-        // Sunucu bilgilerini al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -2199,14 +2199,14 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
             $params[$f] = $vars[$f] ?? ($product->{$f} ?? '');
         }
 
-        // API'den token al
+         
         $token = WhiteLabelServices_getToken($params);
         if (!$token) {
             WLS_debugLog("Debug - Failed to get API token");
             return;
         }
 
-        // API'den ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiBaseUrl . "/api/order/" . $productId);
@@ -2244,7 +2244,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
         $forms = $data['product']['config']['forms'];
         WLS_debugLog("Debug - Found " . count($forms) . " forms in API response");
 
-        // ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“nce bu ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ne ait tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼m custom field'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± temizle
+         
         $deletedCount = Capsule::table('tblcustomfields')
             ->where('type', 'product')
             ->where('relid', $vars['pid'])
@@ -2252,15 +2252,15 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
         
         WLS_debugLog("Debug - Deleted " . $deletedCount . " existing custom fields");
 
-        // Form yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rmasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± saklamak iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+         
         $formConfig = [];
         $createdFields = 0;
 
-        // Her form iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in custom field oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+         
         foreach ($forms as $form) {
             WLS_debugLog("Debug - Processing form: " . $form['title'] . " (ID: " . $form['id'] . ", Type: " . $form['type'] . ")");
 
-            // Form yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rmasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sakla (ID'ler dahil) - TÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“M FORMLAR ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°N
+             
             $formConfig[$form['id']] = [
                 'id' => $form['id'],
                 'type' => $form['type'],
@@ -2271,7 +2271,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
                 'items' => []
             ];
 
-            // Form item'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sakla
+             
             if (isset($form['items']) && is_array($form['items'])) {
                 foreach ($form['items'] as $item) {
                     $formConfig[$form['id']]['items'][$item['id']] = [
@@ -2285,7 +2285,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
                 }
             }
 
-            // Form tipine gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶re enable durumunu kontrol et - SADECE CUSTOM FIELD ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°N
+             
             $isEnabled = WhiteLabelServices_isFormEnabled($form, $params);
             
             if (!$isEnabled) {
@@ -2293,7 +2293,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
                 continue;
             }
 
-            // WHMCS custom field oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur - SADECE ENABLE EDÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°LMÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â FORMLAR ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°N
+             
             $fieldData = WhiteLabelServices_createCustomFieldData($form, $vars['pid']);
             
             if ($fieldData) {
@@ -2321,12 +2321,12 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
 
         WLS_debugLog("Debug - Process completed. Created " . $createdFields . " custom fields. Form config saved.");
 
-        // Configurable Options oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur (fiyatlandÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rma iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in)
+         
         $configResult = WhiteLabelServices_CreateConfigurableOptions($vars['pid'], $formConfig);
         if ($configResult) {
             WLS_debugLog("Debug - Configurable options created successfully");
             
-            // FiyatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             WhiteLabelServices_UpdateConfigurableOptionsPricing($vars['pid'], $formConfig);
         } else {
             WLS_debugLog("Debug - Failed to create configurable options");
@@ -2337,7 +2337,7 @@ function WhiteLabelServices_AdminProductConfigFieldsSave($vars) {
     }
 }
 
-// Form'un enable durumunu kontrol et
+ 
 function WhiteLabelServices_isFormEnabled($form, $params) {
     $formType = $form['type'] ?? '';
     $formVariable = $form['metadata']['variable'] ?? '';
@@ -2360,34 +2360,34 @@ function WhiteLabelServices_generateFieldName($form) {
         'snapshot_limit' => 'snapshots',
     ];
     
-    // Variable varsa ve map'te varsa onu kullan
+     
     if (!empty($variable) && isset($variableMap[$variable])) {
         return $variableMap[$variable];
     }
     
-    // Type'a gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶re ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶zel durumlar
+     
     if ($type === 'serverselector') {
         return 'location';
     } elseif ($type === 'multicheckbox') {
         return 'addons';
     }
     
-    // VarsayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lan olarak custom_formid
+     
     return 'custom_' . $form['id'];
 }
 
-// Hook tanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±mlamasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± - DEVRE DIÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚ÂI (ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼nler artÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±k pricing sayfasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸turuluyor)
-// add_hook('AdminProductConfigFieldsSave', 1, function($vars) {
-//     // Sadece ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n kaydetme iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemlerinde ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±n
-//     if (isset($vars['pid']) && !empty($vars['pid'])) {
-//         WhiteLabelServices_AdminProductConfigFieldsSave($vars);
-//     }
-// });
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
-/**
- * TicketOpen: Iliskili hizmet WLS ise mod_wls_ticket_tasks'a Pending ekler. API cagrisi cron (ProcessTicketTasks) ile yapilir.
- * Iliskili hizmet: tbltickets.service "S123" formatinda veya tbltickets.relid (hosting id).
- */
+ 
+
+
+
 function WhiteLabelServices_CreatePortalTicketIfWLS($vars) {
     try {
         $ticketId = (int) (isset($vars['ticketid']) ? $vars['ticketid'] : 0);
@@ -2436,10 +2436,10 @@ function WhiteLabelServices_CreatePortalTicketIfWLS($vars) {
     }
 }
 
-/**
- * CancellationRequest hook: WLS hizmetine iptal talebi acildiysa mod_wls_cancel_tasks'a Pending ekler.
- * Cron (ProcessCancelTasks) ile portal API POST /service/@id/cancel cagrilir.
- */
+ 
+
+
+
 function WhiteLabelServices_AddCancelTaskIfWLS($vars) {
     try {
         $relid = (int) (isset($vars['relid']) ? $vars['relid'] : 0);
@@ -2471,9 +2471,9 @@ function WhiteLabelServices_AddCancelTaskIfWLS($vars) {
     }
 }
 
-/**
- * Cron'dan cagrilir: Pending ticket task'lari portal API'ye gonderir.
- */
+ 
+
+
 function WhiteLabelServices_ProcessTicketTasks() {
     $processed = 0;
     try {
@@ -2580,10 +2580,10 @@ function WhiteLabelServices_ProcessTicketTasks() {
     return $processed;
 }
 
-/**
- * Portal ticket API: JSON body. Cift encode onlenir, body elle birlikte tek JSON string yapilir.
- * Request body: {"dept_id":5,"subject":"...","body":"..."}
- */
+ 
+
+
+
 function WhiteLabelServices_APIRequestTicket($url, $token, $data) {
     if (is_string($data)) {
         $data = json_decode($data, true);
@@ -2626,9 +2626,9 @@ function WhiteLabelServices_APIRequestTicket($url, $token, $data) {
     return is_array($decoded) ? $decoded : null;
 }
 
-/**
- * Cron'dan cagrilir: Pending iptal taleplerini portal API POST /service/@id/cancel ile gonderir.
- */
+ 
+
+
 function WhiteLabelServices_ProcessCancelTasks() {
     $processed = 0;
     try {
@@ -2701,7 +2701,7 @@ function WhiteLabelServices_ProcessCancelTasks() {
     return $processed;
 }
 
-// ClientArea fonksiyonlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± - WHMCS standart formatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nda
+ 
 function WhiteLabelServices_ClientArea($params) {
     $requestedAction = isset($_REQUEST['customAction']) ? $_REQUEST['customAction'] : '';
 
@@ -2710,7 +2710,7 @@ function WhiteLabelServices_ClientArea($params) {
     }
 
     if (isset($_REQUEST['ajax']) && $_REQUEST['ajax'] == 1) {
-        // AJAX iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in output buffering temizle
+         
         while (ob_get_level()) {
             ob_end_clean();
         }
@@ -2736,7 +2736,7 @@ function WhiteLabelServices_ClientArea($params) {
             case 'shutdown':
             case 'reboot':
             case 'reset':
-                // DoÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rudan API'ye istek gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+                 
                 $result = WhiteLabelServices_handleVMAction($params, $requestedAction);
                 if (isset($result['error'])) {
                     $response = ['success' => false, 'error' => $result['error']];
@@ -2751,7 +2751,7 @@ function WhiteLabelServices_ClientArea($params) {
                     $response = ['success' => false, 'error' => 'Template is required'];
                     break;
                 }
-                // DoÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rudan rebuild API ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§aÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+                 
                 $result = WhiteLabelServices_rebuildVM($params, $template);
                 if (isset($result['error'])) {
                     $response = ['success' => false, 'error' => $result['error']];
@@ -2776,7 +2776,7 @@ function WhiteLabelServices_ClientArea($params) {
                 
             case 'updateRDNS':
                 $rdns = $_REQUEST['rdns'] ?? '';
-                $ip = $_REQUEST['ip'] ?? ''; // Specific IP to update
+                $ip = $_REQUEST['ip'] ?? '';  
                 $result = WhiteLabelServices_updateRDNS($params, $rdns, $ip);
                 if (isset($result['error'])) {
                     $response = ['success' => false, 'error' => $result['error']];
@@ -2837,7 +2837,7 @@ function WhiteLabelServices_ClientArea($params) {
                 break;
                 
             case 'syncVMData':
-                // API'den gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncel VM verilerini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek ve DB'yi gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                 
                 $result = WhiteLabelServices_SyncVMFromAPI($params);
                 if (isset($result['error'])) {
                     $response = ['success' => false, 'error' => $result['error']];
@@ -2847,7 +2847,7 @@ function WhiteLabelServices_ClientArea($params) {
                 break;
                 
             case 'getVMStatus':
-                // Always refresh from API (rebuild sonrası storage/interfaces dahil)
+                 
                 WhiteLabelServices_SyncVMFromAPI($params);
 
                 $vpsDetails = Capsule::table('mod_wls_vps')
@@ -2874,17 +2874,17 @@ function WhiteLabelServices_ClientArea($params) {
         die();
     }
     
-    // Normal sayfa yÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼klemesi - WHMCS standart return formatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kullan
+     
     try {
-        // Servis durumunu kontrol et
+         
         $serviceStatus = $params['status'] ?? 'Active';
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± mod_wls_vps tablosundan al
+         
         $vpsDetails = Capsule::table('mod_wls_vps')
             ->where('id', $params['serviceid'])
             ->first();
         
-        // DeÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸kenleri hazÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rla
+         
         $templateVars = [
             'serviceid' => $params['serviceid'],
             'domain' => $params['domain'] ?? '',
@@ -2895,12 +2895,12 @@ function WhiteLabelServices_ClientArea($params) {
         ];
         
         if ($vpsDetails) {
-            // Fetch rDNS value for all IPs
+             
             $rdnsResult = WhiteLabelServices_getRDNS($params);
             $rdnsValue = ($rdnsResult['success'] ?? false) ? ($rdnsResult['rdns'] ?? '') : '';
             $allRdns = ($rdnsResult['success'] ?? false) ? ($rdnsResult['all_rdns'] ?? []) : [];
             
-            // Parse vm_interfaces for detailed IP info (gateway, mask, etc.)
+             
             $networkIps = [];
             $vmInterfaces = json_decode($vpsDetails->vm_interfaces ?? '{}', true);
             if (!empty($vmInterfaces)) {
@@ -2944,7 +2944,7 @@ function WhiteLabelServices_ClientArea($params) {
                 'label' => $params['domain'] ?? '',
             ];
             
-            // WHMCS "Preparing" ekranı: vm_built bayrak bazen API ile senkron kalmaz; VM id + anlamlı durum varsa paneli göster
+             
             $vmStatusStr = (string) ($vpsDetails->vm_status ?? '');
             $statusLower = strtolower($vmStatusStr);
             $transitional = $vmStatusStr === '' || $statusLower === 'unknown'
@@ -2952,7 +2952,7 @@ function WhiteLabelServices_ClientArea($params) {
             $templateVars['showVMDetails'] = !empty($vmStatusStr) && !$transitional
                 && (!empty($vpsDetails->vm_built) || !empty($vpsDetails->wls_vm_id));
             
-            // Templates will be loaded via AJAX when rebuild tab is clicked (performance optimization)
+             
             $templateVars['availableTemplates'] = [];
             $templateVars['osFamilies'] = [];
             $templateVars['linuxFamilies'] = [];
@@ -2965,7 +2965,7 @@ function WhiteLabelServices_ClientArea($params) {
             $templateVars['windowsFamilies'] = [];
         }
         
-        // Iptal talebi bu hizmet icin acilmis mi (Pending veya Completed)
+         
         $templateVars['hasCancelRequest'] = false;
         if (Capsule::schema()->hasTable('mod_wls_cancel_tasks')) {
             $hasCancel = Capsule::table('mod_wls_cancel_tasks')
@@ -2990,11 +2990,11 @@ function WhiteLabelServices_ClientArea($params) {
     }
 }
 
-/**
- * Portal /vms yanitini normalize et (assoc id => vm veya numerik dizi).
- *
- * @return array<int, array>
- */
+ 
+
+
+
+
 function WhiteLabelServices_ParseVmsList($vmsPayload) {
     if (!is_array($vmsPayload)) {
         return [];
@@ -3019,9 +3019,9 @@ function WhiteLabelServices_ParseVmsList($vmsPayload) {
     return $result;
 }
 
-/**
- * /vms listesinden VM id coz (tercihen mevcut kayit).
- */
+ 
+
+
 function WhiteLabelServices_ResolveWlsVmId($vmsPayload, $preferredId = null) {
     $vms = WhiteLabelServices_ParseVmsList($vmsPayload);
     if (empty($vms)) {
@@ -3036,9 +3036,9 @@ function WhiteLabelServices_ResolveWlsVmId($vmsPayload, $preferredId = null) {
     return (int) array_key_first($vms);
 }
 
-/**
- * Detay endpoint storage donmezse disk / additional_storage alanlarindan UI formati uret.
- */
+ 
+
+
 function WhiteLabelServices_BuildStorageFromVm(array $vm) {
     if (isset($vm['storage']) && is_array($vm['storage']) && count($vm['storage']) > 0) {
         return $vm['storage'];
@@ -3082,9 +3082,9 @@ function WhiteLabelServices_BuildStorageFromVm(array $vm) {
     return $disks;
 }
 
-/**
- * wls_vm_id eksikse portal /vms uzerinden bul ve DB'ye yaz.
- */
+ 
+
+
 function WhiteLabelServices_EnsureWlsVmId(array $params, $vpsDetails = null) {
     if (!$vpsDetails) {
         $vpsDetails = Capsule::table('mod_wls_vps')
@@ -3123,9 +3123,9 @@ function WhiteLabelServices_EnsureWlsVmId(array $params, $vpsDetails = null) {
     return $vmId;
 }
 
-/**
- * API VM detay yanitinda VM yok/ silinmis (or. {"error":["VM 30458 not found"]}).
- */
+ 
+
+
 function WhiteLabelServices_ApiPayloadIndicatesVmGone($decoded) {
     if (!is_array($decoded) || empty($decoded['error'])) {
         return false;
@@ -3144,9 +3144,9 @@ function WhiteLabelServices_ApiPayloadIndicatesVmGone($decoded) {
     return false;
 }
 
-/**
- * GET /api/service/{wlsServiceId} ile portal servis durumunu oku; VM yok/iptal ise WHMCS ile esitle.
- */
+ 
+
+
 function WhiteLabelServices_ReconcileWlsServiceFromPortal($whmcsServiceId, $wlsServiceId, $token, $apiBaseUrl = null) {
     try {
         $base = $apiBaseUrl ? rtrim($apiBaseUrl, '/') : rtrim(WhiteLabelServices_getApiBaseUrl(), '/');
@@ -3181,7 +3181,7 @@ function WhiteLabelServices_ReconcileWlsServiceFromPortal($whmcsServiceId, $wlsS
             $vpsUpdate['vm_status'] = 'suspended';
             $hostingStatus = 'Suspended';
         } else {
-            // Portal Active — once /vms ile VM id bul; yalnizca liste bos ise temizle
+             
             $vmsUrl = $base . '/api/service/' . $wlsServiceId . '/vms';
             $vmsData = WhiteLabelServices_APIRequest($vmsUrl, $token, 'GET');
             $discoveredVmId = WhiteLabelServices_ResolveWlsVmId($vmsData);
@@ -3231,10 +3231,10 @@ function WhiteLabelServices_ReconcileWlsServiceFromPortal($whmcsServiceId, $wlsS
     }
 }
 
-// Sync VM data from API - fetch latest VM info and update local database
+ 
 function WhiteLabelServices_SyncVMFromAPI($params) {
     try {
-        // Get token
+         
         $token = WhiteLabelServices_getToken($params);
         if (!$token) {
             return ['error' => 'Could not get API token'];
@@ -3242,7 +3242,7 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         
-        // Get VPS details from local DB
+         
         $vpsDetails = Capsule::table('mod_wls_vps')
             ->where('id', $params['serviceid'])
             ->first();
@@ -3268,7 +3268,7 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
             return ['success' => true, 'reconciled' => 'no_vm_id'];
         }
         
-        // Get VM details from API - Correct endpoint: /api/service/{id}/vms/{vmid}
+         
         $vmUrl = rtrim($apiBaseUrl, '/') . '/api/service/' . $wlsServiceId . '/vms/' . $wlsVmId;
         WLS_debugLog("Sync Debug - API URL: " . $vmUrl);
         WLS_debugLog("Sync Debug - Token: " . substr($token, 0, 20) . "...");
@@ -3284,27 +3284,27 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
             return ['success' => true, 'reconciled' => 'service_endpoint'];
         }
         
-        // Extract VM info - API returns {"vm":{...}} structure
+         
         $vm = $vmData['vm'] ?? $vmData['data'] ?? $vmData;
         
-        // Update local database
+         
         $updateData = [
             'wls_vm_id' => $wlsVmId,
             'updated_at' => date('Y-m-d H:i:s'),
         ];
         
-        // Update fields if available
+         
         if (isset($vm['status'])) {
             $updateData['vm_status'] = $vm['status'];
         }
         if (isset($vm['hostname'])) {
             $updateData['hostname'] = $vm['hostname'];
         }
-        // API returns template_name for OS
+         
         if (isset($vm['template_name'])) {
             $updateData['template'] = $vm['template_name'];
         }
-        // API returns cores or cpus for CPU count
+         
         if (isset($vm['cpus'])) {
             $updateData['cores'] = $vm['cpus'];
         } elseif (isset($vm['cores'])) {
@@ -3366,7 +3366,7 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
 
         $updateData['last_sync'] = date('Y-m-d H:i:s');
         
-        // vm_built: API alanı varsa kullan; yoksa kararlı VM durumlarında WHMCS arayüzünün takılmaması için işaretle
+         
         if (isset($vm['built'])) {
             $updateData['vm_built'] = $vm['built'] ? 1 : 0;
         } elseif (isset($updateData['vm_status'])) {
@@ -3376,12 +3376,12 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
             }
         }
 
-        // Update mod_wls_vps
+         
         Capsule::table('mod_wls_vps')
             ->where('id', $params['serviceid'])
             ->update($updateData);
         
-        // Also update tblhosting for WHMCS display
+         
         $hostingUpdate = [];
         if (isset($updateData['ipv4'])) {
             $hostingUpdate['dedicatedip'] = $updateData['ipv4'];
@@ -3392,7 +3392,7 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
         if (isset($updateData['password'])) {
             $hostingUpdate['password'] = encrypt($updateData['password']);
         }
-        // Sync label/hostname to domain field
+         
         if (isset($vm['label']) && $vm['label'] !== '') {
             $hostingUpdate['domain'] = $vm['label'];
         } elseif (isset($vm['hostname']) && $vm['hostname'] !== '') {
@@ -3415,16 +3415,16 @@ function WhiteLabelServices_SyncVMFromAPI($params) {
     }
 }
 
-// ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rma sayfasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶zel alanlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± hazÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rla
+ 
 function WhiteLabelServices_ConfigureProductAddons($params) {
     try {
-        // Form yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rmasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $formConfig = WhiteLabelServices_DecodeFormConfigFromSource($params);
         if (!$formConfig) {
             return [];
         }
 
-        // ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“zel alan deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸erlerini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $customFields = [];
         $result = Capsule::table('tblcustomfields')
             ->where('type', 'product')
@@ -3458,19 +3458,19 @@ function WhiteLabelServices_SuspendAccount(array $params) {
     try {
         WLS_debugLog("Suspend - Suspending service: " . $params['serviceid']);
         
-        // Token al
+         
         $token = WLSTokenManager::getToken($params);
         if (!$token) {
             throw new Exception("API token alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±namadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±");
         }
 
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
             throw new Exception("Servis bulunamadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±");
         }
 
-        // Suspend API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
             $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiBaseUrl . "/api/service/" . $vpsDetails->wls_service_id . "/vms/" . $vpsDetails->wls_vm_id . "/suspend");
@@ -3497,7 +3497,7 @@ function WhiteLabelServices_SuspendAccount(array $params) {
             throw new Exception("API Error: HTTP " . $httpCode);
         }
 
-        // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WLSTokenManager::updateVPSDetails($params['serviceid'], [
             'status' => 'suspended',
             'vm_status' => 'suspended'
@@ -3516,19 +3516,19 @@ function WhiteLabelServices_UnsuspendAccount(array $params) {
     try {
         WLS_debugLog("Unsuspend - Unsuspending service: " . $params['serviceid']);
         
-        // Token al
+         
         $token = WLSTokenManager::getToken($params);
         if (!$token) {
             throw new Exception("API token alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±namadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±");
         }
 
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
             throw new Exception("Servis bulunamadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±");
         }
 
-        // Unsuspend API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiBaseUrl . "/api/service/" . $vpsDetails->wls_service_id . "/vms/" . $vpsDetails->wls_vm_id . "/unsuspend");
@@ -3555,7 +3555,7 @@ function WhiteLabelServices_UnsuspendAccount(array $params) {
             throw new Exception("API Error: HTTP " . $httpCode);
         }
 
-        // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WLSTokenManager::updateVPSDetails($params['serviceid'], [
             'status' => 'active',
             'vm_status' => 'running'
@@ -3574,21 +3574,21 @@ function WhiteLabelServices_TerminateAccount(array $params) {
     try {
         WLS_debugLog("Terminate - Terminating service: " . $params['serviceid']);
         
-        // Token al
+         
         $token = WLSTokenManager::getToken($params);
         if (!$token) {
             throw new Exception("API token alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±namadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±");
         }
 
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id) {
-            // KayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±t yoksa zaten silinmiÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ demektir
+             
             WLS_debugLog("Terminate - No VPS details found, assuming already terminated");
             return 'success';
         }
 
-        // VM varsa ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nce onu sil
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         if ($vpsDetails->wls_vm_id) {
             $ch = curl_init();
@@ -3607,13 +3607,13 @@ function WhiteLabelServices_TerminateAccount(array $params) {
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
             
-            // 404 hatasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± VM zaten silinmiÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ demektir
+             
             if ($httpCode !== 200 && $httpCode !== 404) {
                 WLS_debugLog("Terminate - VM deletion returned HTTP " . $httpCode);
             }
         }
 
-        // Servisi iptal et
+         
         $payload = [
             'immediate' => true,
             'reason' => 'Service terminated via WHMCS'
@@ -3641,12 +3641,12 @@ function WhiteLabelServices_TerminateAccount(array $params) {
         
         curl_close($ch);
         
-        // 404 veya 200 kabul edilebilir
+         
         if ($httpCode !== 200 && $httpCode !== 404) {
             throw new Exception("API Error: HTTP " . $httpCode);
         }
 
-        // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan VM kaydÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sil
+         
         WLSTokenManager::deleteVPSDetails($params['serviceid']);
 
         WLS_debugLog("Terminate - Service terminated successfully: " . $params['serviceid']);
@@ -3662,7 +3662,7 @@ function WhiteLabelServices_ChangePassword(array $params) {
     try {
         WLS_debugLog("Debug - ChangePassword called for service: " . $params['serviceid']);
         
-        // TODO: WLS API'sine ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ifre deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tirme isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         return 'success';
         
     } catch (Exception $e) {
@@ -3671,10 +3671,10 @@ function WhiteLabelServices_ChangePassword(array $params) {
     }
 }
 
-/**
- * Change Package / Upgrade - WHMCS paket degisikligi veya yukseltme istediginde cagrilir.
- * mod_wls_upgrade_tasks tablosuna kayit eklenir; cron ProcessUpgradeTasks ile portal API'ye gonderilir.
- */
+ 
+
+
+
 function WhiteLabelServices_ChangePackage(array $params) {
     try {
         WLS_debugLog("ChangePackage - Called for service " . ($params['serviceid'] ?? '?'), true);
@@ -3722,16 +3722,16 @@ function WhiteLabelServices_ChangePackage(array $params) {
     }
 }
 
-/**
- * Sync VM Data from API - Admin modÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼l komutu
- * Bu fonksiyon admin panelinden "Yenile" butonuna basÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ldÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nda ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§aÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
- */
+ 
+
+
+
 function WhiteLabelServices_SyncVMData(array $params) {
     try {
         $serviceId = $params['serviceid'];
         WLS_debugLog("Debug - SyncVMData called for service: " . $serviceId);
         
-        // API'den gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncel VM verilerini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $result = WhiteLabelServices_SyncVMFromAPI($params);
         
         if (isset($result['error'])) {
@@ -3752,7 +3752,7 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
     try {
         $serviceId = $params['serviceid'];
         
-        // VM bilgilerini veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $vmInfo = Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->first();
@@ -3763,13 +3763,13 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
             ];
         }
 
-        // VM detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± JSON'dan decode et
+         
         $vmInterfaces = json_decode($vmInfo->vm_interfaces, true) ?: [];
         $vmStorage = json_decode($vmInfo->vm_storage, true) ?: [];
         $vmResources = json_decode($vmInfo->vm_resources, true) ?: [];
         $vmBandwidth = json_decode($vmInfo->vm_bandwidth, true) ?: [];
         
-        // Bandwidth hesapla
+         
         $dataReceivedBytes = isset($vmBandwidth['data_received']) ? intval($vmBandwidth['data_received']) : 0;
         $dataSentBytes = isset($vmBandwidth['data_sent']) ? intval($vmBandwidth['data_sent']) : 0;
         $totalTrafficBytes = $dataReceivedBytes + $dataSentBytes;
@@ -3778,12 +3778,12 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
         $dataSent = formatBytes($dataSentBytes);
         $totalTraffic = formatBytes($totalTrafficBytes);
         
-        // 4TB = 4 * 1024^4 bytes = 4398046511104 bytes
+         
         $trafficLimitBytes = 4398046511104;
         $isOverLimit = $totalTrafficBytes > $trafficLimitBytes;
         $trafficWarning = '';
 
-        // Power durumu iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±f belirle
+         
                 $statusClass = '';
         switch ($vmInfo->vm_status) {
             case 'running':
@@ -3800,7 +3800,7 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
                 $statusClass = 'info';
         }
 
-        // Uptime hesapla
+         
         $uptime = '';
         if (isset($vmResources['uptime'])) {
             $uptimeSeconds = intval($vmResources['uptime']);
@@ -3817,7 +3817,7 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
             $uptime = 'N/A';
         }
 
-        // Username'i iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸letim sistemine gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶re belirle
+         
         $template = strtolower($vmInfo->template ?? '');
         if (strpos($template, 'windows') !== false) {
             $displayUsername = 'administrator';
@@ -3827,14 +3827,14 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
             $displayUsername = 'root';
         }
 
-        // Unique ID'ler oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+         
         $pwdHiddenId = 'pwd-hidden-' . $serviceId;
         $pwdVisibleId = 'pwd-visible-' . $serviceId;
         
-        // HTML ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ktÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+         
         $output = '
         <style>
-            /* Hide Change Password button in Module Commands */
+             
             #btnChange_Password { display: none !important; }
             
             .vm-box {
@@ -4000,7 +4000,7 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
                 return;
             }
             
-            // AJAX request
+             
             WHMCS.http.jqClient.post("addonmodules.php?module=WLS", {
                 action: action,
                 service_id: serviceId,
@@ -4020,18 +4020,18 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
         }
 
         function refreshVMInfo(serviceId) {
-            // Refresh button dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ndÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rmeye baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸la
+             
             var refreshBtn = document.querySelector(".vm-refresh i");
             refreshBtn.className = "fas fa-sync-alt fa-spin";
             
-            // AJAX request
+             
             WHMCS.http.jqClient.post("addonmodules.php?module=WLS", {
                 action: "refresh",
                 service_id: serviceId,
                 token: csrfToken
             }, function(data) {
                 if (data.success) {
-                    // SayfayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± yenile
+                     
                     window.location.reload();
                 } else {
                     alert("Error: " + (data.message || "Unknown error occurred"));
@@ -4052,12 +4052,12 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
             var icon = event.target.tagName === "I" ? event.target : event.target.querySelector("i");
             
             if (visiblePwd.style.display === "none") {
-                // Show password
+                 
                 hiddenPwd.style.display = "none";
                 visiblePwd.style.display = "inline";
                 icon.className = "fas fa-eye-slash";
             } else {
-                // Hide password
+                 
                 hiddenPwd.style.display = "inline";
                 visiblePwd.style.display = "none";
                 icon.className = "fas fa-eye";
@@ -4076,29 +4076,29 @@ function WhiteLabelServices_AdminServicesTabFields($params) {
     }
 }
 
-// WHMCS Configurable Options oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+ 
 function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
     try {
         WLS_debugLog("Debug - Creating configurable options for product: " . $productId);
         
-        // ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“nce mevcut configurable options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± temizle
+         
         $existingLinks = Capsule::table('tblproductconfiglinks')
             ->where('pid', $productId)
             ->get();
             
         foreach ($existingLinks as $link) {
-            // Options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sil
+             
             $options = Capsule::table('tblproductconfigoptions')
                 ->where('gid', $link->gid)
                 ->get();
                 
             foreach ($options as $option) {
-                // Sub options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sil
+                 
                 Capsule::table('tblproductconfigoptionssub')
                     ->where('configid', $option->id)
                     ->delete();
                     
-                // Pricing'leri sil
+                 
                 Capsule::table('tblpricing')
                     ->where('type', 'configoptions')
                     ->whereIn('relid', function($query) use ($option) {
@@ -4109,18 +4109,18 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                     ->delete();
             }
             
-            // Options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sil
+             
             Capsule::table('tblproductconfigoptions')
                 ->where('gid', $link->gid)
                 ->delete();
         }
         
-        // Links'leri sil
+         
         Capsule::table('tblproductconfiglinks')
             ->where('pid', $productId)
             ->delete();
             
-        // Groups'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sil (eÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ka ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼nle baÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸lantÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± yoksa)
+         
         foreach ($existingLinks as $link) {
             $otherLinks = Capsule::table('tblproductconfiglinks')
                 ->where('gid', $link->gid)
@@ -4138,7 +4138,7 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
         $groupOrder = 1;
         
         foreach ($formConfig as $formId => $form) {
-            // Sadece ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼cretli seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§enekleri olan formlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+             
             $hasPaidOptions = false;
             if (isset($form['items'])) {
                 foreach ($form['items'] as $item) {
@@ -4150,18 +4150,18 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
             }
             
             if (!$hasPaidOptions) {
-                continue; // ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“cretsiz formlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± atla
+                continue;  
             }
             
             WLS_debugLog("Debug - Processing paid form for configurable options: " . $form['title']);
 
-            // Configurable Option Group oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+             
             $groupId = Capsule::table('tblproductconfiggroups')->insertGetId([
                 'name' => $form['title'],
                 'description' => $form['title']
             ]);
             
-            // ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n ile grubu baÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸la
+             
             Capsule::table('tblproductconfiglinks')->insert([
                 'gid' => $groupId,
                 'pid' => $productId
@@ -4176,11 +4176,11 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                 $qtyMin = 1;
             }
 
-            // Configurable Option oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+             
             $optionId = Capsule::table('tblproductconfigoptions')->insertGetId([
                 'gid' => $groupId,
                 'optionname' => $form['title'],
-                'optiontype' => 1, // Dropdown
+                'optiontype' => 1,  
                 'qtyminimum' => $qtyMin,
                 'qtymaximum' => $qtyMax,
                 'order' => 1,
@@ -4189,23 +4189,23 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
             
             WLS_debugLog("Debug - Created config option: " . $form['title'] . " (ID: " . $optionId . ")");
             
-            // Sub options oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+             
             $subOrder = 1;
             
-            // Form tipine gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶re seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§enekleri oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+             
             switch ($form['type']) {
                 case 'slider':
-                    // IP, Storage, Backup iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+                     
                     if (isset($form['items']) && count($form['items']) > 0) {
-                        $item = reset($form['items']); // ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°lk item'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+                        $item = reset($form['items']);  
                         $unitPrice = $item['unit_price'];
                         
-                        // API'den min/max deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸erlerini al (form config'den)
+                         
                         $min = 0;
                         $max = 10;
                         $step = 1;
                         
-                        // Form variable'a gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶re deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸erleri ayarla
+                         
                         switch ($form['variable']) {
                             case 'ipamlimit':
                                 $min = 1; $max = 3; $unit = ' IP';
@@ -4228,7 +4228,7 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                                 'hidden' => 0
                             ]);
                             
-                            // FiyatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ekle (tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼m para birimleri iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in)
+                             
                             $currencies = Capsule::table('tblcurrencies')->get();
                             foreach ($currencies as $currency) {
                                 Capsule::table('tblpricing')->insert([
@@ -4254,9 +4254,9 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                     break;
                     
                 case 'multicheckbox':
-                    // Server Licenses iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+                     
                     if (isset($form['items'])) {
-                        // None seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§eneÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i
+                         
                         $noneSubId = Capsule::table('tblproductconfigoptionssub')->insertGetId([
                             'configid' => $optionId,
                             'optionname' => 'None',
@@ -4264,7 +4264,7 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                             'hidden' => 0
                         ]);
                         
-                        // None iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼cretsiz fiyat
+                         
                         $currencies = Capsule::table('tblcurrencies')->get();
                         foreach ($currencies as $currency) {
                             Capsule::table('tblpricing')->insert([
@@ -4278,7 +4278,7 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                             ]);
                         }
                         
-                        // Lisans seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§enekleri
+                         
                     foreach ($form['items'] as $item) {
                             $subId = Capsule::table('tblproductconfigoptionssub')->insertGetId([
                                 'configid' => $optionId,
@@ -4287,7 +4287,7 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
                                 'hidden' => 0
                             ]);
                             
-                            // FiyatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ekle
+                             
                             foreach ($currencies as $currency) {
                                 $price = $item['unit_price'];
                                 Capsule::table('tblpricing')->insert([
@@ -4319,12 +4319,12 @@ function WhiteLabelServices_CreateConfigurableOptions($productId, $formConfig) {
     }
 }
 
-// Configurable Options fiyatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+ 
 function WhiteLabelServices_UpdateConfigurableOptionsPricing($productId, $formConfig) {
     try {
         WLS_debugLog("Debug - Updating configurable options pricing for product: " . $productId);
         
-        // Mevcut configurable options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± bul
+         
         $links = Capsule::table('tblproductconfiglinks')
             ->where('pid', $productId)
             ->get();
@@ -4336,7 +4336,7 @@ function WhiteLabelServices_UpdateConfigurableOptionsPricing($productId, $formCo
                 
             if (!$group) continue;
             
-            // Form config'den bu gruba ait form'u bul
+             
             $matchingForm = null;
             foreach ($formConfig as $form) {
                 if ($form['title'] === $group->name) {
@@ -4349,23 +4349,23 @@ function WhiteLabelServices_UpdateConfigurableOptionsPricing($productId, $formCo
             
             WLS_debugLog("Debug - Updating pricing for group: " . $group->name);
             
-            // Bu grubun options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+             
             $options = Capsule::table('tblproductconfigoptions')
                 ->where('gid', $link->gid)
                 ->get();
                 
             foreach ($options as $option) {
-                // Sub options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+                 
                 $subOptions = Capsule::table('tblproductconfigoptionssub')
                     ->where('configid', $option->id)
                     ->get();
                     
                 foreach ($subOptions as $subOption) {
-                    // API'den gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncel fiyatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± hesapla
+                     
                     $newPrice = WhiteLabelServices_CalculateOptionPrice($matchingForm, $subOption->optionname);
                     
                     if ($newPrice !== null) {
-                        // Mevcut fiyatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                         
                         $currencies = Capsule::table('tblcurrencies')->get();
                         foreach ($currencies as $currency) {
                             Capsule::table('tblpricing')
@@ -4397,23 +4397,23 @@ function WhiteLabelServices_UpdateConfigurableOptionsPricing($productId, $formCo
     }
 }
 
-// Option fiyatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± hesapla
+ 
 function WhiteLabelServices_CalculateOptionPrice($form, $optionName) {
     try {
         $formVariable = $form['variable'] ?? '';
         
         switch ($form['type']) {
                 case 'slider':
-                // IP, Storage, Backup iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+                 
                 if (isset($form['items']) && count($form['items']) > 0) {
-                    $item = reset($form['items']); // ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°lk item'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+                    $item = reset($form['items']);  
                     $unitPrice = $item['unit_price'];
                     
-                    // Option name'den sayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±kar
+                     
                     if (preg_match('/(\d+)/', $optionName, $matches)) {
                         $quantity = intval($matches[1]);
                         
-                        // ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“zel durumlar
+                         
                         switch ($formVariable) {
                             case 'ipamlimit':
                                 return ($quantity == 1) ? 0 : $quantity * $unitPrice;
@@ -4426,12 +4426,12 @@ function WhiteLabelServices_CalculateOptionPrice($form, $optionName) {
                     break;
                     
                 case 'multicheckbox':
-                // Server Licenses iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+                 
                 if ($optionName === 'None') {
                     return 0;
                 }
                 
-                // Form items'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan fiyatÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± bul
+                 
                 if (isset($form['items'])) {
                     foreach ($form['items'] as $item) {
                         if (strpos($optionName, $item['title']) !== false) {
@@ -4442,7 +4442,7 @@ function WhiteLabelServices_CalculateOptionPrice($form, $optionName) {
                     break;
             }
 
-        return null; // Fiyat bulunamadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+        return null;  
         
     } catch (Exception $e) {
         WLS_debugLog("Error calculating price: " . $e->getMessage());
@@ -4450,12 +4450,12 @@ function WhiteLabelServices_CalculateOptionPrice($form, $optionName) {
     }
 }
 
-// Gunluk fiyat guncelleme fonksiyonu (DailyCronJob hook: hooks.php)
+ 
 function WhiteLabelServices_DailyPriceUpdate() {
     try {
         WLS_debugLog("Debug - Daily price update started");
         
-        // WLS ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼nlerini bul
+         
         $products = Capsule::table('tblproducts')
             ->where('servertype', 'WhiteLabelServices')
             ->get();
@@ -4480,7 +4480,7 @@ function WhiteLabelServices_DailyPriceUpdate() {
     }
 }
 
-// Tek ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n fiyat gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelleme fonksiyonu (kod tekrarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nler)
+ 
 function WhiteLabelServices_UpdateSingleProductPricing($product) {
     try {
         $formConfig = WhiteLabelServices_DecodeFormConfigFromSource($product);
@@ -4488,7 +4488,7 @@ function WhiteLabelServices_UpdateSingleProductPricing($product) {
             return false;
         }
         
-        // API'den gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncel form verilerini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -4510,7 +4510,7 @@ function WhiteLabelServices_UpdateSingleProductPricing($product) {
             return false;
         }
         
-        // API'den gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncel ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n verilerini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $updatedFormConfig = WLS_FetchProductConfig($apiProductId, $token);
         if (!$updatedFormConfig) return false;
         
@@ -4521,7 +4521,7 @@ function WhiteLabelServices_UpdateSingleProductPricing($product) {
                 $formCol => json_encode($updatedFormConfig),
             ));
             
-        // FiyatlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WhiteLabelServices_UpdateConfigurableOptionsPricing($product->id, $updatedFormConfig);
         
         WLS_debugLog("Debug - Updated pricing for product: " . $product->name . " (ID: " . $product->id . ")");
@@ -4533,7 +4533,7 @@ function WhiteLabelServices_UpdateSingleProductPricing($product) {
     }
 }
 
-// API'den ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼n config'i ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ekme fonksiyonu (kod tekrarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nler)
+ 
 function WhiteLabelServices_FetchProductConfig($productId, $token) {
     try {
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl();
@@ -4545,7 +4545,7 @@ function WhiteLabelServices_FetchProductConfig($productId, $token) {
         ]);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30); // Standart timeout
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);  
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         
         $response = curl_exec($ch);
@@ -4557,7 +4557,7 @@ function WhiteLabelServices_FetchProductConfig($productId, $token) {
         $data = json_decode($response, true);
         if (!$data || !isset($data['product']['config']['forms'])) return false;
         
-        // Form config'i oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+         
         $formConfig = [];
         foreach ($data['product']['config']['forms'] as $form) {
             $formConfig[$form['id']] = [
@@ -4592,9 +4592,9 @@ function WhiteLabelServices_FetchProductConfig($productId, $token) {
     }
 }
 
-/**
- * Map a form/item mapping into portal upgrade "resources" payload shape.
- */
+ 
+
+
 function WhiteLabelServices_ApplyMappingToUpgradeResources(array &$resources, array $mapping, array $formConfig) {
     $formId = (string) ($mapping['form_id'] ?? '');
     $itemId = (string) ($mapping['item_id'] ?? '');
@@ -4629,9 +4629,9 @@ function WhiteLabelServices_ApplyMappingToUpgradeResources(array &$resources, ar
     $resources[$formId] = $itemId;
 }
 
-/**
- * Build portal POST /service/@id/upgrade "resources" from WHMCS hosting params.
- */
+ 
+
+
 function WhiteLabelServices_BuildUpgradeResourcesFromParams(array $params, $packageProductId = null) {
     $source = $params;
     if ($packageProductId) {
@@ -4683,9 +4683,9 @@ function WhiteLabelServices_BuildUpgradeResourcesFromParams(array $params, $pack
     return $resources;
 }
 
-/**
- * Build POST body for portal /api/service/{id}/upgrade from WHMCS service state.
- */
+ 
+
+
 function WhiteLabelServices_BuildServiceUpgradePostData($wlsServiceId, array $serviceParams, array $options = []) {
     $packageProductId = isset($options['package_product_id']) ? (int) $options['package_product_id'] : 0;
     $billingCycle = $options['billing_cycle'] ?? ($serviceParams['billingcycle'] ?? '');
@@ -4720,7 +4720,7 @@ function WhiteLabelServices_BuildServiceUpgradePostData($wlsServiceId, array $se
     return $postData;
 }
 
-// Manuel fiyat guncelleme fonksiyonu (AfterCronJob hook: hooks.php)
+ 
 function WhiteLabelServices_ProcessUpdateTasks() {
     try {
         WLSTokenManager::ensureTablesExist();
@@ -4810,9 +4810,9 @@ function WhiteLabelServices_ProcessUpdateTasks() {
     }
 }
 
-/**
- * Pending mod_wls_upgrade_tasks kayitlarini isle: portal POST /api/service/@id/upgrade cagir.
- */
+ 
+
+
 function WhiteLabelServices_ProcessUpgradeTasks() {
     try {
         WLSTokenManager::ensureTablesExist();
@@ -4944,13 +4944,13 @@ function WhiteLabelServices_ManualPriceUpdate($productId = null) {
     }
 }
 
-// Custom field mapping (ClientAreaHeadOutput hook: hooks.php)
+ 
 function WhiteLabelServices_MapCustomFieldToItemId($formConfig, $fieldName, $fieldValue) {
     try {
-        // Field name'e gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶re form'u bul
+         
         $targetForm = null;
         foreach ($formConfig as $form) {
-            // Form'u simÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼le et (metadata yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur)
+             
             $simulatedForm = [
                 'id' => $form['id'],
                 'type' => $form['type'],
@@ -4972,10 +4972,10 @@ function WhiteLabelServices_MapCustomFieldToItemId($formConfig, $fieldName, $fie
             return null;
         }
         
-        // Text'i normalize et (boÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸luklarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± temizle)
+         
         $normalizedValue = preg_replace('/[,\s]+/', ' ', trim($fieldValue));
         
-        // Form items'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nda deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸eri ara
+         
         if (isset($targetForm['items'])) {
             foreach ($targetForm['items'] as $item) {
                 $normalizedItemTitle = preg_replace('/[,\s]+/', ' ', trim($item['title']));
@@ -4998,7 +4998,7 @@ function WhiteLabelServices_MapCustomFieldToItemId($formConfig, $fieldName, $fie
     }
 }
 
-// Configurable option deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸erini form item ID'sine dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r
+ 
 function WhiteLabelServices_MapConfigurableOptionToItemId($formConfig, $optionName, $quantity) {
     try {
         $targetForm = null;
@@ -5040,9 +5040,9 @@ function WhiteLabelServices_MapConfigurableOptionToItemId($formConfig, $optionNa
                     break;
                 
             case 'multicheckbox':
-                // Server Licenses iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in - seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ilen lisansÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±n item ID'sini bul
+                 
                 if ($quantity === 'None') {
-                    // None seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§eneÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶zel durum - genelde ilk item
+                     
                     if (isset($targetForm['items']) && count($targetForm['items']) > 0) {
                         $firstItem = reset($targetForm['items']);
                         return [
@@ -5052,7 +5052,7 @@ function WhiteLabelServices_MapConfigurableOptionToItemId($formConfig, $optionNa
                         ];
                     }
                 } else {
-                    // Lisans adÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan item ID'sini bul
+                     
                     if (isset($targetForm['items'])) {
                         foreach ($targetForm['items'] as $item) {
                             if (strpos($quantity, $item['title']) !== false) {
@@ -5077,23 +5077,23 @@ function WhiteLabelServices_MapConfigurableOptionToItemId($formConfig, $optionNa
     }
 }
 
-// WHMCS billing cycle'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± WLS API cycle'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±na dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r
+ 
 function WhiteLabelServices_ConvertBillingCycle($whmcsCycle) {
     $cycleMap = [
         'Monthly' => 'm',
         'Quarterly' => 'q', 
-        'Semi-Annually' => 'q', // 6 aylÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±k iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in quarterly kullan
+        'Semi-Annually' => 'q',  
         'Annually' => 'a',
         'Biennially' => 'b',
         'Triennially' => 't',
-        'Free Account' => 'm', // ÃƒÆ’Ã†â€™Ãƒâ€¦Ã¢â‚¬Å“cretsiz hesaplar iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in monthly
-        'One Time' => 'm' // Tek seferlik iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in monthly
+        'Free Account' => 'm',  
+        'One Time' => 'm'  
     ];
     
-    return $cycleMap[$whmcsCycle] ?? 'm'; // VarsayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lan monthly
+    return $cycleMap[$whmcsCycle] ?? 'm';  
 }
 
-// SipariÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in API payload'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+ 
 function WhiteLabelServices_BuildOrderPayload($params) {
     try {
         WLS_debugLog("Debug - Building order payload for service: " . $params['serviceid']);
@@ -5102,20 +5102,20 @@ function WhiteLabelServices_BuildOrderPayload($params) {
 
         $productId = WhiteLabelServices_ExtractProductId(WhiteLabelServices_ResolveWlsApiProductRaw($params));
         
-        // Temel payload
+         
         $domainVal = !empty($params['domain']) ? $params['domain'] : 'wls-vm-' . time() . '-' . $params['serviceid'];
         $payload = [
             'product_id' => $productId,
             'domain' => $domainVal,
             'hostname' => $domainVal,
             'cycle' => WhiteLabelServices_ConvertBillingCycle($params['billingcycle'] ?? 'monthly'),
-            'pay_method' => '120', // Default payment method
+            'pay_method' => '120',  
             'custom' => []
         ];
         
         $promoCode = WhiteLabelServices_ResolvePromoCodeFromParams($params);
         if ($promoCode === '') {
-            // Ayarlardan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+             
             try {
                 $promoSetting = Capsule::table('mod_wls_settings')
                     ->where('setting_key', 'promo_code')
@@ -5124,7 +5124,7 @@ function WhiteLabelServices_BuildOrderPayload($params) {
                     $promoCode = trim($promoSetting->setting_value);
                 }
             } catch (Exception $e) {
-                // Ayarlar tablosu yoksa sessizce devam et
+                 
             }
         }
         
@@ -5133,13 +5133,13 @@ function WhiteLabelServices_BuildOrderPayload($params) {
             WLS_debugLog("Debug - Promocode added: " . $promoCode);
         }
         
-        // Form yapÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±landÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rmasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± yoksa sadece temel payload ile devam et
+         
         if (!$formConfig) {
             WLS_debugLog("Debug - No form config found, using basic payload");
             return $payload;
         }
         
-        // Custom field'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+         
         if (!empty($params['customfields'])) {
             foreach ($params['customfields'] as $fieldName => $fieldValue) {
                 if (empty($fieldValue)) continue;
@@ -5154,14 +5154,14 @@ function WhiteLabelServices_BuildOrderPayload($params) {
             }
         }
         
-        // Configurable options'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+         
         if (!empty($params['configoptions'])) {
             foreach ($params['configoptions'] as $optionName => $selectedValue) {
                 if (empty($selectedValue) || $selectedValue === 'None') {
-                    continue; // None seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§eneklerini atla
+                    continue;  
                 }
                 
-                // SeÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ilen deÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸erden quantity'yi ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±kar
+                 
                 $quantity = $selectedValue;
                 if (preg_match('/(\d+)/', $selectedValue, $matches)) {
                     $quantity = intval($matches[1]);
@@ -5188,12 +5188,12 @@ function WhiteLabelServices_BuildOrderPayload($params) {
     }
 }
 
-// Arka planda pending sipariÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸leri iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+ 
 function WhiteLabelServices_ProcessPendingOrders() {
     try {
         WLS_debugLog("Debug - Processing pending orders");
         
-        // Pending durumundaki WLS servislerini bul
+         
         $pendingServices = Capsule::table('tblhosting')
             ->where('domainstatus', 'Active')
             ->whereIn('packageid', function($query) {
@@ -5208,15 +5208,15 @@ function WhiteLabelServices_ProcessPendingOrders() {
         $processedCount = 0;
         
         foreach ($pendingServices as $service) {
-            // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+             
             $vpsDetails = WLSTokenManager::getVPSDetails($service->id);
             
-            // Sadece WLS service ID'si olan ama VM'i henÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼z hazÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r olmayan servisleri iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+             
             if ($vpsDetails && $vpsDetails->wls_service_id && 
                 (!$vpsDetails->vm_status || $vpsDetails->vm_status !== 'running' || 
                  !$vpsDetails->vm_built)) {
                 
-                // Token al
+                 
                 $server = Capsule::table('tblservers')
                     ->where('type', 'WhiteLabelServices')
                     ->where('active', '1')
@@ -5233,7 +5233,7 @@ function WhiteLabelServices_ProcessPendingOrders() {
                 $token = WhiteLabelServices_getToken($params);
                 if (!$token) continue;
                 
-                // VM status check task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§aÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
+                 
                 $vmParams = ['serviceid' => $service->id];
                 $vmResult = WhiteLabelServices_check_vm_status($vmParams);
                 if ($vmResult === 'success' || $vmResult === true) {
@@ -5252,29 +5252,29 @@ function WhiteLabelServices_ProcessPendingOrders() {
     }
 }
 
-// WLS servis durumunu kontrol et
+ 
 function WhiteLabelServices_CheckServiceStatus($serviceId, $token) {
     return WLSTokenManager::checkServiceStatus($serviceId, $token);
 }
 
-// WLS VM listesini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+ 
 function WhiteLabelServices_getVMList($serviceId, $token) {
     return WLSTokenManager::getVMList($serviceId, $token);
 }
 
-// WLS VM detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+ 
 function WhiteLabelServices_getVMDetails($whmcsServiceId, $vmId, $token) {
     try {
-        // Debug log ekle
+         
         WLS_debugLog("Debug - Getting VM details for WHMCS Service ID: " . $whmcsServiceId);
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($whmcsServiceId);
         if (!$vpsDetails) {
             throw new Exception("VPS kaydÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± bulunamadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± (WHMCS Service ID: " . $whmcsServiceId . ")");
         }
 
-        // wls_service_id kontrolÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼
+         
         if (!$vpsDetails->wls_service_id) {
             throw new Exception("WLS Service ID bulunamadÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± (WHMCS Service ID: " . $whmcsServiceId . ")");
         }
@@ -5312,23 +5312,23 @@ function WhiteLabelServices_getVMDetails($whmcsServiceId, $vmId, $token) {
     }
 }
 
-// ============ WHMCS MODULE QUEUE SYSTEM ============
+ 
 
-// WHMCS Module Queue'ya task ekle
+ 
 function WhiteLabelServices_AddToQueue($action, $data, $priority = 1, $scheduledAt = null) {
     try {
-        // check_vm_status için WHMCS module queue kullanma (kendi cron döngümüzle yöneteceğiz)
+         
         if ($action === 'check_vm_status') {
             WLS_debugLog("Queue - Skipping WHMCS module queue for check_vm_status, will be handled by custom cron loop");
             return 0;
         }
-        // EÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er scheduledAt verilmiÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸se, last_attempt olarak kullan (WHMCS bu zamanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± geÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ene kadar bekler)
+         
         $lastAttempt = null;
         if ($scheduledAt && $scheduledAt > time()) {
             $lastAttempt = date('Y-m-d H:i:s', $scheduledAt);
         }
         
-        // WHMCS'nin gerÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek module queue sistemini kullan
+         
         $moduleQueueId = Capsule::table('tblmodulequeue')->insertGetId([
             'service_type' => 'hosting',
             'service_id' => $data['service_id'] ?? 0,
@@ -5342,7 +5342,7 @@ function WhiteLabelServices_AddToQueue($action, $data, $priority = 1, $scheduled
             'updated_at' => date('Y-m-d H:i:s')
         ]);
         
-        // Data'yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ayrÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± tabloda sakla (tblhosting.notes yerine)
+         
         WLSTokenManager::addQueueData($moduleQueueId, $data);
         
         WLS_debugLog("Queue - Added task to WHMCS module queue: " . $action . " (ID: " . $moduleQueueId . ")" . ($lastAttempt ? " scheduled for: " . $lastAttempt : ""));
@@ -5354,15 +5354,15 @@ function WhiteLabelServices_AddToQueue($action, $data, $priority = 1, $scheduled
     }
 }
 
-/**
- * WHMCS cron'u üzerinden, module queue KULLANMADAN pending VM durumlarını kontrol et
- * check_vm_status için kendi döngümüz
- */
+ 
+
+
+
 function WhiteLabelServices_ProcessPendingVMChecks() {
     try {
         WLSTokenManager::ensureTablesExist();
 
-        // Sadece WLS ürünü + iptal edilmemiş hosting; aksi halde OR koşulu tüm vm_built=0 satırlarını (gürültü) çekerdi
+         
         $pending = Capsule::table('mod_wls_vps as v')
             ->join('tblhosting as h', 'h.id', '=', 'v.id')
             ->join('tblproducts as p', 'p.id', '=', 'h.packageid')
@@ -5391,10 +5391,10 @@ function WhiteLabelServices_ProcessPendingVMChecks() {
 
             WLS_debugLog("VMCheck Cron - Running check_vm_status for service: " . $serviceId);
 
-            // Sadece serviceid ver, geri kalanını WhiteLabelServices_check_vm_status kendisi dolduruyor
+             
             $result = WhiteLabelServices_check_vm_status(['serviceid' => $serviceId]);
 
-            // Hata almıyorsak processed say
+             
             if ($result === 'success' || stripos((string)$result, 'failed') === false) {
                 $processed++;
             }
@@ -5408,15 +5408,15 @@ function WhiteLabelServices_ProcessPendingVMChecks() {
     }
 }
 
-/**
- * Queue Power Action (start/stop/reboot/shutdown/reset)
- * Client Area'dan gelen power eylemleri WHMCS queue'ya eklenir
- */
+ 
+
+
+
 function WhiteLabelServices_QueuePowerAction($params, $action) {
     try {
         $serviceId = $params['serviceid'];
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kontrol et
+         
         $vpsDetails = Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->first();
@@ -5425,7 +5425,7 @@ function WhiteLabelServices_QueuePowerAction($params, $action) {
             return ['error' => 'VM not provisioned yet'];
         }
         
-        // Queue data hazÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rla
+         
         $queueData = [
             'service_id' => $serviceId,
             'wls_service_id' => $vpsDetails->wls_service_id,
@@ -5435,16 +5435,16 @@ function WhiteLabelServices_QueuePowerAction($params, $action) {
             'requested_by' => 'clientarea'
         ];
         
-        // WHMCS Module Queue'ya ekle
+         
         $queueId = WhiteLabelServices_AddToQueue('power_' . $action, $queueData);
         
         if (!$queueId) {
-            // Queue baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸arÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±z olursa doÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rudan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
+             
             WLS_debugLog("Queue - Failed to queue, executing directly: " . $action);
             return WhiteLabelServices_handleVMAction($params, $action);
         }
         
-        // AyrÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ca anÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nda durum gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle (UI iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in)
+         
         $statusMap = [
             'start' => 'starting',
             'stop' => 'stopping',
@@ -5474,15 +5474,15 @@ function WhiteLabelServices_QueuePowerAction($params, $action) {
     }
 }
 
-/**
- * Queue Rebuild Action
- * VM rebuild iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemi WHMCS queue'ya eklenir
- */
+ 
+
+
+
 function WhiteLabelServices_QueueRebuild($params, $template) {
     try {
         $serviceId = $params['serviceid'];
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kontrol et
+         
         $vpsDetails = Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->first();
@@ -5491,7 +5491,7 @@ function WhiteLabelServices_QueueRebuild($params, $template) {
             return ['error' => 'VM not provisioned yet'];
         }
         
-        // Queue data hazÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rla
+         
         $queueData = [
             'service_id' => $serviceId,
             'wls_service_id' => $vpsDetails->wls_service_id,
@@ -5501,16 +5501,16 @@ function WhiteLabelServices_QueueRebuild($params, $template) {
             'requested_by' => 'clientarea'
         ];
         
-        // WHMCS Module Queue'ya ekle
+         
         $queueId = WhiteLabelServices_AddToQueue('rebuild', $queueData);
         
         if (!$queueId) {
-            // Queue baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸arÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±z olursa doÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rudan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
+             
             WLS_debugLog("Queue - Failed to queue rebuild, executing directly");
             return WhiteLabelServices_rebuildVM($params, $template);
         }
         
-        // Durumu hemen gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->update([
@@ -5534,10 +5534,10 @@ function WhiteLabelServices_QueueRebuild($params, $template) {
     }
 }
 
-// WHMCS Module Queue'dan task'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+ 
 function WhiteLabelServices_ProcessQueue() {
     try {
-        // Cron lock al - duplicate ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸mayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nle
+         
         $cronLockToken = WLSTokenManager::acquireCronLock('wls_queue_process', 120);
         if (!$cronLockToken) {
             WLS_debugLog("Queue - Already running, skipping this execution");
@@ -5546,7 +5546,7 @@ function WhiteLabelServices_ProcessQueue() {
         
         WLS_debugLog("Queue - Processing WHMCS module queue tasks");
         
-        // Pending durumundaki WLS task'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+         
         $tasks = Capsule::table('tblmodulequeue')
             ->where('module_name', 'WhiteLabelServices')
             ->where('completed', 0)
@@ -5565,14 +5565,14 @@ function WhiteLabelServices_ProcessQueue() {
         
         foreach ($tasks as $task) {
             try {
-                // Task iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in lock almaya ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ (atomik)
+                 
                 $taskLockToken = WLSTokenManager::lockQueueData($task->id);
                 if (!$taskLockToken) {
                     WLS_debugLog("Queue - Task " . $task->id . " is locked by another process, skipping");
                     continue;
                 }
                 
-                // Task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± processing olarak iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸aretle
+                 
                 Capsule::table('tblmodulequeue')
                     ->where('id', $task->id)
                     ->update([
@@ -5580,12 +5580,12 @@ function WhiteLabelServices_ProcessQueue() {
                         'updated_at' => date('Y-m-d H:i:s')
                     ]);
                 
-                // Data'yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± yeni tablodan al
+                 
                 $data = WLSTokenManager::getQueueData($task->id, $taskLockToken);
                 
                 if (!$data) {
                     WLS_debugLog("Queue - No data found for task: " . $task->id);
-                    // Task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± failed olarak iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸aretle
+                     
                     Capsule::table('tblmodulequeue')
                         ->where('id', $task->id)
                         ->update([
@@ -5599,13 +5599,13 @@ function WhiteLabelServices_ProcessQueue() {
                 
                 $result = false;
                 
-                // WHMCS Module Queue action'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+                 
                 switch ($task->module_action) {
                     case 'process_order':
                         $result = WhiteLabelServices_ProcessOrderTask($data);
                         break;
                     case 'check_vm_status':
-                        // Get WHMCS service params for API calls
+                         
                         $whmcsServiceId = $data['service_id'] ?? 0;
                         if ($whmcsServiceId) {
                             $service = Capsule::table('tblhosting')->where('id', $whmcsServiceId)->first();
@@ -5613,14 +5613,14 @@ function WhiteLabelServices_ProcessQueue() {
                                 $product = Capsule::table('tblproducts')->where('id', $service->packageid)->first();
                                 $serverParams = [];
                                 if ($product && $product->servertype === 'WhiteLabelServices') {
-                                    // Get active WLS server for credentials
+                                     
                                     $server = Capsule::table('tblservers')
                                         ->where('type', 'WhiteLabelServices')
                                         ->where('active', '1')
                                         ->first();
                                     
                                     if ($server) {
-                                        // Get server params with credentials for token retrieval
+                                         
                                         $serverParams = WhiteLabelServices_ParamsMergeProductConfigOptions($product, array(
                                             'serviceid' => $whmcsServiceId,
                                             'serverid' => $server->id,
@@ -5644,11 +5644,11 @@ function WhiteLabelServices_ProcessQueue() {
                         }
                         break;
                     case 'CreateAccount':
-                        // WHMCS'nin kendi CreateAccount action'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+                         
                         $result = WhiteLabelServices_ProcessOrderTask($data);
                         break;
                     
-                    // Power Actions
+                     
                     case 'power_start':
                     case 'power_stop':
                     case 'power_shutdown':
@@ -5657,14 +5657,14 @@ function WhiteLabelServices_ProcessQueue() {
                         $result = WhiteLabelServices_ProcessPowerActionTask($data);
                         break;
                     
-                    // Rebuild Action
+                     
                     case 'rebuild':
                         $result = WhiteLabelServices_ProcessRebuildTask($data);
                         break;
                         
                     default:
                         WLS_debugLog("Queue - Unknown action: " . $task->module_action);
-                        // Unknown action'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± failed olarak iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸aretle
+                         
                         Capsule::table('tblmodulequeue')
                             ->where('id', $task->id)
                             ->update([
@@ -5676,9 +5676,9 @@ function WhiteLabelServices_ProcessQueue() {
                         break;
                 }
                 
-                // WLS result sabitlerini kontrol et
+                 
                 if ($result === WLS_RESULT_SUCCESS || $result === true) {
-                    // GerÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ekten tamamlandÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± - task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kapat
+                     
                     Capsule::table('tblmodulequeue')
                         ->where('id', $task->id)
                         ->update([
@@ -5686,13 +5686,13 @@ function WhiteLabelServices_ProcessQueue() {
                             'updated_at' => date('Y-m-d H:i:s')
                         ]);
                     
-                    // Queue data'yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± temizle
+                     
                     WLSTokenManager::deleteQueueData($task->id);
                     
                     $processedCount++;
                     WLS_debugLog("Queue - Task completed: " . $task->module_action . " (ID: " . $task->id . ")");
                 } elseif ($result === WLS_RESULT_RESCHEDULED) {
-                    // Yeniden zamanlandÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± - mevcut task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kapat, yeni task zaten oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸turuldu
+                     
                     Capsule::table('tblmodulequeue')
                         ->where('id', $task->id)
                         ->update([
@@ -5701,15 +5701,15 @@ function WhiteLabelServices_ProcessQueue() {
                             'updated_at' => date('Y-m-d H:i:s')
                         ]);
                     
-                    // Queue data'yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± temizle
+                     
                     WLSTokenManager::deleteQueueData($task->id);
                     
                     WLS_debugLog("Queue - Task rescheduled: " . $task->module_action . " (ID: " . $task->id . ")");
                 } else {
-                    // Hata - retry sayÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± artÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
+                     
                     $retryCount = ($task->num_retries ?? 0) + 1;
                     if ($retryCount >= 5) {
-                        // 5 deneme sonrasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± completed olarak iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸aretle (failed)
+                         
                         Capsule::table('tblmodulequeue')
                             ->where('id', $task->id)
                             ->update([
@@ -5721,7 +5721,7 @@ function WhiteLabelServices_ProcessQueue() {
                         WLSTokenManager::deleteQueueData($task->id);
                         WLS_debugLog("Queue - Task failed after 5 retries: " . $task->module_action . " (ID: " . $task->id . ")");
                     } else {
-                        // Tekrar dene - lock'u serbest bÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rak
+                         
                         Capsule::table('mod_wls_queue_data')
                             ->where('queue_id', $task->id)
                             ->update([
@@ -5743,7 +5743,7 @@ function WhiteLabelServices_ProcessQueue() {
             } catch (Exception $e) {
                 WLS_debugLog("Queue Error processing task " . $task->id . ": " . $e->getMessage());
                 
-                // Hata durumunda task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± failed olarak iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸aretle
+                 
                 Capsule::table('tblmodulequeue')
                     ->where('id', $task->id)
                     ->update([
@@ -5755,7 +5755,7 @@ function WhiteLabelServices_ProcessQueue() {
             }
         }
         
-        // Cron lock'u serbest bÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rak
+         
         WLSTokenManager::releaseCronLock('wls_queue_process', $cronLockToken);
         
         WLS_debugLog("Queue - Processed " . $processedCount . " tasks successfully from WHMCS module queue");
@@ -5763,13 +5763,13 @@ function WhiteLabelServices_ProcessQueue() {
         
     } catch (Exception $e) {
         WLS_debugLog("Queue Error: " . $e->getMessage());
-        // Hata durumunda da lock'u serbest bÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rak
+         
         WLSTokenManager::releaseCronLock('wls_queue_process');
         return false;
     }
 }
 
-// SipariÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸leme task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+ 
 function WhiteLabelServices_ProcessOrderTask($data) {
     try {
         $serviceId = $data['service_id'];
@@ -5778,7 +5778,7 @@ function WhiteLabelServices_ProcessOrderTask($data) {
         
         WLS_debugLog("Queue - Processing order for service: " . $serviceId);
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -5801,7 +5801,7 @@ function WhiteLabelServices_ProcessOrderTask($data) {
             return false;
         }
 
-        // API'ye sipariÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiBaseUrl . "/api/order/" . $wlsProductId);
@@ -5826,7 +5826,7 @@ function WhiteLabelServices_ProcessOrderTask($data) {
             curl_close($ch);
             WLS_debugLog("Queue - API Error: " . $error);
             
-            // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             $updateData = [
                 'status' => 'error',
                 'error_message' => $error,
@@ -5844,7 +5844,7 @@ function WhiteLabelServices_ProcessOrderTask($data) {
             $errorMessage = isset($errorData['message']) ? $errorData['message'] : 'Unknown API error';
             WLS_debugLog("Queue - API Error (HTTP " . $httpCode . "): " . $errorMessage);
             
-            // Service notes'u gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             $service = Capsule::table('tblhosting')->where('id', $serviceId)->first();
             if ($service) {
                 $notes = json_decode($service->notes, true);
@@ -5867,7 +5867,7 @@ function WhiteLabelServices_ProcessOrderTask($data) {
             return false;
         }
         
-        // BaÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸arÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± sipariÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ - bilgileri gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         $updateData = [
             'status' => 'completed',
             'order_num' => $orderData['order_num'],
@@ -5877,14 +5877,14 @@ function WhiteLabelServices_ProcessOrderTask($data) {
             'last_check' => date('Y-m-d H:i:s')
         ];
             
-            // WLS service ID'sini kaydet
+             
             if (isset($orderData['items']) && is_array($orderData['items'])) {
                 foreach ($orderData['items'] as $item) {
                     if (isset($item['id'])) {
                     $updateData['wls_service_id'] = $item['id'];
                     $updateData['status'] = 'provisioning';
                 
-                // VM durumu kontrol task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± queue'ya ekle
+                 
                 WhiteLabelServices_AddToQueue('check_vm_status', [
                     'service_id' => $serviceId,
                     'wls_service_id' => $item['id']
@@ -5896,12 +5896,12 @@ function WhiteLabelServices_ProcessOrderTask($data) {
             }
         }
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WLSTokenManager::updateVPSDetails($serviceId, $updateData);
         
         WLS_debugLog("Queue - Order processed successfully for service: " . $serviceId);
         
-        // Admin bilgilendirme
+         
         sendAdminNotification(
             'WLS VM Order Completed',
             'A WLS VM order has been completed successfully.<br>' .
@@ -5920,7 +5920,7 @@ function WhiteLabelServices_ProcessOrderTask($data) {
     }
 }
 
-// VM durumu kontrol task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+ 
 function WhiteLabelServices_CheckVMStatusTask($data) {
     try {
         $serviceId = $data['service_id'];
@@ -5928,7 +5928,7 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
         
         WLS_debugLog("Queue - Checking VM status for service: " . $serviceId);
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -5949,20 +5949,20 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
             return false;
         }
         
-        // Service durumunu kontrol et
+         
         $serviceStatus = WhiteLabelServices_CheckServiceStatus($wlsServiceId, $token);
         if (!$serviceStatus || !isset($serviceStatus['service'])) {
             WLS_debugLog("Queue - Failed to get service status");
             return false;
         }
         
-        // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         $updateData = [
             'status' => $serviceStatus['service']['status'],
             'last_check' => date('Y-m-d H:i:s')
         ];
         
-        // Service Active ise VM'leri kontrol et
+         
         if ($serviceStatus['service']['status'] === 'Active') {
             $vmList = WhiteLabelServices_getVMList($wlsServiceId, $token);
             if ($vmList && isset($vmList['vms']) && !empty($vmList['vms'])) {
@@ -5972,13 +5972,13 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
                     $updateData['vm_built'] = $vm['built'] ? true : false;
                     $updateData['vm_power'] = $vm['power'] ? true : false;
                     
-                    // VM running ve built ise detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+                     
                     if ($vm['status'] === 'running' && $vm['built']) {
                         $vmDetails = WhiteLabelServices_getVMDetails($serviceId, $vmId, $token);
                         if ($vmDetails && isset($vmDetails['vm'])) {
                             $vmData = $vmDetails['vm'];
                             
-                            // VM bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             $updateData['vm_ip'] = $vmData['ipv4'] ?? '';
                             $updateData['vm_username'] = $vmData['username'] ?? '';
                             $updateData['vm_password'] = $vmData['password'] ?? '';
@@ -5989,17 +5989,17 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
                             $updateData['vm_mac'] = $vmData['mac'] ?? '';
                             $updateData['vm_uptime'] = $vmData['uptime'] ?? 0;
                             
-                            // Storage bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             if (isset($vmData['storage']) && is_array($vmData['storage'])) {
                                 $updateData['vm_storage'] = json_encode($vmData['storage']);
                             }
                             
-                            // Network interfaces bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             if (isset($vmData['interfaces']) && is_array($vmData['interfaces'])) {
                                 $updateData['vm_interfaces'] = json_encode($vmData['interfaces']);
                             }
                             
-                            // IP listesini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             if (isset($vmData['ip']) && is_array($vmData['ip'])) {
                                 $allIps = [];
                                 foreach ($vmData['ip'] as $ipId => $ipInfo) {
@@ -6012,7 +6012,7 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
                                 $updateData['vm_all_ips'] = json_encode($allIps);
                             }
                             
-                            // WHMCS servisini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             $hostingData = [];
                             
                             if (!empty($vmData['username'])) {
@@ -6033,12 +6033,12 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
                         }
                     }
                     }
-                    break; // ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°lk VM'i iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ledikten sonra dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ngÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼den ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±k
+                    break;  
                 }
             }
         }
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WLSTokenManager::updateVPSDetails($serviceId, $updateData);
         
         return true;
@@ -6049,10 +6049,10 @@ function WhiteLabelServices_CheckVMStatusTask($data) {
     }
 }
 
-/**
- * Power Action Task Processor
- * Queue'dan power action iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemlerini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
- */
+ 
+
+
+
 function WhiteLabelServices_ProcessPowerActionTask($data) {
     try {
         $serviceId = $data['service_id'];
@@ -6062,7 +6062,7 @@ function WhiteLabelServices_ProcessPowerActionTask($data) {
         
         WLS_debugLog("Queue - Processing power action: " . $action . " for service " . $serviceId);
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -6085,7 +6085,7 @@ function WhiteLabelServices_ProcessPowerActionTask($data) {
             return false;
         }
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($apiParams);
         $apiUrl = $apiBaseUrl . "/api/service/{$wlsServiceId}/vms/{$vmId}/{$action}";
         
@@ -6120,10 +6120,10 @@ function WhiteLabelServices_ProcessPowerActionTask($data) {
         if ($httpCode === 200 && isset($result['status']) && $result['status'] === true) {
             WLS_debugLog("Queue - Power action executed successfully: " . $action);
             
-            // 2 saniye bekle ve durumu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             sleep(2);
             
-            // VM durumunu API'den al ve gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             WhiteLabelServices_CheckVMStatusTask([
                 'service_id' => $serviceId,
                 'wls_service_id' => $wlsServiceId
@@ -6135,7 +6135,7 @@ function WhiteLabelServices_ProcessPowerActionTask($data) {
         $errorMsg = isset($result['error']) ? implode(', ', (array)$result['error']) : 'Unknown error';
         WLS_debugLog("Queue - Power action failed: " . $errorMsg . " (HTTP " . $httpCode . ")");
         
-        // Hata durumunda durumu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->update([
@@ -6151,10 +6151,10 @@ function WhiteLabelServices_ProcessPowerActionTask($data) {
     }
 }
 
-/**
- * Rebuild Task Processor
- * Queue'dan rebuild iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemini ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
- */
+ 
+
+
+
 function WhiteLabelServices_ProcessRebuildTask($data) {
     try {
         $serviceId = $data['service_id'];
@@ -6164,7 +6164,7 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
         
         WLS_debugLog("Queue - Processing rebuild for service " . $serviceId . " with template: " . $template);
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -6187,7 +6187,7 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
             return false;
         }
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($apiParams);
         $apiUrl = $apiBaseUrl . "/api/service/{$wlsServiceId}/vms/{$vmId}/rebuild?template=" . urlencode($template);
         
@@ -6202,7 +6202,7 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
         ]);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 120); // Rebuild uzun sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rebilir
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);  
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         
         $response = curl_exec($ch);
@@ -6222,7 +6222,7 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
         if ($httpCode === 200 || $httpCode === 202) {
             WLS_debugLog("Queue - Rebuild started successfully");
             
-            // Durumu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             Capsule::table('mod_wls_vps')
                 ->where('id', $serviceId)
                 ->update([
@@ -6232,11 +6232,11 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
             
-            // VM durumu kontrolÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in yeni queue ekle
+             
             WhiteLabelServices_AddToQueue('check_vm_status', [
                 'service_id' => $serviceId,
                 'wls_service_id' => $wlsServiceId
-            ], 5); // Normal ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ncelik
+            ], 5);  
             
             return true;
         }
@@ -6244,7 +6244,7 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
         $errorMsg = isset($result['message']) ? $result['message'] : 'Unknown error';
         WLS_debugLog("Queue - Rebuild failed: " . $errorMsg . " (HTTP " . $httpCode . ")");
         
-        // Hata durumunda durumu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->update([
@@ -6260,50 +6260,50 @@ function WhiteLabelServices_ProcessRebuildTask($data) {
     }
 }
 
-/**
- * WHMCS Queue Compatible Module Functions
- * WHMCS queue processor bu fonksiyonlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± doÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸rudan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§aÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
- */
+ 
 
-// Power Start - WHMCS Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+
+
+
+ 
 function WhiteLabelServices_power_start(array $params) {
     WLS_debugLog("Queue - power_start called for service: " . $params['serviceid']);
     return WhiteLabelServices_executePowerAction($params, 'start');
 }
 
-// Power Stop - WHMCS Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+ 
 function WhiteLabelServices_power_stop(array $params) {
     WLS_debugLog("Queue - power_stop called for service: " . $params['serviceid']);
     return WhiteLabelServices_executePowerAction($params, 'stop');
 }
 
-// Power Shutdown - WHMCS Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+ 
 function WhiteLabelServices_power_shutdown(array $params) {
     WLS_debugLog("Queue - power_shutdown called for service: " . $params['serviceid']);
     return WhiteLabelServices_executePowerAction($params, 'shutdown');
 }
 
-// Power Reboot - WHMCS Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+ 
 function WhiteLabelServices_power_reboot(array $params) {
     WLS_debugLog("Queue - power_reboot called for service: " . $params['serviceid']);
     return WhiteLabelServices_executePowerAction($params, 'reboot');
 }
 
-// Power Reset - WHMCS Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+ 
 function WhiteLabelServices_power_reset(array $params) {
     WLS_debugLog("Queue - power_reset called for service: " . $params['serviceid']);
     return WhiteLabelServices_executePowerAction($params, 'reset');
 }
 
-// Rebuild - WHMCS Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in
+ 
 function WhiteLabelServices_rebuild(array $params) {
     WLS_debugLog("Queue - rebuild called for service: " . $params['serviceid']);
     
-    // Queue data'dan template al
+     
     $template = $params['template'] ?? '';
     
     if (empty($template)) {
-        // Service notes'dan template'i al
+         
         $service = Capsule::table('tblhosting')->where('id', $params['serviceid'])->first();
         if ($service) {
             $notes = json_decode($service->notes, true) ?: [];
@@ -6324,15 +6324,15 @@ function WhiteLabelServices_rebuild(array $params) {
     return 'success';
 }
 
-/**
- * Power Action Executor
- * TÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼m power action'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± bu fonksiyon ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼zerinden ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
- */
+ 
+
+
+
 function WhiteLabelServices_executePowerAction($params, $action) {
     try {
         $serviceId = $params['serviceid'];
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+         
         $vpsDetails = Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->first();
@@ -6344,7 +6344,7 @@ function WhiteLabelServices_executePowerAction($params, $action) {
         $wlsServiceId = $vpsDetails->wls_service_id;
         $vmId = $vpsDetails->wls_vm_id;
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -6365,7 +6365,7 @@ function WhiteLabelServices_executePowerAction($params, $action) {
             return 'Failed to get API token';
         }
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($apiParams);
         $apiUrl = $apiBaseUrl . "/api/service/{$wlsServiceId}/vms/{$vmId}/{$action}";
         
@@ -6398,7 +6398,7 @@ function WhiteLabelServices_executePowerAction($params, $action) {
         if ($httpCode === 200 && isset($result['status']) && $result['status'] === true) {
             WLS_debugLog("Queue - Power action {$action} executed successfully for service {$serviceId}");
             
-            // Durumu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             $statusMap = [
                 'start' => 'running',
                 'stop' => 'stopped',
@@ -6426,7 +6426,7 @@ function WhiteLabelServices_executePowerAction($params, $action) {
     }
 }
 
-// WHMCS Admin Custom Buttons - Yeni sistem
+ 
 function WhiteLabelServices_AdminCustomButtonArray() {
     return [
         "Sync VM Data" => "refresh",
@@ -6438,7 +6438,7 @@ function WhiteLabelServices_AdminCustomButtonArray() {
     ];
 }
 
-// Yenile butonu fonksiyonu - action adÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ile aynÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± olmalÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+ 
 function WhiteLabelServices_refresh(array $params) {
     try {
         WLS_debugLog("Refresh - Starting refresh for service: " . $params['serviceid']);
@@ -6504,17 +6504,17 @@ function WhiteLabelServices_refresh(array $params) {
         $updateData['template'] = $vmData['template_name'] ?? '';
         $updateData['mac_address'] = $vmData['mac'] ?? '';
         
-        // Network interfaces bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         if (isset($vmData['interfaces']) && is_array($vmData['interfaces'])) {
             $updateData['vm_interfaces'] = json_encode($vmData['interfaces']);
         }
         
-        // Storage bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         if (isset($vmData['storage']) && is_array($vmData['storage'])) {
             $updateData['vm_storage'] = json_encode($vmData['storage']);
         }
         
-        // Resources bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         $resources = [
             'memory' => $vmData['memory'] ?? '',
             'disk' => intval($vmData['disk'] ?? 0),
@@ -6526,7 +6526,7 @@ function WhiteLabelServices_refresh(array $params) {
         ];
         $updateData['vm_resources'] = json_encode($resources);
         
-        // IP listesini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         if (isset($vmData['ip']) && is_array($vmData['ip'])) {
             $allIps = [];
             foreach ($vmData['ip'] as $ipId => $ipInfo) {
@@ -6539,7 +6539,7 @@ function WhiteLabelServices_refresh(array $params) {
             $updateData['all_ips'] = json_encode($allIps);
         }
         
-        // WHMCS servisini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         $hostingData = [];
         if (!empty($vmData['username'])) {
             $hostingData['username'] = $vmData['username'];
@@ -6558,11 +6558,11 @@ function WhiteLabelServices_refresh(array $params) {
                 ->update($hostingData);
         }
         
-        // Status bilgisini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         $updateData['status'] = 'Active';
         $updateData['service_status'] = 'Active';
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WLSTokenManager::updateVPSDetails($params['serviceid'], $updateData);
         
         return 'success';
@@ -6573,11 +6573,11 @@ function WhiteLabelServices_refresh(array $params) {
     }
 }
 
-// Power Control Functions for Admin Module Commands
+ 
 function WhiteLabelServices_start(array $params) {
     $result = WhiteLabelServices_powerAction($params, 'start');
-    sleep(2); // Wait for VM state to change
-    WhiteLabelServices_refresh($params); // Sync data
+    sleep(2);  
+    WhiteLabelServices_refresh($params);  
     return $result;
 }
 
@@ -6609,18 +6609,18 @@ function WhiteLabelServices_reset(array $params) {
     return $result;
 }
 
-// Generic power action handler
+ 
 function WhiteLabelServices_powerAction(array $params, string $action, bool $isRetry = false) {
     try {
         WLS_debugLog("Power - {$action} for service: " . $params['serviceid'] . ($isRetry ? " (retry)" : ""));
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_vm_id) {
             throw new Exception('VM ID not found');
         }
         
-        // Server bilgilerini al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -6636,7 +6636,7 @@ function WhiteLabelServices_powerAction(array $params, string $action, bool $isR
             'serverpassword' => decrypt($server->password)
         ];
         
-        // If retry, force new token
+         
         if ($isRetry) {
             WLSTokenManager::clearToken($server->id);
         }
@@ -6646,7 +6646,7 @@ function WhiteLabelServices_powerAction(array $params, string $action, bool $isR
             throw new Exception('Failed to get API token');
         }
         
-        // API endpoint - server hostname'den al
+         
         $vmId = $vpsDetails->wls_vm_id;
         $serviceId = $vpsDetails->wls_service_id;
         $apiHost = rtrim($server->hostname, '/');
@@ -6678,14 +6678,14 @@ function WhiteLabelServices_powerAction(array $params, string $action, bool $isR
         curl_close($ch);
         
         if ($curlError) {
-            WLS_debugLog("Power - cURL Error: {$curlError}", true); // Force log errors
+            WLS_debugLog("Power - cURL Error: {$curlError}", true);  
             throw new Exception("Connection error: {$curlError}");
         }
         
         $responseData = json_decode($response, true);
         WLS_debugLog("Power - Response: " . $response);
         
-        // Check for token expired / unauthorized error - retry with fresh token
+         
         if (!$isRetry && isset($responseData['error']) && is_array($responseData['error'])) {
             $errors = $responseData['error'];
             if (in_array('token_expired', $errors) || in_array('unauthorized', $errors)) {
@@ -6694,7 +6694,7 @@ function WhiteLabelServices_powerAction(array $params, string $action, bool $isR
             }
         }
         
-        // API returns {"status": true} on success
+         
         if ($httpCode >= 200 && $httpCode < 300 && isset($responseData['status']) && $responseData['status'] === true) {
             WLS_debugLog("Power - {$action} successful for VM: {$vmId}");
             return 'success';
@@ -6704,23 +6704,23 @@ function WhiteLabelServices_powerAction(array $params, string $action, bool $isR
         }
         
     } catch (Exception $e) {
-        WLS_debugLog("Power Error - {$action}: " . $e->getMessage(), true); // Force log errors
+        WLS_debugLog("Power Error - {$action}: " . $e->getMessage(), true);  
         return $e->getMessage();
     }
 }
 
-// Senkronize Et butonu fonksiyonu
+ 
 function WhiteLabelServices_synchronizeService(array $params) {
     try {
         WLS_debugLog("Sync - Starting synchronization for service: " . $params['serviceid']);
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id) {
             throw new Exception('Service not found');
         }
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -6741,13 +6741,13 @@ function WhiteLabelServices_synchronizeService(array $params) {
             throw new Exception('Failed to get API token');
         }
         
-        // Service durumunu kontrol et
+         
         $serviceStatus = WhiteLabelServices_CheckServiceStatus($vpsDetails->wls_service_id, $token);
         if (!$serviceStatus || !isset($serviceStatus['service'])) {
             throw new Exception('Failed to get service status from WLS API');
         }
         
-        // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         $updateData = [
             'service_status' => $serviceStatus['service']['status'],
             'last_check' => date('Y-m-d H:i:s')
@@ -6756,7 +6756,7 @@ function WhiteLabelServices_synchronizeService(array $params) {
         $syncMessage = 'Service synchronized successfully';
         $vmUpdated = false;
         
-        // Service Active ise VM'leri kontrol et
+         
         if ($serviceStatus['service']['status'] === 'Active') {
             $vmList = WhiteLabelServices_getVMList($vpsDetails->wls_service_id, $token);
             if ($vmList && isset($vmList['vms']) && !empty($vmList['vms'])) {
@@ -6766,7 +6766,7 @@ function WhiteLabelServices_synchronizeService(array $params) {
                     $updateData['vm_built'] = $vm['built'] ? true : false;
                     $updateData['vm_power'] = $vm['power'] ? true : false;
                     
-                    // VM running ve built ise detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+                     
                     if ($vm['status'] === 'running' && $vm['built']) {
                         $vmDetails = WhiteLabelServices_getVMDetails($params['serviceid'], $vmId, $token);
                         if ($vmDetails && isset($vmDetails['vm'])) {
@@ -6782,17 +6782,17 @@ function WhiteLabelServices_synchronizeService(array $params) {
                             $updateData['vm_mac'] = $vmData['mac'] ?? '';
                             $updateData['vm_uptime'] = $vmData['uptime'] ?? 0;
                             
-                            // Storage bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             if (isset($vmData['storage']) && is_array($vmData['storage'])) {
                                 $updateData['vm_storage'] = json_encode($vmData['storage']);
                             }
                             
-                            // Network interfaces bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             if (isset($vmData['interfaces']) && is_array($vmData['interfaces'])) {
                                 $updateData['vm_interfaces'] = json_encode($vmData['interfaces']);
                             }
                             
-                            // IP listesini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             if (isset($vmData['ip']) && is_array($vmData['ip'])) {
                                 $allIps = [];
                                 foreach ($vmData['ip'] as $ipId => $ipInfo) {
@@ -6805,7 +6805,7 @@ function WhiteLabelServices_synchronizeService(array $params) {
                                 $updateData['vm_all_ips'] = json_encode($allIps);
                             }
                             
-                            // WHMCS servisini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                             
                             $hostingData = [];
                             
                             if (!empty($vmData['username'])) {
@@ -6832,7 +6832,7 @@ function WhiteLabelServices_synchronizeService(array $params) {
                         $syncMessage = 'Service synchronized. VM status: ' . $vm['status'] . ', Built: ' . ($vm['built'] ? 'Yes' : 'No');
                     }
                     
-                    break; // ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â°lk VM'i iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸le
+                    break;  
                 }
             } else {
                 $syncMessage = 'Service synchronized. No VMs found for this service.';
@@ -6841,7 +6841,7 @@ function WhiteLabelServices_synchronizeService(array $params) {
             $syncMessage = 'Service synchronized. Service status: ' . $serviceStatus['service']['status'];
         }
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+         
         WLSTokenManager::updateVPSDetails($params['serviceid'], $updateData);
         
         return 'success';
@@ -6852,18 +6852,18 @@ function WhiteLabelServices_synchronizeService(array $params) {
     }
 }
 
-// VM Durumu Kontrol Et butonu fonksiyonu
+ 
 function WhiteLabelServices_checkVMStatusButton(array $params) {
     try {
         WLS_debugLog("VM Check - checkVMStatusButton called with params: " . print_r($params, true));
         
-        // Service notes'undan WLS bilgilerini al - iyileÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tirilmiÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸
+         
         $notes = '';
         if (!empty($params['notes'])) {
             $notes = $params['notes'];
             WLS_debugLog("VM Check - Notes from params['notes']: " . substr($notes, 0, 200) . "...");
         } else {
-            // Manuel olarak service'i ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+             
             if (isset($params['serviceid'])) {
                 $service = Capsule::table('tblhosting')->where('id', $params['serviceid'])->first();
                 if ($service && $service->notes) {
@@ -6893,17 +6893,17 @@ function WhiteLabelServices_checkVMStatusButton(array $params) {
         
         WLS_debugLog("VM Check - Starting VM status check for service: " . $params['serviceid'] . " (WLS Service: " . $wlsServiceId . ")");
         
-        // VM status check task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± direkt ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§aÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
+         
         $result = WhiteLabelServices_check_vm_status($params);
         
         if ($result === 'success' || $result === true) {
-            // GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncellenmiÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ service bilgilerini al
+             
             $updatedService = Capsule::table('tblhosting')->where('id', $params['serviceid'])->first();
             $updatedNotes = json_decode($updatedService->notes, true) ?: [];
             
             $message = 'VM status checked successfully';
             
-            // VM durumu hakkÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nda detaylÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± bilgi ver
+             
             if (isset($updatedNotes['WLS_vm_status'])) {
                 $vmStatus = $updatedNotes['WLS_vm_status'];
                 $vmBuilt = $updatedNotes['WLS_vm_built'] ?? false;
@@ -6938,7 +6938,7 @@ function WhiteLabelServices_checkVMStatusButton(array $params) {
             }
         }
         
-        // Try to load existing queue data if this is called via WHMCS Module Queue
+         
         $queueData = null;
         if (isset($params['queueid'])) {
             $queueData = WLSTokenManager::getQueueData($params['queueid']);
@@ -6968,7 +6968,7 @@ function WhiteLabelServices_checkVMStatusButton(array $params) {
     }
 }
 
-// WHMCS custom field data oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸tur
+ 
 function WhiteLabelServices_createCustomFieldData($form, $productId) {
             $fieldType = '';
     $fieldOptions = [];
@@ -6977,16 +6977,16 @@ function WhiteLabelServices_createCustomFieldData($form, $productId) {
             switch ($form['type']) {
                 case 'serverselector':
                     $fieldType = 'dropdown';
-            // Sadece seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ili olan location'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+             
                     foreach ($form['items'] as $item) {
                         if ($item['selected']) {
-                    // VirgÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â¼l ve boÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸luklarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± normalize et
+                     
                     $normalizedTitle = preg_replace('/[,\s]+/', ' ', trim($item['title']));
                     $fieldOptions[] = $normalizedTitle;
                     break;
                 }
             }
-            // EÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ili yoksa ilk item'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+             
             if (empty($fieldOptions) && !empty($form['items'])) {
                         $firstItem = reset($form['items']);
                 $normalizedTitle = preg_replace('/[,\s]+/', ' ', trim($firstItem['title']));
@@ -6997,7 +6997,7 @@ function WhiteLabelServices_createCustomFieldData($form, $productId) {
                 case 'select':
                     $fieldType = 'dropdown';
                     if ($form['metadata']['variable'] === 'os') {
-                // OS iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in CentOS 7'yi ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nce ekle
+                 
                 $centosAdded = false;
                         foreach ($form['items'] as $item) {
                             if (stripos($item['title'], 'CentOS 7') !== false) {
@@ -7006,19 +7006,19 @@ function WhiteLabelServices_createCustomFieldData($form, $productId) {
                                 break;
                             }
                         }
-                // DiÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er OS'leri ekle
+                 
                         foreach ($form['items'] as $item) {
                             if (stripos($item['title'], 'CentOS 7') === false) {
                         $fieldOptions[] = $item['title'];
                             }
                         }
-                // CentOS 7 yoksa ilk item'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸a ekle
+                 
                 if (!$centosAdded && !empty($form['items'])) {
                             $firstItem = reset($form['items']);
                     array_unshift($fieldOptions, $firstItem['title']);
                 }
             } else {
-                // DiÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er select'ler iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼m seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§enekleri ekle
+                 
                     foreach ($form['items'] as $item) {
                     $fieldOptions[] = $item['title'];
                 }
@@ -7031,14 +7031,14 @@ function WhiteLabelServices_createCustomFieldData($form, $productId) {
             $max = intval($form['config']['maxvalue'] ?? 10);
                     $step = intval($form['config']['step'] ?? 1);
             
-            // IP Address iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶zel durum - minimum 1, None yok
+             
             if ($form['metadata']['variable'] === 'ipamlimit') {
-                $min = max(1, $min); // Minimum 1 yap
+                $min = max(1, $min);  
                 for ($i = $min; $i <= $max; $i += $step) {
                     $fieldOptions[] = $i . ' IP';
                 }
             } else {
-                // Storage ve Backup iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in - None yok, 0'dan baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸la
+                 
                     for ($i = $min; $i <= $max; $i += $step) {
                         $unit = '';
                         switch ($form['metadata']['variable']) {
@@ -7056,7 +7056,7 @@ function WhiteLabelServices_createCustomFieldData($form, $productId) {
             
         case 'multicheckbox':
             $fieldType = 'dropdown';
-            // None seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§eneÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ini kaldÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rdÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±k - WHMCS zaten required olmayan alanlara boÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸ seÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§enek ekliyor
+             
             foreach ($form['items'] as $item) {
                 $price = $item['unit_price'] > 0 ? ' ($' . number_format($item['unit_price'], 2) . '/mo)' : '';
                 $fieldOptions[] = $item['title'] . $price;
@@ -7091,22 +7091,22 @@ function WhiteLabelServices_createCustomFieldData($form, $productId) {
     ];
 }
 
-// VM Action Handler fonksiyonlarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±
+ 
 function WhiteLabelServices_handleVMAction($params, $action) {
     try {
         WLS_debugLog("VM Action - Starting action: " . $action . " for service: " . $params['serviceid']);
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
             WLS_debugLog("VM Action - Missing service or VM ID");
             return ['error' => 'VM not provisioned yet'];
         }
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ncesi durumu kaydet
+         
         $initialStatus = $vpsDetails->vm_status;
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -7127,7 +7127,7 @@ function WhiteLabelServices_handleVMAction($params, $action) {
             return ['error' => 'Failed to get API token'];
         }
         
-        // API endpoint'ini belirle
+         
         $actionMap = [
             'start' => 'start',
             'stop' => 'stop',
@@ -7144,7 +7144,7 @@ function WhiteLabelServices_handleVMAction($params, $action) {
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         $apiUrl = $apiBaseUrl . "/api/service/{$vpsDetails->wls_service_id}/vms/{$vpsDetails->wls_vm_id}/{$apiAction}";
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -7173,22 +7173,22 @@ function WhiteLabelServices_handleVMAction($params, $action) {
         
             $result = json_decode($response, true);
         
-        // API yanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±tÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kontrol et
+         
         if ($httpCode === 200 && isset($result['status'])) {
             if ($result['status'] === true) {
                 WLS_debugLog("VM Action - {$action} command sent successfully for service: " . $params['serviceid']);
                 
-                // 3 saniye bekle
+                 
                 sleep(3);
                 
-                // VM bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle (hata olursa sessizce geÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§)
+                 
                 try {
                     WhiteLabelServices_SyncVMFromAPI($params);
                 } catch (Exception $syncError) {
                     WLS_debugLog("VM Action - Sync error (non-fatal): " . $syncError->getMessage());
                 }
                 
-                // GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncel VM durumunu al
+                 
                 $updatedVpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
                 $newStatus = $updatedVpsDetails ? $updatedVpsDetails->vm_status : $initialStatus;
                 
@@ -7218,7 +7218,7 @@ function WhiteLabelServices_addNetworkInterface($params) {
     try {
         WLS_debugLog("Network - Add interface called for service: " . $params['serviceid']);
         
-        // VPS detaylarini mod_wls_vps tablosundan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
@@ -7232,7 +7232,7 @@ function WhiteLabelServices_addNetworkInterface($params) {
         WLS_debugLog("Network - WLS Service ID: " . $wlsServiceId);
         WLS_debugLog("Network - VM ID: " . $vmId);
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -7260,7 +7260,7 @@ function WhiteLabelServices_addNetworkInterface($params) {
         
         WLS_debugLog("Network - Sending POST request to: " . $apiUrl);
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -7315,7 +7315,7 @@ function WhiteLabelServices_deleteNetworkInterface($params, $interfaceId) {
     try {
         WLS_debugLog("Network - Delete interface called for service: " . $params['serviceid'] . ", interface: " . $interfaceId);
         
-        // VPS detaylarini mod_wls_vps tablosundan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
@@ -7335,13 +7335,13 @@ function WhiteLabelServices_deleteNetworkInterface($params, $interfaceId) {
             return ['error' => 'Interface ID is required'];
         }
         
-        // net0'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± silmeye izin verme
+         
         if ($interfaceId === 'net0' || $interfaceId === '0') {
             WLS_debugLog("Network - Attempted to delete primary interface (net0)");
             return ['error' => 'Cannot delete primary network interface (net0)'];
         }
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -7369,7 +7369,7 @@ function WhiteLabelServices_deleteNetworkInterface($params, $interfaceId) {
         
         WLS_debugLog("Network - Sending DELETE request to: " . $apiUrl);
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder
+         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
@@ -7420,29 +7420,29 @@ function WhiteLabelServices_deleteNetworkInterface($params, $interfaceId) {
     }
 }
 
-// WHMCS Module Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶zel fonksiyonlar
+ 
 function WhiteLabelServices_process_order($params) {
     try {
         WLS_debugLog("Debug - process_order function called with params: " . print_r($params, true));
         
-        // Service ID'yi al
+         
         $serviceId = $params['serviceid'] ?? null;
         if (!$serviceId) {
             WLS_debugLog("Error - No service ID provided to process_order");
             return 'No service ID provided';
         }
         
-        // Service bilgilerini al
+         
         $service = Capsule::table('tblhosting')->where('id', $serviceId)->first();
         if (!$service) {
             WLS_debugLog("Error - Service not found: " . $serviceId);
             return 'Service not found';
         }
         
-        // Notes'dan queue data'yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al
+         
         $notes = json_decode($service->notes, true) ?: [];
         
-        // Queue data'yÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± bul
+         
         $queueData = null;
         foreach ($notes as $key => $value) {
             if (strpos($key, 'queue_data_') === 0 && is_array($value)) {
@@ -7456,7 +7456,7 @@ function WhiteLabelServices_process_order($params) {
             return 'No queue data found';
         }
         
-        // Process order task'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§aÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±r
+         
         $result = WLS_ProcessOrderTask($queueData);
         
         if ($result) {
@@ -7473,20 +7473,20 @@ function WhiteLabelServices_process_order($params) {
     }
 }
 
-// WHMCS Module Queue iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in check_vm_status fonksiyonu
+ 
 function WhiteLabelServices_check_vm_status($params) {
     try {
-        // TablolarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±n varlÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± kontrol et
+         
         WLSTokenManager::ensureTablesExist();
         
-        // Service ID'yi al
+         
         $serviceId = $params['serviceid'] ?? null;
         if (!$serviceId) {
             WLS_debugLog("check_vm_status - No service ID provided");
             return 'No service ID provided';
         }
         
-        // WLS bilgilerini mod_wls_vps tablosundan al
+         
         $wlsData = Capsule::table('mod_wls_vps')
             ->where('id', $serviceId)
             ->first();
@@ -7496,14 +7496,14 @@ function WhiteLabelServices_check_vm_status($params) {
             return 'No WLS data found';
         }
         
-        // WLS service ID'yi al
+         
         $wlsServiceId = $wlsData->wls_service_id ?? null;
         if (!$wlsServiceId) {
             WLS_debugLog("check_vm_status - No WLS service ID for service: $serviceId");
             return 'No WLS service ID found';
         }
         
-        // Server credentials'ÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± al (eÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er params'ta yoksa)
+         
         if (empty($params['serverusername']) || empty($params['serverpassword'])) {
             $server = Capsule::table('tblservers')
                 ->where('type', 'WhiteLabelServices')
@@ -7520,7 +7520,7 @@ function WhiteLabelServices_check_vm_status($params) {
             }
         }
         
-        // Queue benzeri data yapısını hazırla (kendi cron döngümüz için)
+         
         $queueData = [
             'service_id' => $serviceId,
             'wls_service_id' => $wlsServiceId,
@@ -7532,14 +7532,14 @@ function WhiteLabelServices_check_vm_status($params) {
         
         WLS_debugLog("check_vm_status - Processing service $serviceId with WLS ID $wlsServiceId");
         
-        // ProcessVMStatusCheck'i çağır
+         
         $result = WhiteLabelServices_ProcessVMStatusCheck($params, $queueData);
         
-        // WLS result sabitlerini kontrol et
+         
         if ($result === WLS_RESULT_SUCCESS) {
             return 'success';
         } elseif ($result === WLS_RESULT_RESCHEDULED) {
-            // Reschedule baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸arÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± - WHMCS iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in bu "success" demek, yeni task oluÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸turuldu
+             
             return 'success';
         } else {
             return $result ?: 'VM status check failed';
@@ -7551,7 +7551,7 @@ function WhiteLabelServices_check_vm_status($params) {
     }
 }
 
-// WHMCS'nin standart module queue action'larÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in wrapper fonksiyonlar
+ 
 function WhiteLabelServices_ProcessOrder($params) {
     return WhiteLabelServices_process_order($params);
 }
@@ -7560,7 +7560,7 @@ function WhiteLabelServices_CheckVMStatus($params) {
     return WhiteLabelServices_check_vm_status($params);
 }
 
-// WHMCS Module Queue action handler
+ 
 function WhiteLabelServices_ModuleQueueAction($action, $params) {
     try {
         WLS_debugLog("Debug - ModuleQueueAction called: " . $action . " with params: " . print_r($params, true));
@@ -7585,19 +7585,19 @@ function WhiteLabelServices_ModuleQueueAction($action, $params) {
     }
 }
 
-// Power action'dan sonra VM bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+ 
 function WhiteLabelServices_updateVMInfoAfterPowerAction($params) {
     try {
         WLS_debugLog("Debug - Updating VM info after power action for service: " . $params['serviceid']);
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
             WLS_debugLog("Debug - Missing service or VM ID for update");
             return false;
         }
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -7620,12 +7620,12 @@ function WhiteLabelServices_updateVMInfoAfterPowerAction($params) {
             return false;
         }
         
-        // VM detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $vmDetails = WhiteLabelServices_getVMDetails($params['serviceid'], $vpsDetails->wls_vm_id, $token);
         if ($vmDetails && isset($vmDetails['vm'])) {
             $vmData = $vmDetails['vm'];
             
-            // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             $updateData = [
                 'vm_status' => $vmData['status'] ?? $vpsDetails->vm_status,
                 'vm_power' => $vmData['power'] ?? $vpsDetails->vm_power,
@@ -7633,7 +7633,7 @@ function WhiteLabelServices_updateVMInfoAfterPowerAction($params) {
                 'last_check' => date('Y-m-d H:i:s')
             ];
             
-            // VM running ise diÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸er bilgileri de gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             if (isset($vmData['status']) && $vmData['status'] === 'running') {
                 $updateData['ipv4'] = $vmData['ipv4'] ?? $vpsDetails->ipv4;
                 $updateData['username'] = $vmData['username'] ?? $vpsDetails->username;
@@ -7645,17 +7645,17 @@ function WhiteLabelServices_updateVMInfoAfterPowerAction($params) {
                 $updateData['mac_address'] = $vmData['mac'] ?? $vpsDetails->mac_address;
                 $updateData['vm_uptime'] = $vmData['uptime'] ?? $vpsDetails->vm_uptime;
                 
-                // Storage bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                 
                 if (isset($vmData['storage']) && is_array($vmData['storage'])) {
                     $updateData['vm_storage'] = json_encode($vmData['storage']);
                 }
                 
-                // Network interfaces bilgilerini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                 
                 if (isset($vmData['interfaces']) && is_array($vmData['interfaces'])) {
                     $updateData['vm_interfaces'] = json_encode($vmData['interfaces']);
                 }
                 
-                // IP listesini gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+                 
                 if (isset($vmData['ip']) && is_array($vmData['ip'])) {
                     $allIps = [];
                     foreach ($vmData['ip'] as $ipId => $ipInfo) {
@@ -7669,7 +7669,7 @@ function WhiteLabelServices_updateVMInfoAfterPowerAction($params) {
                 }
             }
             
-            // VeritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             WLSTokenManager::updateVPSDetails($params['serviceid'], $updateData);
                 
             WLS_debugLog("Debug - VM info updated successfully after power action. New status: " . ($vmData['status'] ?? 'unknown'));
@@ -7685,10 +7685,10 @@ function WhiteLabelServices_updateVMInfoAfterPowerAction($params) {
     }
 }
 
-// Hostname/Label gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelleme fonksiyonu
+ 
 function WhiteLabelServices_updateLabel($params, $label) {
     try {
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $label = trim((string) $label);
         if ($label === '') {
             return ['error' => 'Hostname is required'];
@@ -7710,7 +7710,7 @@ function WhiteLabelServices_updateLabel($params, $label) {
             return ['error' => 'Could not get API token'];
         }
         
-        // API base URL al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -7721,12 +7721,12 @@ function WhiteLabelServices_updateLabel($params, $label) {
         }
         
         $apiBaseUrl = rtrim($server->hostname, '/');
-        // Ensure https:// prefix
+         
         if (strpos($apiBaseUrl, 'http://') !== 0 && strpos($apiBaseUrl, 'https://') !== 0) {
             $apiBaseUrl = 'https://' . $apiBaseUrl;
         }
         
-        // API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶nder - hostname endpoint
+         
         $apiBaseUrl = rtrim(WhiteLabelServices_getApiBaseUrl($params), '/');
         $encodedLabel = rawurlencode($label);
 
@@ -7787,12 +7787,12 @@ function WhiteLabelServices_updateLabel($params, $label) {
     }
 }
 
-// Template'leri ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§eken fonksiyon
+ 
 function WhiteLabelServices_getTemplates($params) {
     try {
         WLS_debugLog("Debug - Getting templates for service: " . $params['serviceid']);
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id) {
             WLS_debugLog("Error - No WLS service ID found for templates");
@@ -7801,7 +7801,7 @@ function WhiteLabelServices_getTemplates($params) {
         
         $serviceId = $vpsDetails->wls_service_id;
         
-        // API token al - server bilgilerini kullan
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -7824,7 +7824,7 @@ function WhiteLabelServices_getTemplates($params) {
             return [];
         }
         
-        // API'den template'leri ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         $url = $apiBaseUrl . "/api/service/{$serviceId}/templates";
         
@@ -7853,11 +7853,11 @@ function WhiteLabelServices_getTemplates($params) {
             return ['templates' => [], 'grouped' => ['linux' => [], 'windows' => []]];
         }
         
-        // Get raw templates and group by OS family
+         
         $templates = $data['templates'];
         $osFamilies = [];
         
-        // Define OS family detection rules
+         
         $familyRules = [
             'Ubuntu' => ['match' => 'ubuntu', 'icon' => 'fab fa-ubuntu', 'color' => '#E95420', 'isWindows' => false],
             'Debian' => ['match' => 'debian', 'icon' => 'fab fa-linux', 'color' => '#A81D33', 'isWindows' => false],
@@ -7874,7 +7874,7 @@ function WhiteLabelServices_getTemplates($params) {
             $familyKey = 'Other';
             $familyInfo = ['icon' => 'fab fa-linux', 'color' => '#FCC624', 'isWindows' => false];
             
-            // Detect OS family
+             
             foreach ($familyRules as $family => $rule) {
                 if (strpos($nameLower, $rule['match']) !== false) {
                     $familyKey = $family;
@@ -7883,7 +7883,7 @@ function WhiteLabelServices_getTemplates($params) {
                 }
             }
             
-            // Initialize family if not exists
+             
             if (!isset($osFamilies[$familyKey])) {
                 $osFamilies[$familyKey] = [
                     'name' => $familyKey,
@@ -7894,7 +7894,7 @@ function WhiteLabelServices_getTemplates($params) {
                 ];
             }
             
-            // Add version to family
+             
             $osFamilies[$familyKey]['versions'][] = [
                 'id' => $template['id'],
                 'name' => $name,
@@ -7902,7 +7902,7 @@ function WhiteLabelServices_getTemplates($params) {
             ];
         }
         
-        // Sort families: Linux first, Windows last
+         
         $linux = [];
         $windows = [];
         foreach ($osFamilies as $key => $family) {
@@ -7928,7 +7928,7 @@ function WhiteLabelServices_getTemplates($params) {
     }
 }
 
-// OS grubunu belirleyen fonksiyon
+ 
 function WhiteLabelServices_getOSGroup($templateName) {
     $name = strtolower($templateName);
     
@@ -7944,7 +7944,7 @@ function WhiteLabelServices_getOSGroup($templateName) {
     return 'Other';
 }
 
-// OS ikonunu dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ndÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ren fonksiyon
+ 
 function WhiteLabelServices_getOSIcon($osGroup) {
     $icons = [
         'Ubuntu' => 'fab fa-ubuntu',
@@ -7961,7 +7961,7 @@ function WhiteLabelServices_getOSIcon($osGroup) {
     return $icons[$osGroup] ?? 'fab fa-linux';
 }
 
-// OS rengini dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ndÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ren fonksiyon
+ 
 function WhiteLabelServices_getOSColor($osGroup) {
     $colors = [
         'Ubuntu' => '#E95420',
@@ -7978,12 +7978,12 @@ function WhiteLabelServices_getOSColor($osGroup) {
     return $colors[$osGroup] ?? '#667eea';
 }
 
-// VM rebuild fonksiyonu
+ 
 function WhiteLabelServices_rebuildVM($params, $templateId) {
     try {
         WLS_debugLog("Debug - Rebuilding VM for service: " . $params['serviceid'] . " with template: " . $templateId);
         
-        // VPS detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan al
+         
         $vpsDetails = WLSTokenManager::getVPSDetails($params['serviceid']);
         if (!$vpsDetails || !$vpsDetails->wls_service_id || !$vpsDetails->wls_vm_id) {
             return ['error' => 'VM information not found'];
@@ -7992,13 +7992,13 @@ function WhiteLabelServices_rebuildVM($params, $templateId) {
         $serviceId = $vpsDetails->wls_service_id;
         $vmId = $vpsDetails->wls_vm_id;
         
-        // Token al
+         
         $token = WhiteLabelServices_getToken($params);
         if (!$token) {
             return ['error' => 'Authentication failed'];
         }
         
-        // Rebuild API isteÃƒÆ’Ã¢â‚¬ÂÃƒâ€¦Ã‚Â¸i
+         
         $apiBaseUrl = WhiteLabelServices_getApiBaseUrl($params);
         $url = $apiBaseUrl . "/api/service/{$serviceId}/vms/{$vmId}/rebuild";
         
@@ -8025,7 +8025,7 @@ function WhiteLabelServices_rebuildVM($params, $templateId) {
         WLS_debugLog("Debug - Rebuild API response: HTTP " . $httpCode . " - " . $response);
         
         if ($httpCode === 200 || $httpCode === 202) {
-            // Rebuild baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸arÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±lÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±, VM durumunu gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             $orderData['WLS_vm_status'] = 'rebuilding';
             $orderData['rebuild_started'] = date('Y-m-d H:i:s');
             $orderData['rebuild_template'] = $templateId;
@@ -8034,7 +8034,7 @@ function WhiteLabelServices_rebuildVM($params, $templateId) {
                 ->where('id', $params['serviceid'])
                 ->update(['notes' => json_encode($orderData)]);
             
-            // mod_wls_vps tablosundaki vm_status'u da gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             Capsule::table('mod_wls_vps')
                 ->where('id', $params['serviceid'])
                 ->update([
@@ -8057,20 +8057,20 @@ function WhiteLabelServices_rebuildVM($params, $templateId) {
     }
 }
 
-// WLS ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼nlerini getir
+ 
 function WhiteLabelServices_getProducts($params) {
     return WLSTokenManager::getProducts($params);
 }
 
 function ClientArea($params) {
     try {
-        // Smarty template engine'i baÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lat
+         
         require_once __DIR__ . '/lib/Smarty/Smarty.class.php';
         $smarty = new Smarty();
         $smarty->template_dir = __DIR__ . '/templates/';
         $smarty->compile_dir = __DIR__ . '/templates_c/';
         
-        // Rebuild iÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸lemi devam ediyorsa
+         
         if (isset($_SESSION['WLS_rebuild_' . $params['serviceid']])) {
             $smarty->assign('rebuilding', true);
             $smarty->assign('serviceid', $params['serviceid']);
@@ -8078,16 +8078,16 @@ function ClientArea($params) {
             return $output;
         }
         
-        // VPS bilgilerini veritabanÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ndan ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ek
+         
         $vmInfo = WLSTokenManager::getVPSDetails($params['serviceid']);
         
-        // VM detaylarÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶sterilsin mi kontrol et
+         
         $showVMDetails = false;
         if ($vmInfo && $vmInfo->wls_vm_id) {
             $showVMDetails = true;
         }
         
-        // Template iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§in VM bilgilerini hazÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±rla
+         
         $vmData = [
             'vm_id' => '',
             'vm_status' => 'unknown',
@@ -8114,10 +8114,10 @@ function ClientArea($params) {
         
         
         if ($vmInfo) {
-            // stdClass objesini array'e ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§evir
+             
             $vmInfoArray = json_decode(json_encode($vmInfo), true);
             
-            // Temel bilgileri gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼ncelle
+             
             $vmData['vm_id'] = $vmInfoArray['wls_vm_id'] ?? '';
             $vmData['vm_status'] = $vmInfoArray['vm_status'] ?? 'unknown';
             $vmData['vm_built'] = $vmInfoArray['vm_built'] ?? false;
@@ -8136,16 +8136,16 @@ function ClientArea($params) {
             $vmData['uptime'] = intval($vmInfoArray['vm_uptime'] ?? 0);
             $vmData['bandwidth'] = $vmInfoArray['vm_bandwidth'] ?? null;
             
-            // JSON alanlari parse et
+             
             $vmData['all_ips'] = json_decode($vmInfoArray['vm_all_ips'] ?? '[]', true) ?: [];
             $vmData['interfaces'] = json_decode($vmInfoArray['vm_interfaces'] ?? '[]', true) ?: [];
             $vmData['storage'] = json_decode($vmInfoArray['vm_storage'] ?? '[]', true) ?: [];
             $vmData['resources'] = json_decode($vmInfoArray['vm_resources'] ?? '[]', true) ?: [];
             
-            // Debug log for interfaces
+             
         }
 
-        // Smarty template degiskenlerini ata
+         
         $smarty->assign('vmInfo', $vmData);
         $smarty->assign('serviceStatus', $params['domainstatus'] ?? 'Pending');
         $smarty->assign('serviceid', $params['serviceid']);
@@ -8153,14 +8153,14 @@ function ClientArea($params) {
         $smarty->assign('showVMDetails', $showVMDetails);
         $smarty->assign('modulelink', $params['modulelink'] ?? '');
         
-        // Template dosyasÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±nÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â± render et ve dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ndÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r
+         
         $output = $smarty->fetch('clientarea.tpl');
         return $output;
 
     } catch (Exception $e) {
         WLS_debugLog("ClientArea Error: " . $e->getMessage());
         
-        // Hata durumunda basit HTML dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶ndÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r
+         
         return '<div class="alert alert-danger">
                     <h4>VPS Management</h4>
                     <p>Unable to load service information: ' . htmlspecialchars($e->getMessage()) . '</p>
@@ -8183,12 +8183,12 @@ function formatBytes($bytes) {
 
 
 
-/**
- * Get Reverse DNS for VM
- */
+ 
+
+
 function WhiteLabelServices_getRDNS($params) {
     try {
-        // Get WLS data
+         
         $wlsData = Capsule::table('mod_wls_vps')
             ->where('id', $params['serviceid'])
             ->first();
@@ -8204,7 +8204,7 @@ function WhiteLabelServices_getRDNS($params) {
             return ['error' => 'Failed to get API token'];
         }
         
-        // Get API base URL with https
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -8245,9 +8245,9 @@ function WhiteLabelServices_getRDNS($params) {
         
         if ($httpCode === 200) {
             $data = json_decode($response, true);
-            // API format: {"rdns":{"IP":{"ipaddress":"IP","ptrname":"...","ptrcontent":"hostname"}}}
+             
             if (isset($data['rdns']) && is_array($data['rdns'])) {
-                // Return all IPs with their rDNS values
+                 
                 $allRdns = [];
                 foreach ($data['rdns'] as $ip => $rdnsData) {
                     $allRdns[$ip] = [
@@ -8256,7 +8256,7 @@ function WhiteLabelServices_getRDNS($params) {
                         'ptrname' => $rdnsData['ptrname'] ?? ''
                     ];
                 }
-                // Also return primary IP rdns for backward compatibility
+                 
                 $primaryIp = $wlsData->ipv4 ?? $params['dedicatedip'] ?? '';
                 $primaryRdns = isset($allRdns[$primaryIp]) ? $allRdns[$primaryIp]['rdns'] : '';
                 return ['success' => true, 'rdns' => $primaryRdns, 'all_rdns' => $allRdns];
@@ -8272,15 +8272,15 @@ function WhiteLabelServices_getRDNS($params) {
     }
 }
 
-/**
- * Update Reverse DNS for VM
- * @param array $params WHMCS params
- * @param string $rdns Hostname to set
- * @param string $specificIp Optional - specific IP to update, defaults to primary IPv4
- */
+ 
+
+
+
+
+
 function WhiteLabelServices_updateRDNS($params, $rdns, $specificIp = '') {
     try {
-        // Get WLS data
+         
         $wlsData = Capsule::table('mod_wls_vps')
             ->where('id', $params['serviceid'])
             ->first();
@@ -8296,7 +8296,7 @@ function WhiteLabelServices_updateRDNS($params, $rdns, $specificIp = '') {
             return ['error' => 'Failed to get API token'];
         }
         
-        // Get API base URL with https
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')
@@ -8313,7 +8313,7 @@ function WhiteLabelServices_updateRDNS($params, $rdns, $specificIp = '') {
         
         $url = $apiBaseUrl . '/api/service/' . $wlsServiceId . '/rdns';
         
-        // Use specific IP if provided, otherwise use primary IP
+         
         $ip = !empty($specificIp) ? $specificIp : ($wlsData->ipv4 ?? $params['dedicatedip'] ?? '');
         
         if (empty($ip)) {
@@ -8323,7 +8323,7 @@ function WhiteLabelServices_updateRDNS($params, $rdns, $specificIp = '') {
         
         WLS_debugLog("rDNS Update - URL: " . $url . " IP: " . $ip . " Hostname: " . $rdns);
         
-        // POST body: {"id":"<wls_service_id>","<ip>":"<ptr_hostname>"} — id string olmali
+         
         $postData = json_encode([
             'id' => (string) $wlsServiceId,
             $ip => (string) $rdns,
@@ -8369,15 +8369,15 @@ function WhiteLabelServices_updateRDNS($params, $rdns, $specificIp = '') {
     }
 }
 
-/**
- * Perform VM rebuild with selected template
- * POST /service/@id/vms/@vmid/rebuild
- */
+ 
+
+
+
 function WhiteLabelServices_performRebuild($params, $templateId) {
     try {
         WLS_debugLog("Rebuild - Starting rebuild for service " . $params['serviceid'] . " with template: " . $templateId);
         
-        // Get WLS data
+         
         $wlsData = Capsule::table('mod_wls_vps')
             ->where('id', $params['serviceid'])
             ->first();
@@ -8409,7 +8409,7 @@ function WhiteLabelServices_performRebuild($params, $templateId) {
         
         WLS_debugLog("Rebuild - Calling API: " . $url);
         
-        // Prepare JSON payload
+         
         $postData = json_encode(['template' => $templateId]);
         
         WLS_debugLog("Rebuild - POST data: " . $postData);
@@ -8442,9 +8442,9 @@ function WhiteLabelServices_performRebuild($params, $templateId) {
         
         $responseData = json_decode($response, true);
         
-        // Check for API success: {"status": 1}
+         
         if ($httpCode === 200 && isset($responseData['status']) && $responseData['status'] == 1) {
-            // Update VM status to rebuilding
+             
             Capsule::table('mod_wls_vps')
                 ->where('id', $params['serviceid'])
                 ->update([
@@ -8454,7 +8454,7 @@ function WhiteLabelServices_performRebuild($params, $templateId) {
             
             WLS_debugLog("- Rebuild initiated for service " . $params['serviceid'] . " with template: " . $templateId);
             
-            // Queue status check to monitor rebuild progress
+             
             WhiteLabelServices_AddToQueue('check_vm_status', [
                 'service_id' => $params['serviceid'],
                 'wls_service_id' => $wlsServiceId,
@@ -8482,22 +8482,22 @@ function WhiteLabelServices_performRebuild($params, $templateId) {
     }
 }
 
-/**
- * Sync all active WLS services VM data
- * Runs every 5 minutes via cron to keep customer data fresh
- */
+ 
+
+
+
 function WhiteLabelServices_SyncAllVMData() {
     try {
-        // Sync lock al - 5 dakikada bir ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸sÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±n
-        $syncLockToken = WLSTokenManager::acquireCronLock('wls_vm_sync', 300); // 5 dakika lock
+         
+        $syncLockToken = WLSTokenManager::acquireCronLock('wls_vm_sync', 300);  
         if (!$syncLockToken) {
-            // Son 5 dakika iÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§inde ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§alÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸mÃƒÆ’Ã¢â‚¬ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€¦Ã‚Â¸, atla
+             
             return 0;
         }
         
         WLS_debugLog("Sync - Starting VM data sync for all active services");
         
-        // Aktif WLS servislerini al
+         
         $services = Capsule::table('tblhosting')
             ->join('tblproducts', 'tblhosting.packageid', '=', 'tblproducts.id')
             ->where('tblhosting.domainstatus', 'Active')
@@ -8512,7 +8512,7 @@ function WhiteLabelServices_SyncAllVMData() {
         
         WLS_debugLog("Sync - Found " . count($services) . " active services to sync");
         
-        // API token al
+         
         $server = Capsule::table('tblservers')
             ->where('type', 'WhiteLabelServices')
             ->where('active', '1')

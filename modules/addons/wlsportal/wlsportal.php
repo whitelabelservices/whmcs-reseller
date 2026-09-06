@@ -1,15 +1,15 @@
 <?php
-/**
- * WHMCS Addon: WLS Panel kısayolu
- *
- * Kurulum:
- * 1) Bu klasörü WHMCS köküne kopyalayın: modules/addons/wlsportal/
- * 2) Yönetim: Ayarlar > Addon Modülleri > WLS Panel > Etkinleştir
- * 3) Yönetici rollerine bu addon için yetki verin
- *
- * Sonuç: Panel adresi admin/addonmodules.php?module=wlsportal olur (modül dizini adres çubuğunda görünmez).
- * İsteğe bağlı: Aynı köken iframe engellenirse "Yeni sekmede aç" linkini veya sunucu yönlendirmesini kullanın.
- */
+ 
+
+
+
+
+
+
+
+
+
+
 
 if (!defined('WHMCS')) {
     die('This file cannot be accessed directly');

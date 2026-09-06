@@ -1,7 +1,7 @@
 <?php
-/**
- * WhiteLabelServices VPS Module - VM Data Refresh AJAX Endpoint
- */
+ 
+
+
 
 chdir(dirname(__DIR__, 4));
 require_once 'init.php';

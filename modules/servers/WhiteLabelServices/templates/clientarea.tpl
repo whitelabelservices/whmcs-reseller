@@ -23,7 +23,7 @@
             display: none !important;
         }
         
-        /* Hide Change Password in sidebar */
+         
         #Primary_Sidebar-Service_Details_Actions-Change_Password,
         a[menuitemname="Change Password"],
         #tabChangepw { display: none !important; }
@@ -41,7 +41,7 @@
             padding: 20px;
         }
         
-        /* Language Selector */
+         
         .vps-lang-selector {
             position: absolute;
             top: 15px;
@@ -104,7 +104,7 @@
             color: rgba(255,255,255,0.85) !important;
         }
         
-        /* Header */
+         
         .vps-header {
             background: linear-gradient(135deg, var(--vps-primary) 0%, var(--vps-primary-dark) 100%);
             color: white;
@@ -203,7 +203,7 @@
             opacity: 0.8;
         }
         
-        /* Power + Upgrade row */
+         
         .vps-actions-row {
             display: flex;
             flex-wrap: wrap;
@@ -257,7 +257,7 @@
             opacity: 0.95;
         }
         
-        /* Power Buttons */
+         
         .vps-power-controls {
             display: flex;
             flex-wrap: wrap;
@@ -316,7 +316,7 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Tabs */
+         
         .vps-tabs {
             display: flex;
             gap: 5px;
@@ -411,7 +411,7 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Cards */
+         
         .vps-card {
             background: white;
             border-radius: 16px;
@@ -454,7 +454,7 @@
             margin: 0;
         }
         
-        /* Grid */
+         
         .vps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -465,7 +465,7 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         }
         
-        /* Info Items */
+         
         .vps-info-list {
             display: flex;
             flex-direction: column;
@@ -499,7 +499,7 @@
             gap: 8px;
         }
         
-        /* Copy Button */
+         
         .vps-copy-btn {
             padding: 6px 10px;
             background: var(--vps-light);
@@ -517,7 +517,7 @@
             border-color: var(--vps-primary);
         }
         
-        /* Password Field */
+         
         .vps-password-field {
             display: flex;
             align-items: center;
@@ -537,7 +537,7 @@
             cursor: pointer;
         }
         
-        /* Tab Content */
+         
         .vps-tab-content {
             display: none;
         }
@@ -546,7 +546,7 @@
             display: block;
         }
         
-        /* Network Interface */
+         
         .vps-interface {
             background: var(--vps-light);
             border-radius: 12px;
@@ -610,7 +610,7 @@
             color: var(--vps-gray);
         }
         
-        /* OS Templates */
+         
         .vps-template-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -653,7 +653,7 @@
             color: var(--vps-gray);
         }
         
-        /* Alerts */
+         
         .vps-alert {
             padding: 16px 20px;
             border-radius: 10px;
@@ -703,7 +703,7 @@
             color: #1e40af;
         }
         
-        /* Buttons */
+         
         .vps-btn {
             display: inline-flex;
             align-items: center;
@@ -747,7 +747,7 @@
             color: var(--vps-primary);
         }
         
-        /* Resource Bars */
+         
         .vps-resource-bar {
             height: 10px;
             background: var(--vps-light);
@@ -766,7 +766,7 @@
         .vps-resource-fill.medium { background: var(--vps-warning); }
         .vps-resource-fill.high { background: var(--vps-danger); }
         
-        /* Responsive */
+         
         @media (max-width: 768px) {
             .vps-container {
                 padding: 10px;
@@ -798,7 +798,7 @@
             }
         }
         
-        /* Loading Overlay */
+         
         .vps-loading-overlay {
             position: fixed;
             top: 0;
@@ -825,7 +825,7 @@
             animation: spin 1s linear infinite;
         }
         
-        /* Floating Refresh */
+         
         .vps-refresh-btn {
             position: fixed;
             bottom: 30px;
@@ -848,7 +848,7 @@
             transform: translateY(-3px);
         }
         
-        /* ===== PREMIUM RESOURCE CARDS ===== */
+         
         .vps-resource-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -986,7 +986,7 @@
             margin-top: 5px;
         }
         
-        /* ===== QUICK STATS ROW ===== */
+         
         .vps-quick-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1092,7 +1092,7 @@
             border-color: rgba(15,23,42,0.95) transparent transparent transparent;
         }
         
-        /* ===== ACCESS TERMINAL CARD ===== */
+         
         .vps-access-card {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border-radius: 20px;
@@ -1237,7 +1237,7 @@
             white-space: nowrap;
         }
         
-        /* ===== OS BANNER SECTION ===== */
+         
         .vps-os-banner {
             display: flex;
             align-items: center;
@@ -1345,7 +1345,7 @@
             }
         }
         
-        /* ===== OS FAMILY CARDS FOR REBUILD ===== */
+         
         .vps-os-family-card {
             background: white;
             border: 2px solid var(--vps-border);
@@ -1423,7 +1423,7 @@
             opacity: 1;
         }
         
-        /* ===== LOADING OVERLAY ===== */
+         
         .vps-loading-overlay {
             position: fixed;
             top: 0;
@@ -1459,7 +1459,7 @@
             to { transform: rotate(360deg); }
         }
         
-        /* ===== VM OPERATION LOCK OVERLAY ===== */
+         
         .vps-lock-overlay {
             position: fixed;
             top: 0;
@@ -1548,7 +1548,7 @@
             50% { opacity: 0.5; transform: scale(0.8); }
         }
         
-        /* Hostname Edit Button */
+         
         .vps-hostname-edit-btn {
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -1571,7 +1571,7 @@
             transform: scale(1.1);
         }
         
-        /* Modal Styles */
+         
         .vps-modal-overlay {
             position: fixed;
             top: 0;
@@ -1771,12 +1771,12 @@
         }
     </style>
 
-    <!-- Loading Overlay -->
+     
     <div class="vps-loading-overlay" id="loadingOverlay">
         <div class="vps-loading-spinner"></div>
     </div>
     
-    <!-- VM Operation Lock Overlay -->
+     
     <div class="vps-lock-overlay" id="vmLockOverlay">
         <div class="vps-lock-spinner"></div>
         <div class="vps-lock-content">
@@ -1790,7 +1790,7 @@
         </div>
     </div>
 
-    <!-- Power Action Confirm Modal -->
+     
     <div class="vps-modal-overlay" id="powerConfirmModal">
         <div class="vps-modal" style="max-width: 420px;">
             <div class="vps-modal-header">
@@ -1813,7 +1813,7 @@
         </div>
     </div>
 
-    <!-- Hostname Edit Modal -->
+     
     <div class="vps-modal-overlay" id="hostnameModal">
         <div class="vps-modal">
             <div class="vps-modal-header">
@@ -1841,7 +1841,7 @@
     </div>
 
     <div class="vps-container">
-        {* Check service status first *}
+         
         {if $serviceStatus == 'Terminated' || $serviceStatus == 'Cancelled'}
             <div class="vps-alert alert-danger">
                 <i class="fas fa-times-circle"></i>
@@ -1876,11 +1876,11 @@
                 <script>setTimeout(function() { location.reload(); }, 30000);</script>
             </div>
         {else}
-            {* Active VPS - Full Interface *}
+             
             
-            <!-- Header -->
+             
             <div class="vps-header">
-                <!-- Language Selector -->
+                 
                 <div class="vps-lang-selector">
                     <button class="vps-lang-btn active" data-lang-switch="en">EN</button>
                     <button class="vps-lang-btn" data-lang-switch="tr">TR</button>
@@ -1914,7 +1914,7 @@
                         {/if}
                     </div>
                     
-                    <!-- Power Controls + Upgrade Buttons -->
+                     
                     {assign var="isVMLocked" value=($vmInfo.vm_status == 'rebuild' || $vmInfo.vm_status == 'rebuilding' || $vmInfo.vm_status == 'creating' || $vmInfo.vm_status == 'resetting' || $vmInfo.vm_status == 'shutdown' || $vmInfo.vm_status == 'stopping' || $vmInfo.vm_status == 'starting' || $vmInfo.vm_status == 'backup' || $vmInfo.vm_status == 'snapshot' || $vmInfo.vm_status == 'restore' || $vmInfo.vm_status == 'updating')}
                     <div class="vps-actions-row">
                     {if !$isVMLocked}
@@ -1988,7 +1988,7 @@
                 </div>
             </div>
             
-            <!-- Tabs -->
+             
             <div class="vps-tabs">
                 <div class="vps-tabs-left">
                     <button class="vps-tab active" data-tab="overview">
@@ -2020,9 +2020,9 @@
                 </div>
             </div>
             
-            <!-- Tab: Overview -->
+             
             <div class="vps-tab-content active" id="tab-overview">
-                <!-- SVG Gradients for Progress Rings -->
+                 
                 <svg width="0" height="0">
                     <defs>
                         <linearGradient id="gradient-cpu" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -2040,9 +2040,9 @@
                     </defs>
                 </svg>
                 
-                <!-- Resource Cards Grid -->
+                 
                 <div class="vps-resource-grid">
-                    <!-- CPU Card -->
+                     
                     <div class="vps-resource-card card-cpu">
                         <div class="vps-resource-card-content">
                             <div class="vps-resource-ring">
@@ -2064,7 +2064,7 @@
                         </div>
                     </div>
                     
-                    <!-- RAM Card -->
+                     
                     <div class="vps-resource-card card-ram">
                         <div class="vps-resource-card-content">
                             <div class="vps-resource-ring">
@@ -2087,7 +2087,7 @@
                         </div>
                     </div>
                     
-                    <!-- Storage Card -->
+                     
                     <div class="vps-resource-card card-disk">
                         <div class="vps-resource-card-content">
                             <div class="vps-resource-ring">
@@ -2111,7 +2111,7 @@
                     
                 </div>
                 
-                <!-- Quick Stats Row - IPv4, IPv6, Status -->
+                 
                 <div class="vps-quick-stats" style="grid-template-columns: repeat(3, 1fr);">
                     <div class="vps-stat-item">
                         <div class="vps-stat-icon ip">
@@ -2154,7 +2154,7 @@
                     </div>
                 </div>
                 
-                <!-- OS Banner Section -->
+                 
                 {assign var="isWindows" value=($vmInfo.template|strpos:'Windows' !== false)}
                 <div class="vps-os-banner">
                     <div class="vps-os-banner-content">
@@ -2195,7 +2195,7 @@
                     </a>
                 </div>
                 
-                <!-- Access Terminal Card -->
+                 
                 <div class="vps-access-card">
                     <div class="vps-access-header">
                         {if $isWindows}
@@ -2261,7 +2261,7 @@
                 </div>
             </div>
             
-            <!-- Tab: Network -->
+             
             <div class="vps-tab-content" id="tab-network">
                 <div class="vps-card">
                     <div class="vps-card-header" style="display:flex;justify-content:space-between;align-items:center;">
@@ -2343,7 +2343,7 @@
                             </div>
                             {/foreach}
                         {else}
-                            {* Fallback - show primary IPs if no interfaces data *}
+                             
                             <div class="vps-interface" style="background:#f8fafc;border-radius:12px;padding:20px;border-left:4px solid #6366f1;">
                                 <div class="vps-interface-header" style="margin-bottom:15px;">
                                     <span style="font-weight:600;font-size:1.1rem;color:#1e293b;">
@@ -2392,7 +2392,7 @@
                             </div>
                             {/foreach}
                         {else}
-                            {* Fallback for single IP - backward compatibility *}
+                             
                             <div class="vps-rdns-item" style="display:flex;gap:10px;align-items:center;margin-bottom:12px;padding:12px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb;">
                                 <div style="min-width:140px;">
                                     <span class="vps-ip-badge" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8);color:white;padding:6px 12px;border-radius:6px;font-family:monospace;font-size:0.85rem;">{$vmInfo.ip_address}</span>
@@ -2412,7 +2412,7 @@
                 </div>
             </div>
             
-            <!-- Tab: Storage -->
+             
             <div class="vps-tab-content" id="tab-storage">
                 <div class="vps-card">
                     <div class="vps-card-header">
@@ -2513,7 +2513,7 @@
                 </div>
             </div>
             
-            <!-- Tab: Rebuild -->
+             
             <div class="vps-tab-content" id="tab-rebuild">
                 <div class="vps-alert alert-warning">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -2533,7 +2533,7 @@
                     
                     <div class="vps-template-grid" id="os-templates" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
                         {if $linuxFamilies|count > 0 || $windowsFamilies|count > 0}
-                            <!-- Linux Families -->
+                             
                             {if $linuxFamilies|count > 0}
                             <div style="grid-column:1/-1;margin-bottom:5px;">
                                 <h4 style="color:var(--vps-gray);font-size:0.85rem;margin:0;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
@@ -2559,7 +2559,7 @@
                             {/foreach}
                             {/if}
                             
-                            <!-- Windows Families -->
+                             
                             {if $windowsFamilies|count > 0}
                             <div style="grid-column:1/-1;margin:15px 0 5px 0;">
                                 <h4 style="color:var(--vps-gray);font-size:0.85rem;margin:0;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
@@ -2607,7 +2607,7 @@
                 </div>
             </div>
             
-            <!-- Tab: Settings -->
+             
             <div class="vps-tab-content" id="tab-settings">
                 <div class="vps-card">
                     <div class="vps-card-header">
@@ -2639,7 +2639,7 @@
                 </div>
             </div>
             
-            <!-- Floating Refresh Button -->
+             
             <button class="vps-refresh-btn" onclick="refreshData()" title="Refresh">
                 <i class="fas fa-sync-alt"></i>
             </button>
@@ -2650,10 +2650,10 @@
   $('.primary-content').removeClass('col-lg-8').addClass('col-lg-12');
     $('.primary-content').removeClass('col-xl-9').addClass('col-xl-12');
 
-        // Language translations
+         
         var translations = {
             en: {
-                // Status
+                 
                 service_terminated: 'Service Terminated',
                 service_terminated_desc: 'This VPS service has been terminated. Please contact support to reactivate.',
                 service_suspended: 'Service Suspended',
@@ -2662,32 +2662,32 @@
                 preparing_vps: 'Preparing Your VPS',
                 preparing_vps_desc: 'Your VPS is being provisioned. This usually takes 2-5 minutes. The page will refresh automatically.',
                 
-                // Status badges
+                 
                 status_running: 'Running',
                 status_stopped: 'Stopped',
                 status_pending: 'Pending',
                 status_unknown: 'Unknown',
                 uptime: 'Uptime:',
                 
-                // Power buttons
+                 
                 power_on: 'Power On',
                 power_off: 'Power Off',
                 reboot: 'Reboot',
                 shutdown: 'Shutdown',
                 hard_reset: 'Hard Reset',
                 
-                // Tabs
+                 
                 tab_overview: 'Overview',
                 tab_network: 'Network',
                 tab_rebuild: 'Rebuild',
                 tab_settings: 'Settings',
                 
-                // Cards
+                 
                 server_info: 'Server Information',
                 access_info: 'Access Information',
                 network_interfaces: 'Network Interfaces',
                 
-                // Labels
+                 
                 cpu_cores: 'CPU Cores',
                 memory: 'Memory',
                 disk: 'Disk',
@@ -2701,20 +2701,20 @@
                 cancel_request: 'Cancellation Request',
                 cancel_request_received: 'Your cancellation request has been received',
                 
-                // Rebuild
+                 
                 rebuild_warning: 'Warning',
                 rebuild_warning_desc: 'Rebuilding will erase all data on your VPS. This action cannot be undone. Please backup your data before proceeding.',
                 select_os: 'Select Operating System',
                 rebuild_confirm: 'I understand that all data will be permanently deleted',
                 rebuild_now: 'Rebuild Now',
                 
-                // Settings
+                 
                 server_settings: 'Server Settings',
                 server_label: 'Server Label',
                 wls_service_id: 'WLS Service ID',
                 order_number: 'Order Number',
                 
-                // Messages
+                 
                 copied: 'Copied!',
                 action_success: 'Action completed successfully',
                 action_error: 'An error occurred',
@@ -2734,7 +2734,7 @@
                 power_confirm_start: 'Start will power on your server.'
             },
             tr: {
-                // Status
+                 
                 service_terminated: 'Hizmet Sonlandırıldı',
                 service_terminated_desc: 'Bu VPS hizmeti sonlandırılmıştır. Yeniden aktive etmek için destek ekibimizle iletişime geçin.',
                 service_suspended: 'Hizmet Askıya Alındı',
@@ -2743,33 +2743,33 @@
                 preparing_vps: 'VPS\'iniz Hazırlanıyor',
                 preparing_vps_desc: 'VPS\'iniz oluşturuluyor. Bu işlem genellikle 2-5 dakika sürer. Sayfa otomatik olarak yenilenecek.',
                 
-                // Status badges
+                 
                 status_running: 'Çalışıyor',
                 status_stopped: 'Durduruldu',
                 status_pending: 'Bekliyor',
                 status_unknown: 'Bilinmiyor',
                 uptime: 'Çalışma Süresi:',
                 
-                // Power buttons
+                 
                 power_on: 'Başlat',
                 power_off: 'Durdur',
                 reboot: 'Yeniden Başlat',
                 shutdown: 'Güvenli Kapat',
                 hard_reset: 'Sert Reset',
                 
-                // Tabs
+                 
                 tab_overview: 'Genel Bakış',
                 tab_network: 'Ağ',
                 tab_rebuild: 'Yeniden Yükle',
                 tab_settings: 'Ayarlar',
                 sync_data: 'Verileri Senkronize Et',
                 
-                // Cards
+                 
                 server_info: 'Sunucu Bilgileri',
                 access_info: 'Erişim Bilgileri',
                 network_interfaces: 'Ağ Arayüzleri',
                 
-                // Labels
+                 
                 cpu_cores: 'CPU Çekirdek',
                 memory: 'Bellek',
                 disk: 'Disk',
@@ -2783,20 +2783,20 @@
                 cancel_request: 'İptal Talebi',
                 cancel_request_received: 'İptal talebiniz alındı',
                 
-                // Rebuild
+                 
                 rebuild_warning: 'Uyarı',
                 rebuild_warning_desc: 'Yeniden yükleme VPS\'inizdeki tüm verileri silecektir. Bu işlem geri alınamaz. Lütfen devam etmeden önce verilerinizi yedekleyin.',
                 select_os: 'İşletim Sistemi Seçin',
                 rebuild_confirm: 'Tüm verilerin kalıcı olarak silineceğini anlıyorum',
                 rebuild_now: 'Şimdi Yeniden Yükle',
                 
-                // Settings
+                 
                 server_settings: 'Sunucu Ayarları',
                 server_label: 'Sunucu Etiketi',
                 wls_service_id: 'WLS Servis ID',
                 order_number: 'Sipariş Numarası',
                 
-                // Messages
+                 
                 copied: 'Kopyalandı!',
                 action_success: 'İşlem başarıyla tamamlandı',
                 action_error: 'Bir hata oluştu',
@@ -2824,12 +2824,12 @@
         var vmStatusPollingInterval = null;
         var currentVMStatus = '{$vmInfo.vm_status|default:"unknown"}';
         
-        // Locked states - VM operations in progress
+         
         var lockedStates = ['rebuild', 'rebuilding', 'creating', 'resetting', 'reset', 'rebooting', 'shutdown', 'stopping', 'starting', 'backup', 'snapshot', 'restore', 'updating'];
         
-        // ===== LOADING AND NOTIFICATION FUNCTIONS =====
+         
         
-        // Show loading overlay
+         
         function showLoading() {
             var overlay = document.getElementById('loadingOverlay');
             if (overlay) {
@@ -2837,7 +2837,7 @@
             }
         }
         
-        // Hide loading overlay
+         
         function hideLoading() {
             var overlay = document.getElementById('loadingOverlay');
             if (overlay) {
@@ -2845,20 +2845,20 @@
             }
         }
         
-        // Show notification
+         
         function showNotification(message, type) {
             type = type || 'info';
             
-            // Remove existing notification
+             
             var existing = document.querySelector('.vps-notification');
             if (existing) existing.remove();
             
-            // Create notification
+             
             var notification = document.createElement('div');
             notification.className = 'vps-notification vps-notification-' + type;
             notification.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle') + '"></i> ' + message;
             
-            // Style the notification
+             
             notification.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 500; z-index: 10000; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: slideIn 0.3s ease;';
             
             if (type === 'success') {
@@ -2871,7 +2871,7 @@
             
             document.body.appendChild(notification);
             
-            // Auto remove after 4 seconds
+             
             setTimeout(function() {
                 notification.style.opacity = '0';
                 notification.style.transform = 'translateX(100px)';
@@ -2882,23 +2882,23 @@
             }, 4000);
         }
         
-        // Initialize
+         
         document.addEventListener('DOMContentLoaded', function() {
             setLanguage(currentLang);
             initTabs();
             initTemplateSelection();
             initRebuildConfirm();
             
-            // Check if VM is in a locked state on page load
+             
             checkInitialVMLock();
         });
         
-        // Language switching
+         
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('vps_lang', lang);
             
-            // Update buttons
+             
             document.querySelectorAll('.vps-lang-btn').forEach(function(btn) {
                 btn.classList.remove('active');
                 if (btn.getAttribute('data-lang-switch') === lang) {
@@ -2906,7 +2906,7 @@
                 }
             });
             
-            // Update all text
+             
             document.querySelectorAll('[data-lang]').forEach(function(el) {
                 var key = el.getAttribute('data-lang');
                 if (translations[lang] && translations[lang][key]) {
@@ -2921,23 +2921,23 @@
             });
         });
         
-        // Tab navigation
-        var templatesLoaded = false; // Flag to track if templates are already loaded
+         
+        var templatesLoaded = false;  
         
         function initTabs() {
             document.querySelectorAll('.vps-tab').forEach(function(tab) {
                 tab.addEventListener('click', function() {
                     var tabName = this.getAttribute('data-tab');
                     
-                    // Update tabs
+                     
                     document.querySelectorAll('.vps-tab').forEach(function(t) { t.classList.remove('active'); });
                     this.classList.add('active');
                     
-                    // Update content
+                     
                     document.querySelectorAll('.vps-tab-content').forEach(function(c) { c.classList.remove('active'); });
                     document.getElementById('tab-' + tabName).classList.add('active');
                     
-                    // Load templates when rebuild tab is clicked (lazy loading)
+                     
                     if (tabName === 'rebuild' && !templatesLoaded) {
                         loadTemplates();
                     }
@@ -2945,12 +2945,12 @@
             });
         }
         
-        // Load templates via AJAX
+         
         function loadTemplates() {
             var container = document.getElementById('os-templates');
             if (!container) return;
             
-            // Show loading state
+             
             container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--vps-primary);"></i><br><br>Loading templates...</div>';
             
             var xhr = new XMLHttpRequest();
@@ -2977,14 +2977,14 @@
             xhr.send('customAction=getTemplates&token=' + csrfToken + '&ajax=1');
         }
         
-        // Render templates in the rebuild tab
+         
         function renderTemplates(linuxFamilies, windowsFamilies) {
             var container = document.getElementById('os-templates');
             if (!container) return;
             
             var html = '';
             
-            // Linux families header
+             
             var linuxCount = Object.keys(linuxFamilies).length;
             if (linuxCount > 0) {
                 html += '<div style="grid-column:1/-1;margin-bottom:5px;">';
@@ -2998,7 +2998,7 @@
                 }
             }
             
-            // Windows families header
+             
             var windowsCount = Object.keys(windowsFamilies).length;
             if (windowsCount > 0) {
                 html += '<div style="grid-column:1/-1;margin:15px 0 5px 0;">';
@@ -3022,7 +3022,7 @@
             container.innerHTML = html;
         }
         
-        // Render a family card
+         
         function renderFamilyCard(familyKey, family) {
             var html = '';
             html += '<div class="vps-os-family-card" data-family="' + familyKey + '" onclick="selectOSFamily(this)">';
@@ -3045,7 +3045,7 @@
             return html;
         }
         
-        // Get OS icon class
+         
         function getOSIcon(family) {
             var f = family.toLowerCase();
             if (f.indexOf('windows') !== -1) return 'fab fa-windows';
@@ -3058,28 +3058,28 @@
             return 'fab fa-linux';
         }
         
-        // Template selection
-        // OS Family selection for rebuild
+         
+         
         function initTemplateSelection() {
-            // Initialize - new system uses selectOSFamily and selectVersion
+             
         }
         
-        // Select OS Family card
+         
         function selectOSFamily(card) {
-            // Remove selection from all cards
+             
             document.querySelectorAll('.vps-os-family-card').forEach(function(c) {
                 c.classList.remove('selected');
-                // Reset dropdown in other cards
+                 
                 if (c !== card) {
                     var select = c.querySelector('.vps-os-version-select');
                     if (select) select.selectedIndex = 0;
                 }
             });
             
-            // Select this card
+             
             card.classList.add('selected');
             
-            // Get the dropdown in this card
+             
             var select = card.querySelector('.vps-os-version-select');
             if (select && select.value) {
                 selectedTemplate = select.value;
@@ -3092,11 +3092,11 @@
             checkRebuildButton();
         }
         
-        // Select version from dropdown
+         
         function selectVersion(selectElement) {
             var card = selectElement.closest('.vps-os-family-card');
             
-            // Remove selection from all other cards
+             
             document.querySelectorAll('.vps-os-family-card').forEach(function(c) {
                 if (c !== card) {
                     c.classList.remove('selected');
@@ -3105,17 +3105,17 @@
                 }
             });
             
-            // Select this card
+             
             card.classList.add('selected');
             
-            // Set selected template
+             
             selectedTemplate = selectElement.value || null;
             document.getElementById('selected-template-id').value = selectedTemplate || '';
             
             checkRebuildButton();
         }
         
-        // Rebuild confirm
+         
         function initRebuildConfirm() {
             var checkbox = document.getElementById('rebuild-confirm');
             if (checkbox) {
@@ -3132,9 +3132,9 @@
             }
         }
         
-        // ===== VM LOCK OVERLAY FUNCTIONS =====
+         
         
-        // Status display names
+         
         var statusLabels = {
             'rebuild': 'Rebuilding Server',
             'rebuilding': 'Rebuilding Server',
@@ -3149,7 +3149,7 @@
             'updating': 'Updating Server'
         };
         
-        // Check if VM is locked on page load
+         
         function checkInitialVMLock() {
             if (lockedStates.indexOf(currentVMStatus) !== -1) {
                 showVMLock(currentVMStatus);
@@ -3157,7 +3157,7 @@
             }
         }
         
-        // Show lock overlay
+         
         function showVMLock(status) {
             var overlay = document.getElementById('vmLockOverlay');
             var lockTitle = document.getElementById('lockTitle');
@@ -3174,39 +3174,39 @@
             }
         }
         
-        // Hide lock overlay
+         
         function hideVMLock() {
             var overlay = document.getElementById('vmLockOverlay');
             if (overlay) {
                 overlay.classList.remove('active');
             }
             
-            // Stop polling
+             
             if (vmStatusPollingInterval) {
                 clearInterval(vmStatusPollingInterval);
                 vmStatusPollingInterval = null;
             }
         }
         
-        // Start polling VM status every 30 seconds
+         
         function startVMStatusPolling() {
-            // Clear existing interval
+             
             if (vmStatusPollingInterval) {
                 clearInterval(vmStatusPollingInterval);
             }
             
-            // Poll every 20 seconds
+             
             vmStatusPollingInterval = setInterval(function() {
                 checkVMStatusFromAPI();
             }, 20000);
             
-            // Also check immediately after 5 seconds
+             
             setTimeout(function() {
                 checkVMStatusFromAPI();
             }, 5000);
         }
         
-        // Check VM status via AJAX
+         
         function checkVMStatusFromAPI() {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'clientarea.php?action=productdetails&id=' + serviceId, true);
@@ -3220,15 +3220,15 @@
                         if (response.success) {
                             currentVMStatus = response.vm_status;
                             
-                            // Check if still locked
+                             
                             if (lockedStates.indexOf(currentVMStatus) !== -1) {
-                                // Update overlay status
+                                 
                                 var lockStatusText = document.getElementById('lockStatusText');
                                 var lockStatus = document.getElementById('lockStatus');
                                 if (lockStatusText) lockStatusText.textContent = currentVMStatus.charAt(0).toUpperCase() + currentVMStatus.slice(1);
                                 if (lockStatus) lockStatus.textContent = 'Status: ' + currentVMStatus;
                             } else {
-                                // VM is no longer locked - reload page
+                                 
                                 hideVMLock();
                                location.reload();
                             }
@@ -3343,8 +3343,8 @@
                             return;
                         }
                         if (response.success && response.url) {
-                            // noopener/noreferrer ile acilan sekmelerde window.open null doner (guvenlik);
-                            // sekme yine acilir — null kontrolu yanlis "Could not open console" uretir.
+                             
+                             
                             window.open(response.url, '_blank', 'noopener,noreferrer');
                             showNotification(translations[currentLang].console_opening, 'success');
                         } else {
@@ -3364,14 +3364,14 @@
             xhr.send('customAction=getConsole&token=' + csrfToken + '&ajax=1');
         }
         
-        // Rebuild VM
+         
         function rebuildVM() {
             if (!selectedTemplate) {
                 showNotification('Please select an operating system', 'error');
                 return;
             }
             
-            // User already confirmed via checkbox, proceed directly
+             
             showLoading();
             
             var xhr = new XMLHttpRequest();
@@ -3387,7 +3387,7 @@
                             var response = JSON.parse(xhr.responseText);
                             if (response.success) {
                                 showNotification(currentLang === 'tr' ? 'Yeniden yükleme başlatıldı' : 'Rebuild started successfully', 'success');
-                                // Show lock overlay and start polling
+                                 
                                 currentVMStatus = response.vm_status || 'rebuilding';
                                 showVMLock(currentVMStatus);
                                 startVMStatusPolling();
@@ -3411,7 +3411,7 @@
             xhr.send('customAction=rebuild&template=' + selectedTemplate + '&token=' + csrfToken + '&ajax=1');
         }
         
-        // Sync VM Data from API
+         
         function syncVMData() {
             var btn = document.getElementById('sync-vm-btn');
             if (btn) {
@@ -3460,12 +3460,12 @@
             xhr.send('customAction=syncVMData&token=' + csrfToken + '&ajax=1');
         }
         
-        // Update rDNS for specific IP
+         
         function updateRDNS(ip) {
-            // Find the input for this specific IP
+             
             var input = document.querySelector('.rdns-input[data-ip="' + ip + '"]');
             if (!input) {
-                // Fallback to old id-based lookup
+                 
                 input = document.getElementById('rdns-input');
             }
             
@@ -3500,7 +3500,7 @@
                                 showNotification(response.error || 'Failed to update rDNS', 'error');
                             }
                         } catch (e) {
-                            // Old response format - assume success
+                             
                             showNotification('rDNS updated for ' + ip, 'success');
                         }
                     } else {
@@ -3512,7 +3512,7 @@
             xhr.send('customAction=updateRDNS&rdns=' + encodeURIComponent(rdns) + '&ip=' + encodeURIComponent(ip) + '&token=' + csrfToken + '&ajax=1');
         }
         
-        // Update label (hostname)
+         
         function updateLabel() {
             var label = document.getElementById('server-label').value;
             
@@ -3551,9 +3551,9 @@
             xhr.send('customAction=updateLabel&label=' + encodeURIComponent(label) + '&token=' + csrfToken + '&ajax=1');
         }
         
-        // ===== HOSTNAME MODAL FUNCTIONS =====
+         
         
-        // Open hostname modal
+         
         function openHostnameModal() {
             var modal = document.getElementById('hostnameModal');
             var input = document.getElementById('hostname-input');
@@ -3569,7 +3569,7 @@
             }
         }
         
-        // Close hostname modal
+         
         function closeHostnameModal() {
             var modal = document.getElementById('hostnameModal');
             if (modal) {
@@ -3577,7 +3577,7 @@
             }
         }
         
-        // Save hostname from modal
+         
         function saveHostname() {
             var input = document.getElementById('hostname-input');
             if (!input) return;
@@ -3588,7 +3588,7 @@
                 return;
             }
             
-            // Validate hostname format
+             
             var hostnameRegex = /^[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]$|^[a-zA-Z0-9]$/;
             if (!hostnameRegex.test(hostname)) {
                 showNotification('Invalid hostname format. Use only letters, numbers, and hyphens.', 'error');
@@ -3597,13 +3597,13 @@
             
             closeHostnameModal();
             
-            // Set the value to server-label input (for updateLabel function)
+             
             var labelInput = document.getElementById('server-label');
             if (labelInput) {
                 labelInput.value = hostname;
             }
             
-            // Call updateLabel with the new hostname
+             
             showLoading();
             
             var xhr = new XMLHttpRequest();
@@ -3643,7 +3643,7 @@
             xhr.send('customAction=updateLabel&label=' + encodeURIComponent(hostname) + '&token=' + csrfToken + '&ajax=1');
         }
         
-        // Close modal on overlay click
+         
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('vps-modal-overlay')) {
                 closeHostnameModal();
@@ -3651,14 +3651,14 @@
             }
         });
         
-        // Close modal on Escape key
+         
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeHostnameModal();
             }
         });
         
-        // Refresh data - API'den güncel VM verilerini çek
+         
         function refreshData() {
             showLoading();
             
@@ -3680,7 +3680,7 @@
                                 showNotification(response.error || 'Sync failed', 'error');
                             }
                         } catch (e) {
-                            // JSON parse hatası - muhtemelen sayfayı yeniden yüklenmeli
+                             
                             location.reload();
                         }
                     } else {
@@ -3738,7 +3738,7 @@
             copyToClipboard(visible.textContent, btn || null);
         }
         
-        // New password toggle for terminal card
+         
         function togglePasswordNew() {
             var hidden = document.getElementById('password-hidden-new');
             var visible = document.getElementById('password-visible-new');
@@ -3761,10 +3761,10 @@
             copyToClipboard(visible.textContent, btn || null);
         }
         
-        // Initialize on page load - Check if VM is in a locked state
+         
         checkInitialVMLock();
         
-        // ===== ADD NETWORK INTERFACE MODAL =====
+         
         function openAddNetworkModal() {
             var modal = document.getElementById('addNetworkModal');
             if (modal) {
@@ -3800,7 +3800,7 @@
                                 closeAddNetworkModal();
                                 btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Syncing...';
                                 
-                                // Wait 3 seconds then sync VM data
+                                 
                                 setTimeout(function() {
                                     var syncXhr = new XMLHttpRequest();
                                     syncXhr.open('POST', 'clientarea.php?action=productdetails&id=' + serviceId + '&ajax=1', true);
@@ -3808,7 +3808,7 @@
                                     syncXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                                     syncXhr.onreadystatechange = function() {
                                         if (syncXhr.readyState === 4) {
-                                            // Reload page after sync completes
+                                             
                                             location.reload();
                                         }
                                     };
@@ -3859,7 +3859,7 @@
                             if (response.success) {
                                 showNotification(currentLang === 'tr' ? 'Interface silindi! Veriler güncelleniyor...' : 'Interface deleted! Syncing data...', 'success');
                                 
-                                // Wait 2 seconds then sync and reload
+                                 
                                 setTimeout(function() {
                                     var syncXhr = new XMLHttpRequest();
                                     syncXhr.open('POST', 'clientarea.php?action=productdetails&id=' + serviceId + '&ajax=1', true);
@@ -3888,7 +3888,7 @@
         }
     </script>
     
-    <!-- Add Network Interface Modal -->
+     
     <div id="addNetworkModal" class="vps-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;">
         <div style="background:white;border-radius:16px;padding:30px;max-width:450px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">

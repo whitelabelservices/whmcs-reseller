@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Admin Dashboard
- * With new sidebar layout
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -58,7 +58,7 @@ $t = [
             <span style="color: #64748b;"><?= $t['hello'] ?>, <?= htmlspecialchars($adminUser->firstname ?? 'Admin') ?></span>
         </div>
         
-        <!-- İstatistikler -->
+         
         <div class="wls-stat-grid">
             <div class="wls-stat-card">
                 <div class="icon" style="color: #3b82f6;">
@@ -109,7 +109,7 @@ $t = [
             </div>
         </div>
         
-        <!-- İki Kolon -->
+         
         <div class="wls-grid-2">
             <div class="wls-card">
                 <div class="wls-card-header">
@@ -145,7 +145,7 @@ $t = [
 
 <script>
 $(document).ready(function() {
-    // İstatistikler
+     
     $.post("ajax/get_stats.php", {}, function(data) {
         if(data && data.status == "success") {
             $("#stats-wls-active").text(data.wls_active || 0);
@@ -156,7 +156,7 @@ $(document).ready(function() {
         }
     }, "json").fail(function() { $("[id^=stats-]").text("!"); });
 
-    // Faturalar
+     
     $.post("ajax/get_invoices.php", {}, function(data) {
         if(data && data.status == "success" && data.invoices && data.invoices.length > 0) {
             var h = "<div class='table-responsive'><table class='wls-table'><thead><tr><th>#</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>";
@@ -171,7 +171,7 @@ $(document).ready(function() {
         }
     }, "json");
 
-    // Loglar
+     
     $.post("ajax/get_logs.php", {}, function(data) {
         if(data && data.status == "success" && data.logs && data.logs.length) {
             var h = "<div class='table-responsive'><table class='wls-table'><thead><tr><th>Date</th><th>Activity</th></tr></thead><tbody>";
@@ -182,7 +182,7 @@ $(document).ready(function() {
         }
     }, "json");
 
-    // Ticketlar
+     
     $.post("ajax/tickets.php", {action: "list"}, function(data) {
         if(data && data.status == "success" && data.data && data.data.tickets && data.data.tickets.length > 0) {
             var tickets = data.data.tickets.slice(0, 5);

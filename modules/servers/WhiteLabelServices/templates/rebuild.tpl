@@ -1,4 +1,4 @@
-{* VPS Rebuild Template - White Label *}
+ 
 <div class="vps-rebuild-area">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -348,32 +348,32 @@
         var selectedOSGroup = '';
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Version seçimi
+             
             var versionItems = document.querySelectorAll('.vps-version-item');
             var rebuildButtons = document.querySelectorAll('.vps-rebuild-btn');
             var templateCards = document.querySelectorAll('.vps-template-card');
             
-            // Version item click handler
+             
             versionItems.forEach(function(item) {
                 item.addEventListener('click', function() {
                     var templateId = this.getAttribute('data-template-id');
                     var osGroup = this.getAttribute('data-os-group');
                     var radio = this.querySelector('.vps-version-radio');
                     
-                    // Tüm seçimleri temizle
+                     
                     clearAllSelections();
                     
-                    // Bu seçimi aktif et
+                     
                     radio.checked = true;
                     this.classList.add('selected');
                     
-                    // OS kartını seçili yap
+                     
                     var osCard = document.querySelector('.vps-template-card[data-os="' + osGroup + '"]');
                     if (osCard) {
                         osCard.classList.add('selected');
                     }
                     
-                    // Bu OS grubunun rebuild butonunu aktif et
+                     
                     var rebuildBtn = document.querySelector('.vps-rebuild-btn[data-os="' + osGroup + '"]');
                     if (rebuildBtn) {
                         rebuildBtn.classList.add('enabled');
@@ -386,13 +386,13 @@
                 });
             });
             
-            // Rebuild button click handler
+             
             rebuildButtons.forEach(function(button) {
                 button.addEventListener('click', function() {
                     var osGroup = this.getAttribute('data-os');
                     
                     if (selectedOSGroup === osGroup && selectedTemplate) {
-                        // Onay dialogu
+                         
                         var confirmed = confirm(
                             'Are you sure you want to rebuild your VPS with the selected operating system?\\n\\n' +
                             'WARNING: This will permanently delete all data on your VPS!\\n\\n' +
@@ -408,19 +408,19 @@
             });
             
             function clearAllSelections() {
-                // Tüm radio button'ları temizle
+                 
                 var radios = document.querySelectorAll('.vps-version-radio');
                 radios.forEach(function(radio) {
                     radio.checked = false;
                 });
                 
-                // Tüm seçili class'ları temizle
+                 
                 var selectedItems = document.querySelectorAll('.selected');
                 selectedItems.forEach(function(item) {
                     item.classList.remove('selected');
                 });
                 
-                // Tüm rebuild butonlarını deaktif et
+                 
                 rebuildButtons.forEach(function(btn) {
                     btn.classList.remove('enabled');
                 });

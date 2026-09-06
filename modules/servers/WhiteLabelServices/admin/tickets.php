@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Ticket Management
- * Using shared sidebar layout
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -55,7 +55,7 @@ $t = [
 $extraStyles = '
     .tickets-layout { display: grid; grid-template-columns: 350px 1fr; gap: 25px; height: calc(100vh - 150px); min-height: 500px; }
     
-    /* Ticket List Panel */
+     
     .ticket-panel {
         background: rgba(30, 41, 59, 0.8);
         border: 1px solid rgba(255,255,255,0.1);
@@ -98,7 +98,7 @@ $extraStyles = '
     .status-answered { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
     .status-closed { background: rgba(239, 68, 68, 0.2); color: #f87171; }
     
-    /* Chat Panel */
+     
     .chat-panel {
         background: rgba(30, 41, 59, 0.8);
         border: 1px solid rgba(255,255,255,0.1);
@@ -145,7 +145,7 @@ $extraStyles = '
     
     .closed-notice { background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 15px 20px; text-align: center; font-size: 0.9rem; }
     
-    /* Modal */
+     
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; }
     .modal-content {
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -203,7 +203,7 @@ $extraStyles = '
         </div>
         
         <div class="tickets-layout">
-            <!-- Ticket List Panel -->
+             
             <div class="ticket-panel">
                 <div class="panel-header">
                     <h3><i class="fas fa-inbox"></i> <?= $t['all_tickets'] ?></h3>
@@ -219,7 +219,7 @@ $extraStyles = '
                 </div>
             </div>
             
-            <!-- Chat Panel -->
+             
             <div class="chat-panel">
                 <div id="emptyState" class="empty-state">
                     <i class="fas fa-comments"></i>
@@ -254,7 +254,7 @@ $extraStyles = '
         </div>
     </main>
 
-<!-- New Ticket Modal -->
+ 
 <div class="modal-overlay" id="newTicketModal" onclick="closeNewTicketModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
@@ -340,11 +340,11 @@ function viewTicket(id, el, status) {
     $("#emptyState").hide();
     $("#chatView").show().css("display", "flex");
     
-    // Loading state - show loading in chat messages
+
     $("#chatMessages").html('<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#64748b;"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:15px;">' + lang.loading + '</p></div>');
     $("#chatHeader h3").html('<i class="fas fa-spinner fa-spin"></i> ' + lang.loading);
     
-    // Mobilde chat paneline scroll
+
     if(window.innerWidth <= 768) {
         $('html, body').animate({
             scrollTop: $(".chat-panel").offset().top - 80

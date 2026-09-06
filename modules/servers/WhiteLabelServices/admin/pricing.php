@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Pricing Page
- * Using shared sidebar layout
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -26,7 +26,7 @@ if (isset($_GET['lang'])) {
     setcookie('wls_lang', $lang, time() + 86400 * 365, '/');
 }
 
-// Ayarlardan marj değerini çek
+ 
 $defaultMargin = 20;
 try {
     if (Capsule::schema()->hasTable('mod_wls_settings')) {
@@ -127,7 +127,7 @@ $extraStyles = '
     .empty-state { text-align: center; padding: 60px 20px; color: #64748b; }
     .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #475569; }
     
-    /* Responsive Table */
+     
     .table-responsive {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -171,7 +171,7 @@ $extraStyles = '
             </button>
         </div>
         
-        <!-- Matched Products -->
+         
         <div class="tab-content active" id="contentMatched">
             <div class="wls-card">
                 <div class="pricing-header">
@@ -203,7 +203,7 @@ $extraStyles = '
             </div>
         </div>
         
-        <!-- Unmatched Products -->
+         
         <div class="tab-content" id="contentUnmatched">
             <div class="wls-card">
                 <div class="table-responsive">

@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Admin - Yükseltme Yönetimi
- * mod_wls_upgrade_tasks takibi
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 

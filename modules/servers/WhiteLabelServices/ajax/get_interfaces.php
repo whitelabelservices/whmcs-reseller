@@ -1,7 +1,7 @@
 <?php
-/**
- * WhiteLabelServices VPS Module - Get Network Interfaces AJAX Endpoint
- */
+ 
+
+
 
 chdir(dirname(__DIR__, 4));
 require_once 'init.php';

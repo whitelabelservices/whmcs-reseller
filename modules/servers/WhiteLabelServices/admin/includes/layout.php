@@ -1,10 +1,10 @@
 <?php
-/**
- * WLS Admin Panel - Ortak Sidebar Layout
- * Tüm admin sayfalarında include edilecek
- */
+ 
 
-// Bu dosya direkt include edilmeli, kendisi çalıştırılmamalı
+
+
+
+ 
 
 function wls_render_sidebar($currentPage = 'dashboard', $lang = 'en') {
     $translations = [
@@ -51,12 +51,12 @@ function wls_render_sidebar($currentPage = 'dashboard', $lang = 'en') {
     ];
     
     ?>
-    <!-- Mobile Menu Toggle -->
+     
     <button class="wls-mobile-toggle" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
     </button>
     
-    <!-- Mobile Overlay -->
+     
     <div class="wls-overlay" id="wlsOverlay" onclick="toggleMobileMenu()"></div>
     
     <aside class="wls-sidebar" id="wlsSidebar">
@@ -349,7 +349,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             background: rgba(255,255,255,0.02);
         }
         
-        /* Responsive Table Wrapper */
+         
         .table-responsive {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -435,7 +435,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             .wls-page-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .wls-page-header h1 { font-size: 1.4rem; }
             
-            /* Stat Grid Mobile Fix */
+             
             .wls-stat-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
@@ -447,7 +447,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             .wls-stat-card .value { font-size: 1.3rem; }
             .wls-stat-card .label { font-size: 0.7rem; letter-spacing: 0; }
             
-            /* Card overflow control */
+             
             .wls-card { 
                 overflow-x: hidden;
                 padding: 15px;
@@ -461,7 +461,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             .wls-main { padding: 10px; padding-top: 70px; }
         }
         
-        /* Mobile Menu Toggle Button */
+         
         .wls-mobile-toggle {
             display: none;
             position: fixed;
@@ -487,7 +487,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             .wls-mobile-toggle { display: flex; align-items: center; justify-content: center; }
         }
         
-        /* Mobile Overlay */
+         
         .wls-overlay {
             display: none;
             position: fixed;
@@ -505,7 +505,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             opacity: 1;
         }
         
-        /* Sidebar Header with Close Button */
+         
         .wls-sidebar-header {
             display: flex;
             justify-content: space-between;
@@ -540,7 +540,7 @@ function wls_render_head($title = 'WLS Panel', $extraStyles = '') {
             .wls-sidebar-close { display: flex; align-items: center; justify-content: center; }
         }
         
-        /* Prevent body scroll when menu is open */
+         
         body.menu-open {
             overflow: hidden;
         }

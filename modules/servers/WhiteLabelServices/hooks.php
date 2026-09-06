@@ -1,9 +1,9 @@
 <?php
-/**
- * WhiteLabelServices Module Hooks
- *
- * This file is automatically loaded by WHMCS for defined hooks.
- */
+ 
+
+
+
+
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
@@ -16,23 +16,23 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
     
     return '<script>
     $(document).ready(function() {
-        // WLS Dashboard linkini ekle
+
         var wlsLink = \'<li><a href="' . $dashboardLink . '"><i class="fas fa-server"></i> WLS Dashboard</a></li>\';
         var wlsDivider = \'<li role="separator" class="divider"></li>\';
         
-        // Zaten ekli mi kontrol et
+
         if ($("a[href*=\'WhiteLabelServices/admin/index.php\']").length > 0) {
             return;
         }
         
-        // WHMCS 8 yapısı: #Menu-Addons
+
         var addonsMenu = $("#Menu-Addons").parent();
         if (addonsMenu.length > 0) {
             addonsMenu.find("> ul").append(wlsDivider + wlsLink);
             return;
         }
         
-        // Alternatif: has-dropdown yapısı
+
         $(".navigation li.has-dropdown, .navbar-collapse li.has-dropdown").each(function() {
             var menuLink = $(this).find("> a");
             var menuText = menuLink.text().toLowerCase();
@@ -45,12 +45,12 @@ add_hook('AdminAreaHeaderOutput', 1, function($vars) {
     </script>';
 });
 
-/**
- * WHMCS'te destek talebi açıldığında: talebin ilişkili servisi WLS ise portal (vps.tc) API'de ticket oluştur.
- * NOT: Bu hook'un çalışması için WHMCS includes/hooks/ içinde bu hooks.php dosyasını yükleyen bir dosya olmalı.
- * Örnek: includes/hooks/whitelabelservices.php içinde require_once '.../modules/servers/WhiteLabelServices/hooks.php';
- * Hazır loader: Modül içindeki whitelabelservices_loader.php dosyasını includes/hooks/whitelabelservices.php olarak kopyalayın.
- */
+ 
+
+
+
+
+
 add_hook('TicketOpen', 1, function($vars) {
     logActivity("WLS: TicketOpen hook fired - ticketid=" . ($vars['ticketid'] ?? '?'));
     if (!defined('ROOTDIR')) return;
@@ -62,9 +62,9 @@ add_hook('TicketOpen', 1, function($vars) {
     }
 });
 
-/**
- * WHMCS iptal talebi: WLS hizmeti ise mod_wls_cancel_tasks'a Pending eklenir, cron ile API'ye gonderilir.
- */
+ 
+
+
 add_hook('CancellationRequest', 1, function($vars) {
     if (!defined('ROOTDIR')) return;
     $moduleFile = ROOTDIR . '/modules/servers/WhiteLabelServices/WhiteLabelServices.php';
@@ -75,17 +75,17 @@ add_hook('CancellationRequest', 1, function($vars) {
     }
 });
 
-/**
- * WHMCS cron tamamlandığında WLS module queue işlemlerini çalıştır
- * (check_vm_status dahil tüm kuyruk görevleri buradan yürür)
- */
+ 
+
+
+
 add_hook('AfterCronJob', 1, function($vars) {
-    // WHMCS kök dizini tanımlı değilse çık
+     
     if (!defined('ROOTDIR')) {
         return;
     }
 
-    // Ana modül dosyasını yükle (ProcessQueue vb. fonksiyonlar burada)
+     
     $moduleFile = ROOTDIR . '/modules/servers/WhiteLabelServices/WhiteLabelServices.php';
     if (!file_exists($moduleFile)) {
         return;
@@ -98,10 +98,10 @@ add_hook('AfterCronJob', 1, function($vars) {
     }
 
     try {
-        // Cron tetiklendi
+         
         WLS_debugLog("Debug - AfterCronJob triggered from hooks.php");
 
-        // 1) WLS module queue (power actions, rebuild vs. için)
+         
         if (function_exists('WhiteLabelServices_ProcessQueue')) {
             $processedQueue = WhiteLabelServices_ProcessQueue();
             if ($processedQueue > 0) {
@@ -109,7 +109,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 2) check_vm_status için module queue OLMADAN pending VM kontrolleri
+         
         if (function_exists('WhiteLabelServices_ProcessPendingVMChecks')) {
             $vmChecks = WhiteLabelServices_ProcessPendingVMChecks();
             if ($vmChecks > 0) {
@@ -117,7 +117,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 3) Bekleyen siparişleri de işleme al
+         
         if (function_exists('WhiteLabelServices_ProcessPendingOrders')) {
             $processedPending = WhiteLabelServices_ProcessPendingOrders();
             if ($processedPending > 0) {
@@ -125,7 +125,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 4) VM senkronizasyonu
+         
         if (function_exists('WhiteLabelServices_SyncAllVMData')) {
             $syncedCount = WhiteLabelServices_SyncAllVMData();
             if ($syncedCount > 0) {
@@ -133,7 +133,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 5) Fatura odeme -> portal upgrade API (mod_wls_update_tasks)
+         
         if (function_exists('WhiteLabelServices_ProcessUpdateTasks')) {
             $updateTasks = WhiteLabelServices_ProcessUpdateTasks();
             if ($updateTasks > 0) {
@@ -141,7 +141,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 6) Paket degisikligi / upgrade task'lari (mod_wls_upgrade_tasks -> portal upgrade API)
+         
         if (function_exists('WhiteLabelServices_ProcessUpgradeTasks')) {
             $upgradeTasks = WhiteLabelServices_ProcessUpgradeTasks();
             if ($upgradeTasks > 0) {
@@ -149,7 +149,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 7) Talep senkronu: mod_wls_ticket_tasks Pending -> portal API'ye ticket olustur
+         
         if (function_exists('WhiteLabelServices_ProcessTicketTasks')) {
             $ticketTasks = WhiteLabelServices_ProcessTicketTasks();
             if ($ticketTasks > 0) {
@@ -157,7 +157,7 @@ add_hook('AfterCronJob', 1, function($vars) {
             }
         }
 
-        // 8) Iptal talepleri: mod_wls_cancel_tasks Pending -> portal API POST /service/@id/cancel
+         
         if (function_exists('WhiteLabelServices_ProcessCancelTasks')) {
             $cancelTasks = WhiteLabelServices_ProcessCancelTasks();
             if ($cancelTasks > 0) {
@@ -173,12 +173,12 @@ add_hook('AfterCronJob', 1, function($vars) {
         }
     }
 });
-/**
- * Hide "Configure Server" fields (root password, ns1, ns2) for WhiteLabelServices products
- * Hostname remains visible for customer input
- */
+ 
+
+
+
 add_hook('ClientAreaFooterOutput', 1, function($vars) {
-    // Sadece cart sayfasında çalış
+     
     $currentPage = $_GET['a'] ?? '';
     if (strpos($_SERVER['REQUEST_URI'], 'cart.php') === false) {
         return '';
@@ -186,14 +186,14 @@ add_hook('ClientAreaFooterOutput', 1, function($vars) {
     
     return '
     <style>
-        /* Root Password ve NS alanlarını gizle - Hostname kalacak */
+         
         #inputRootpw,
         #inputNs1prefix,
         #inputNs2prefix {
             display: none !important;
         }
         
-        /* Parent form-group elementlerini de gizle */
+         
         #inputRootpw.form-control,
         #inputNs1prefix.form-control,
         #inputNs2prefix.form-control {
@@ -203,35 +203,35 @@ add_hook('ClientAreaFooterOutput', 1, function($vars) {
     <script>
     jQuery(document).ready(function($) {
         function hideServerConfigFields() {
-            // Root Password alanı ve parent container
+             
             $("#inputRootpw").closest(".form-group").hide();
             $("#inputRootpw").closest(".col-sm-6").hide();
             $("#inputRootpw").val("auto-generated");
             
-            // NS1 Prefix alanı ve parent container
+             
             $("#inputNs1prefix").closest(".form-group").hide();
             $("#inputNs1prefix").closest(".col-sm-6").hide();
             $("#inputNs1prefix").val("ns1");
             
-            // NS2 Prefix alanı ve parent container
+             
             $("#inputNs2prefix").closest(".form-group").hide();
             $("#inputNs2prefix").closest(".col-sm-6").hide();
             $("#inputNs2prefix").val("ns2");
             
-            // Hostname satırını full width yap
+             
             var hostnameCol = $("#inputHostname").closest(".col-sm-6");
             if (hostnameCol.length && hostnameCol.siblings(".col-sm-6:visible").length === 0) {
                 hostnameCol.removeClass("col-sm-6").addClass("col-sm-12");
             }
             
-            // NS satırını tamamen gizle (ikisi de gizli)
+             
             var ns1Row = $("#inputNs1prefix").closest(".row");
             if (ns1Row.length && ns1Row.find(".col-sm-6:visible").length === 0) {
                 ns1Row.hide();
             }
         }
         
-        // Değerleri zorla set et
+         
         function forceSetValues() {
             if ($("#inputRootpw").length && !$("#inputRootpw").val()) {
                 $("#inputRootpw").val("AutoGen" + Math.random().toString(36).substr(2, 8));
@@ -244,21 +244,21 @@ add_hook('ClientAreaFooterOutput', 1, function($vars) {
             }
         }
         
-        // Sayfa yüklendiğinde
+         
         hideServerConfigFields();
         forceSetValues();
         
-        // Form submit öncesi değerleri kontrol et ve set et
+         
         $("form").on("submit", function(e) {
             forceSetValues();
         });
         
-        // Continue butonuna tıklandığında
+         
         $("button:contains(\'Continue\'), input[type=\'submit\'], .btn-primary").on("click", function() {
             forceSetValues();
         });
         
-        // AJAX sonrası
+         
         $(document).ajaxComplete(function() {
             setTimeout(function() {
                 hideServerConfigFields();
@@ -266,7 +266,7 @@ add_hook('ClientAreaFooterOutput', 1, function($vars) {
             }, 100);
         });
         
-        // MutationObserver ile dinamik değişiklikleri izle
+         
         var observer = new MutationObserver(function(mutations) {
             hideServerConfigFields();
             forceSetValues();
@@ -280,10 +280,10 @@ add_hook('ClientAreaFooterOutput', 1, function($vars) {
     </script>';
 });
 
-/**
- * AfterShoppingCartCheckout: WLS upgrade sayisi vb. icin tblproducts uzerinden servertype kullan.
- * tblhosting tablosunda servertype kolonu YOK - WHMCS'te servertype tblproducts'ta.
- */
+ 
+
+
+
 add_hook('AfterShoppingCartCheckout', 1, function ($vars) {
     $orderId = (int) ($vars['OrderID'] ?? 0);
     if (!$orderId) {

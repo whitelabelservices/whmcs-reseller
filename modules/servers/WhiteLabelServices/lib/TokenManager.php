@@ -7,16 +7,16 @@ if (!defined("WHMCS")) {
 use WHMCS\Database\Capsule;
 
 class WLSTokenManager {
-    // Debug mode cache
+     
     private static $debugMode = null;
     
-    /**
-     * Debug Log Helper - respects debug mode setting
-     * @param string $message Log message
-     * @param bool $force Force log even if debug mode is off
-     */
+     
+
+
+
+
     private static function debugLog($message, $force = false) {
-        // Cache debug mode setting
+         
         if (self::$debugMode === null) {
             try {
                 $setting = Capsule::table('mod_wls_settings')
@@ -28,13 +28,13 @@ class WLSTokenManager {
             }
         }
         
-        // Only log if debug mode is enabled or force is true
+         
         if (self::$debugMode || $force) {
             logActivity("WLS: " . $message);
         }
     }
     
-    // API base URL'ini sunucu yapÄ±landÄ±rmasÄ±ndan al
+     
     public static function getApiBaseUrl() {
         try {
             $server = Capsule::table('tblservers')
@@ -49,10 +49,10 @@ class WLSTokenManager {
             self::debugLog("getApiBaseUrl Error: " . $e->getMessage());
         }
         
-        return 'https://api.example.com'; // Fallback - sunucu hostname'i kullanÄ±lmasÄ± Ã¶nerilir
+        return 'https://api.example.com';  
     }
     
-    // Public wrapper for createTablesIfNotExists
+     
     public static function ensureTablesExist() {
         self::createTablesIfNotExists();
     }
@@ -66,7 +66,7 @@ class WLSTokenManager {
         self::createTicketTasksTableIfNotExists();
         self::createCancelTasksTableIfNotExists();
         
-        // Mevcut tabloya service_status kolonunu ekle
+         
         if (!Capsule::schema()->hasColumn('mod_wls_vps', 'service_status')) {
             try {
                 Capsule::schema()->table('mod_wls_vps', function ($table) {
@@ -96,15 +96,15 @@ class WLSTokenManager {
         if (!Capsule::schema()->hasTable('mod_wls_queue_data')) {
             Capsule::schema()->create('mod_wls_queue_data', function ($table) {
                 $table->increments('id');
-                $table->integer('queue_id')->unsigned()->index(); // tblmodulequeue.id referansÄ±
-                $table->text('data'); // JSON formatÄ±nda queue data
-                $table->string('lock_token', 64)->nullable()->index(); // Race condition iÃ§in lock token
-                $table->timestamp('locked_at')->nullable(); // Lock alÄ±ndÄ±ÄŸÄ± zaman
+                $table->integer('queue_id')->unsigned()->index();  
+                $table->text('data');  
+                $table->string('lock_token', 64)->nullable()->index();  
+                $table->timestamp('locked_at')->nullable();  
                 $table->timestamp('created_at')->nullable();
             });
         }
         
-        // Cron lock tablosu (duplicate cron Ã§alÄ±ÅŸmasÄ±nÄ± Ã¶nlemek iÃ§in)
+         
         if (!Capsule::schema()->hasTable('mod_wls_cron_lock')) {
             Capsule::schema()->create('mod_wls_cron_lock', function ($table) {
                 $table->string('lock_name', 50)->primary();
@@ -121,9 +121,9 @@ class WLSTokenManager {
                 $table->increments('id');
                 $table->integer('service_id')->unsigned()->index();
                 $table->integer('order_id')->unsigned()->index();
-                $table->string('type', 20)->default('upgrade'); // upgrade or addon
-                $table->text('data'); // JSON format upgrade data
-                $table->string('status', 20)->default('Pending')->index(); // Pending, Paid, Completed, Failed
+                $table->string('type', 20)->default('upgrade');  
+                $table->text('data');  
+                $table->string('status', 20)->default('Pending')->index();  
                 $table->text('last_error')->nullable();
                 $table->timestamp('created_at')->nullable();
                 $table->timestamp('updated_at')->nullable();
@@ -131,15 +131,15 @@ class WLSTokenManager {
         }
     }
 
-    /** Invoice paid -> external (HostBill) update task table */
+     
     private static function createUpdateTasksTableIfNotExists() {
         if (!Capsule::schema()->hasTable('mod_wls_update_tasks')) {
             Capsule::schema()->create('mod_wls_update_tasks', function ($table) {
                 $table->increments('id');
                 $table->integer('invoice_id')->unsigned()->index();
                 $table->integer('service_id')->unsigned()->nullable()->index();
-                $table->string('status', 20)->default('paid')->index(); // paid, completed, failed
-                $table->text('payload')->nullable(); // JSON
+                $table->string('status', 20)->default('paid')->index();  
+                $table->text('payload')->nullable();  
                 $table->timestamp('last_attempt')->nullable();
                 $table->text('last_error')->nullable();
                 $table->timestamp('created_at')->nullable();
@@ -148,7 +148,7 @@ class WLSTokenManager {
         }
     }
 
-    /** Portal ticket sync: WHMCS ticket -> API'ye cron ile gonderilir */
+     
     private static function createTicketTasksTableIfNotExists() {
         if (!Capsule::schema()->hasTable('mod_wls_ticket_tasks')) {
             Capsule::schema()->create('mod_wls_ticket_tasks', function ($table) {
@@ -157,7 +157,7 @@ class WLSTokenManager {
                 $table->integer('hosting_id')->unsigned()->index();
                 $table->string('subject', 500)->nullable();
                 $table->text('message')->nullable();
-                $table->string('status', 20)->default('Pending')->index(); // Pending, Completed, Failed
+                $table->string('status', 20)->default('Pending')->index();  
                 $table->string('portal_ticket_id', 100)->nullable();
                 $table->text('error_message')->nullable();
                 $table->timestamp('created_at')->nullable();
@@ -217,7 +217,7 @@ class WLSTokenManager {
         }
     }
 
-    /** Iptal talebi: WHMCS iptal talebi -> portal API'ye cron ile gonderilir */
+     
     private static function createCancelTasksTableIfNotExists() {
         if (!Capsule::schema()->hasTable('mod_wls_cancel_tasks')) {
             Capsule::schema()->create('mod_wls_cancel_tasks', function ($table) {
@@ -331,7 +331,7 @@ class WLSTokenManager {
         }
     }
 
-    /** Upgrade task (ChangePackage) - add / get pending / set status */
+     
     public static function addUpgradeTask($serviceId, $orderId, $type, $data) {
         try {
             self::createTablesIfNotExists();
@@ -382,7 +382,7 @@ class WLSTokenManager {
         }
     }
     
-    // Queue data ekleme
+     
     public static function addQueueData($queueId, $data) {
         try {
             self::createTablesIfNotExists();
@@ -398,7 +398,7 @@ class WLSTokenManager {
         }
     }
     
-    // Queue data alma (lock ile)
+     
     public static function getQueueData($queueId, $lockToken = null) {
         try {
             self::createTablesIfNotExists();
@@ -411,9 +411,9 @@ class WLSTokenManager {
                 return null;
             }
             
-            // Lock token kontrolÃ¼
+             
             if ($lockToken && $record->lock_token && $record->lock_token !== $lockToken) {
-                // BaÅŸka bir process tarafÄ±ndan kilitlenmiÅŸ
+                 
                 return null;
             }
             
@@ -424,14 +424,14 @@ class WLSTokenManager {
         }
     }
     
-    // Queue data iÃ§in lock al
+     
     public static function lockQueueData($queueId) {
         try {
             self::createTablesIfNotExists();
             
             $lockToken = bin2hex(random_bytes(32));
             
-            // Atomik lock: sadece lock_token null ise gÃ¼ncelle
+             
             $updated = Capsule::table('mod_wls_queue_data')
                 ->where('queue_id', $queueId)
                 ->whereNull('lock_token')
@@ -444,7 +444,7 @@ class WLSTokenManager {
                 return $lockToken;
             }
             
-            // Zaten kilitli ama 5 dakikadan eski lock'larÄ± temizle
+             
             $staleTime = date('Y-m-d H:i:s', strtotime('-5 minutes'));
             $updated = Capsule::table('mod_wls_queue_data')
                 ->where('queue_id', $queueId)
@@ -461,7 +461,7 @@ class WLSTokenManager {
         }
     }
     
-    // Queue data sil
+     
     public static function deleteQueueData($queueId) {
         try {
             self::createTablesIfNotExists();
@@ -475,7 +475,7 @@ class WLSTokenManager {
         }
     }
     
-    // Cron lock al (duplicate Ã§alÄ±ÅŸmayÄ± Ã¶nlemek iÃ§in)
+     
     public static function acquireCronLock($lockName = 'wls_queue_process', $duration = 60) {
         try {
             self::createTablesIfNotExists();
@@ -484,12 +484,12 @@ class WLSTokenManager {
             $now = date('Y-m-d H:i:s');
             $expiresAt = date('Y-m-d H:i:s', time() + $duration);
             
-            // Ã–nce sÃ¼resi dolmuÅŸ lock'larÄ± temizle
+             
             Capsule::table('mod_wls_cron_lock')
                 ->where('expires_at', '<', $now)
                 ->delete();
             
-            // Lock almayÄ± dene
+             
             try {
                 Capsule::table('mod_wls_cron_lock')->insert([
                     'lock_name' => $lockName,
@@ -499,7 +499,7 @@ class WLSTokenManager {
                 ]);
                 return $lockToken;
             } catch (Exception $e) {
-                // Lock zaten var
+                 
                 return false;
             }
         } catch (Exception $e) {
@@ -508,7 +508,7 @@ class WLSTokenManager {
         }
     }
     
-    // Cron lock serbest bÄ±rak
+     
     public static function releaseCronLock($lockName = 'wls_queue_process', $lockToken = null) {
         try {
             $query = Capsule::table('mod_wls_cron_lock')
@@ -529,46 +529,46 @@ class WLSTokenManager {
     private static function createVPSTableIfNotExists() {
         if (!Capsule::schema()->hasTable('mod_wls_vps')) {
             Capsule::schema()->create('mod_wls_vps', function ($table) {
-                // WHMCS service ID'yi primary key yap
+                 
                 $table->integer('id')->unsigned()->primary();
                 
-                // WLS API bilgileri
+                 
                 $table->integer('wls_service_id')->nullable()->index();
                 $table->integer('wls_vm_id')->nullable()->index();
                 
-                // Servis durumu
+                 
                 $table->string('status', 50)->nullable()->index();
                 $table->string('vm_status', 50)->nullable()->index();
                 $table->boolean('vm_built')->default(false);
                 $table->boolean('vm_powered')->default(false);
                 $table->string('service_status', 50)->nullable()->index();
                 
-                // IP bilgileri
+                 
                 $table->string('ipv4', 45)->nullable();
-                $table->text('all_ips')->nullable(); // JSON array
+                $table->text('all_ips')->nullable();  
                 
-                // EriÅŸim bilgileri
+                 
                 $table->string('username', 100)->nullable();
                 $table->text('password')->nullable();
                 
-                // Kaynak bilgileri
+                 
                 $table->integer('memory')->nullable();
                 $table->integer('disk')->nullable();
                 $table->integer('cores')->nullable();
                 $table->string('template', 100)->nullable();
                 $table->string('mac_address', 50)->nullable();
                 
-                // VM detay bilgileri (JSON)
+                 
                 $table->text('vm_interfaces')->nullable();
                 $table->text('vm_storage')->nullable();
                 $table->text('vm_resources')->nullable();
                 $table->text('vm_bandwidth')->nullable();
                 
-                // Fatura/SipariÅŸ bilgileri
+                 
                 $table->string('order_number', 50)->nullable()->index();
                 $table->string('invoice_id', 50)->nullable();
                 
-                // Zaman damgalarÄ±
+                 
                 $table->timestamp('vm_created_at')->nullable();
                 $table->timestamp('last_sync')->nullable();
                 $table->timestamp('updated_at')->nullable();
@@ -576,7 +576,7 @@ class WLSTokenManager {
             });
         }
 
-        // Yeni kolonlarÄ± kontrol et ve ekle
+         
         $columns = [
             'vm_interfaces' => 'text',
             'vm_storage' => 'text',
@@ -626,9 +626,9 @@ class WLSTokenManager {
         );
     }
 
-    /**
-     * Cached token invalid (e.g. API returned unauthorized); force next getToken to login or refresh.
-     */
+     
+
+
     public static function clearToken($serverId) {
         self::createTablesIfNotExists();
         try {
@@ -689,12 +689,12 @@ class WLSTokenManager {
         }
     }
 
-    /**
-     * Validate portal client login (WHMCS server username/password) against POST /api/login.
-     * Does not require serverid — used by Test Connection before save.
-     *
-     * @return array{success:bool,error?:string,token?:string}
-     */
+     
+
+
+
+
+
     public static function validateClientLogin(array $params, $apiBaseUrlOverride = null) {
         if (!isset($params['serverusername']) || trim($params['serverusername']) === ''
             || !isset($params['serverpassword']) || $params['serverpassword'] === '') {
@@ -753,10 +753,10 @@ class WLSTokenManager {
         }
     }
 
-    /**
-     * Password login. $apiBaseUrlOverride must be the same origin as API calls (scheme + host [+ port]),
-     * e.g. https://portal.dchost.com — otherwise token is valid for wrong host and requests return unauthorized.
-     */
+     
+
+
+
     public static function loginWithPassword($params, $apiBaseUrlOverride = null) {
         self::createTablesIfNotExists();
         if (empty($params['serverid']) || !isset($params['serverusername']) || trim($params['serverusername']) === ''
@@ -811,17 +811,17 @@ class WLSTokenManager {
     
     public static function getToken($params, $forceRefresh = false) {
         try {
-            // Force refresh istenmiyorsa mevcut token'Ä± kontrol et
+             
             if (!$forceRefresh) {
                 $storedToken = self::getStoredToken($params['serverid']);
                 
                 if ($storedToken && !empty($storedToken->access_token)) {
-                    // Token'Ä±n geÃ§erliliÄŸini kontrol et
+                     
                     if (!self::isTokenExpired($storedToken->access_token)) {
                         return $storedToken->access_token;
                     }
                     
-                    // Token sÃ¼resi dolmuÅŸsa refresh token ile yenile
+                     
                     if (!empty($storedToken->refresh_token)) {
                         $newTokens = self::refreshToken($storedToken->refresh_token);
                         if ($newTokens && isset($newTokens['token']) && isset($newTokens['refresh'])) {
@@ -846,10 +846,10 @@ class WLSTokenManager {
     
     public static function getProducts($params) {
         try {
-            // Ã–nce tablolarÄ±n varlÄ±ÄŸÄ±nÄ± kontrol et ve oluÅŸtur
+             
             self::createTablesIfNotExists();
             
-            // TablolarÄ±n varlÄ±ÄŸÄ±nÄ± tekrar kontrol et
+             
             if (!Capsule::schema()->hasTable('mod_wls_tokens') || !Capsule::schema()->hasTable('mod_wls_vps')) {
                 throw new Exception('ModÃ¼l tablolarÄ± oluÅŸturulamadÄ±. LÃ¼tfen modÃ¼lÃ¼ yeniden yÃ¼kleyin.');
             }
@@ -889,12 +889,12 @@ class WLSTokenManager {
                 throw new Exception("GeÃ§ersiz API yanÄ±tÄ±");
             }
 
-            // Tablo durumunu logla
+             
             self::debugLog("Module Check - Tables exist: mod_wls_tokens and mod_wls_vps");
 
             $options = [];
             foreach ($data['products'] as $product) {
-                // ÃœrÃ¼n adÄ± ve ID'sini doÄŸru formatta birleÅŸtir
+                 
                 $description = strip_tags(str_replace('<br>', ' | ', $product['description']));
                 $options[] = $product['name'] . " (" . $product['id'] . ") - " . $description;
             }
@@ -902,7 +902,7 @@ class WLSTokenManager {
             return implode(',', $options);
             
         } catch (Exception $e) {
-            // Hata durumunda daha detaylÄ± log
+             
             $errorMsg = $e->getMessage();
             $tableStatus = [];
             
@@ -997,13 +997,13 @@ class WLSTokenManager {
     
     public static function getVMDetails($whmcsServiceId, $vmId, $token) {
         try {
-            // VPS detaylarÄ±nÄ± al
+             
             $vpsDetails = self::getVPSDetails($whmcsServiceId);
             
-            // Debug log ekle
+             
             self::debugLog("Debug - VPS Details for service " . $whmcsServiceId . ": " . json_encode($vpsDetails));
             
-            // wls_service_id kontrolÃ¼
+             
             $serviceId = $vpsDetails ? $vpsDetails->wls_service_id : null;
             if (!$serviceId) {
                 if ($vpsDetails) {
@@ -1047,13 +1047,13 @@ class WLSTokenManager {
 
                 $vmData = $result['vm'];
                 
-                // Ã–nceki bandwidth deÄŸerlerini kontrol et
+                 
                 $previousBandwidth = null;
                 if ($vpsDetails && $vpsDetails->vm_bandwidth) {
                     $previousBandwidth = json_decode($vpsDetails->vm_bandwidth, true);
                 }
 
-                // Bandwidth deÄŸiÅŸimini hesapla ve logla
+                 
                 if ($previousBandwidth && isset($vmData['bandwidth'])) {
                     $receivedDiff = $vmData['bandwidth']['data_received'] - $previousBandwidth['data_received'];
                     $sentDiff = $vmData['bandwidth']['data_sent'] - $previousBandwidth['data_sent'];
@@ -1065,7 +1065,7 @@ class WLSTokenManager {
                     }
                 }
 
-                // Temel VM bilgilerini gÃ¼ncelle
+                 
                 $updateData = [
                     'wls_service_id' => $serviceId,
                     'wls_vm_id' => $vmId,
@@ -1083,22 +1083,22 @@ class WLSTokenManager {
                     'last_sync' => date('Y-m-d H:i:s')
                 ];
 
-                // Network arayÃ¼zlerini iÅŸle
+                 
                 if (isset($vmData['interfaces'])) {
                     $updateData['vm_interfaces'] = json_encode($vmData['interfaces']);
                 }
 
-                // Depolama bilgilerini iÅŸle
+                 
                 if (isset($vmData['storage'])) {
                     $updateData['vm_storage'] = json_encode($vmData['storage']);
                 }
 
-                // Bandwidth bilgilerini iÅŸle
+                 
                 if (isset($vmData['bandwidth'])) {
                     $updateData['vm_bandwidth'] = json_encode($vmData['bandwidth']);
                 }
 
-                // Kaynak kullanÄ±m bilgilerini iÅŸle
+                 
                 $resources = [
                     'memory' => $vmData['memory'] ?? null,
                     'disk' => $vmData['disk'] ?? null,
@@ -1110,7 +1110,7 @@ class WLSTokenManager {
                 ];
                 $updateData['vm_resources'] = json_encode($resources);
 
-                // IP listesini iÅŸle
+                 
                 if (isset($vmData['ip']) && is_array($vmData['ip'])) {
                     $allIps = array_map(function($ipId, $ipInfo) {
                         return [
@@ -1123,12 +1123,12 @@ class WLSTokenManager {
                     $updateData['all_ips'] = json_encode($allIps);
                 }
 
-                // VM oluÅŸturma tarihini ayarla
+                 
                 if (!$vpsDetails->vm_created_at) {
                     $updateData['vm_created_at'] = date('Y-m-d H:i:s');
                 }
 
-                // VeritabanÄ±nÄ± gÃ¼ncelle
+                 
                 self::updateVPSDetails($whmcsServiceId, $updateData);
 
                 return $result;
@@ -1164,44 +1164,44 @@ class WLSTokenManager {
         try {
             self::createTablesIfNotExists();
             
-            // WHMCS ID kontrolÃ¼
+             
             if (!is_numeric($whmcsServiceId) || $whmcsServiceId <= 0) {
                 throw new Exception("GeÃ§ersiz WHMCS ID: " . $whmcsServiceId);
             }
 
-            // Debug log
+             
             self::debugLog("Debug - Updating VPS details for service ID: " . $whmcsServiceId);
 
-            // Mevcut kaydÄ± kontrol et
+             
             $existingRecord = Capsule::table('mod_wls_vps')
                 ->where('id', $whmcsServiceId)
                 ->first();
 
-            // GÃ¼ncelleme verilerini hazÄ±rla
+             
             $updateData = [
                 'updated_at' => date('Y-m-d H:i:s')
             ];
 
-            // VM API yanÄ±tÄ±ndan gelen verileri iÅŸle
+             
             if (isset($data['vm'])) {
                 $vm = $data['vm'];
                 
-                // Network arayÃ¼zlerini iÅŸle
+                 
                 if (isset($vm['interfaces'])) {
                     $updateData['vm_interfaces'] = json_encode($vm['interfaces']);
                 }
                 
-                // Depolama bilgilerini iÅŸle
+                 
                 if (isset($vm['storage'])) {
                     $updateData['vm_storage'] = json_encode($vm['storage']);
                 }
                 
-                // Bandwidth bilgilerini iÅŸle
+                 
                 if (isset($vm['bandwidth'])) {
                     $updateData['vm_bandwidth'] = json_encode($vm['bandwidth']);
                 }
                 
-                // Kaynak kullanÄ±m bilgilerini iÅŸle
+                 
                 $resources = [
                     'memory' => $vm['memory'] ?? null,
                     'disk' => $vm['disk'] ?? null,
@@ -1212,7 +1212,7 @@ class WLSTokenManager {
                 ];
                 $updateData['vm_resources'] = json_encode($resources);
                 
-                // Temel VM bilgilerini gÃ¼ncelle
+                 
                 $updateData = array_merge($updateData, [
                     'vm_status' => $vm['status'] ?? null,
                     'vm_built' => $vm['built'] ?? false,
@@ -1228,7 +1228,7 @@ class WLSTokenManager {
                     'last_sync' => date('Y-m-d H:i:s')
                 ]);
                 
-                // IP listesini iÅŸle
+                 
                 if (isset($vm['ip']) && is_array($vm['ip'])) {
                     $allIps = [];
                     foreach ($vm['ip'] as $ipId => $ipInfo) {
@@ -1241,7 +1241,7 @@ class WLSTokenManager {
                     $updateData['all_ips'] = json_encode($allIps);
                 }
             } else {
-                // VM verisi yoksa normal gÃ¼ncelleme verilerini iÅŸle
+                 
                 foreach ($data as $field => $value) {
                     switch ($field) {
                         case 'interfaces':
@@ -1272,33 +1272,33 @@ class WLSTokenManager {
                 }
             }
 
-            // Status kontrolÃ¼
+             
             if (!isset($updateData['status']) && $existingRecord) {
                 $updateData['status'] = $existingRecord->status;
             }
 
-            // WLS Service ID kontrolÃ¼
+             
             if (!isset($updateData['wls_service_id']) && $existingRecord && $existingRecord->wls_service_id) {
                 $updateData['wls_service_id'] = $existingRecord->wls_service_id;
             }
 
-            // Debug log
+             
             self::debugLog("Debug - Final update data: " . json_encode($updateData));
 
-            // Kaydet veya gÃ¼ncelle
+             
             $result = Capsule::table('mod_wls_vps')->updateOrInsert(
                 ['id' => $whmcsServiceId],
                 array_merge($updateData, ['created_at' => Capsule::raw('IFNULL(created_at, NOW())')])
             );
             
-            // Also update tblhosting.domain with label/hostname
+             
             if (isset($data['vm']['label'])) {
                 Capsule::table('tblhosting')
                     ->where('id', $whmcsServiceId)
                     ->update(['domain' => $data['vm']['label']]);
             }
 
-            // Debug log
+             
             self::debugLog("Debug - Database update result: " . ($result ? "Success" : "Failed"));
 
             return $result;

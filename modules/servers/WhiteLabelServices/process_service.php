@@ -14,13 +14,13 @@ try {
     
     $serviceId = intval($_POST['service_id']);
     
-    // Service'i kontrol et
+     
     $service = Capsule::table('tblhosting')->where('id', $serviceId)->first();
     if (!$service) {
         throw new Exception('Service not found');
     }
     
-    // WLS ürünü mü kontrol et
+     
     $product = Capsule::table('tblproducts')->where('id', $service->packageid)->first();
     if (!$product || $product->servertype !== 'WhiteLabelServices') {
         throw new Exception('This is not a WLS service');
@@ -32,7 +32,7 @@ try {
         'billingcycle' => $service->billingcycle,
     ));
     
-    // Custom fields'ları al
+     
     $customFields = [];
     $customFieldValues = Capsule::table('tblcustomfieldsvalues')
         ->join('tblcustomfields', 'tblcustomfieldsvalues.fieldid', '=', 'tblcustomfields.id')
@@ -46,7 +46,7 @@ try {
     }
     $params['customfields'] = $customFields;
     
-    // Configurable options'ları al
+     
     $configOptions = [];
     $configValues = Capsule::table('tblhostingconfigoptions')
         ->join('tblproductconfigoptions', 'tblhostingconfigoptions.configid', '=', 'tblproductconfigoptions.id')
@@ -60,7 +60,7 @@ try {
     }
     $params['configoptions'] = $configOptions;
     
-    // CreateAccount'u çağır
+     
     $result = WhiteLabelServices_CreateAccount($params);
     
     if ($result === 'success') {

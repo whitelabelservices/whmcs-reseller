@@ -1,8 +1,8 @@
 <?php
-/**
- * WHMCS kök dizini: yalnızca init.php yolunu üretmek için.
- * Bu yol dosya sistemidir; asla HTTP Location ile tarayıcıya gönderilmez (path sızıntısını önler).
- */
+ 
+
+
+
 
 function wls_find_whmcs_root_dir($startDir) {
     $d = @realpath($startDir);
@@ -22,11 +22,11 @@ function wls_find_whmcs_root_dir($startDir) {
     return null;
 }
 
-/**
- * Misafir için güvenli mutlak URL (SystemURL). init.php yüklendikten sonra çağrılmalıdır.
- *
- * @param string $target client_home = müşteri alanı kökü; admin_login = yönetici girişi
- */
+ 
+
+
+
+
 function wls_guest_redirect_url($target = 'client_home') {
     $path = ($target === 'admin_login') ? '/admin/index.php' : '/';
     try {
@@ -44,9 +44,9 @@ function wls_guest_redirect_url($target = 'client_home') {
     return $path;
 }
 
-/**
- * Admin oturumu yoksa yönlendir ve çık (HTML sayfalar için).
- */
+ 
+
+
 function wls_redirect_if_not_admin_session($target = 'client_home') {
     if (!empty($_SESSION['adminid'])) {
         return;

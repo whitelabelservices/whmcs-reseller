@@ -1,8 +1,8 @@
 <?php
-/**
- * WhiteLabelServices Admin Settings
- * Using shared sidebar layout
- */
+ 
+
+
+
 
 require_once __DIR__ . '/includes/wls_bootstrap.php';
 
@@ -26,7 +26,7 @@ if (isset($_GET['lang'])) {
     setcookie('wls_lang', $lang, time() + 86400 * 365, '/');
 }
 
-// Ayarları kaydet
+ 
 $message = '';
 $messageType = '';
 
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
-// Mevcut ayarları al
+ 
 $currentPromoCode = '';
 $currentMargin = 20;
 $currentDebugMode = 0;

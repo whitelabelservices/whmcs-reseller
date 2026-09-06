@@ -1,4 +1,4 @@
-/* WLS Admin Dashboard CSS */
+ 
 .wls-dashboard-container {
     padding: 20px;
     background: #f8f9fa;
@@ -99,7 +99,7 @@
     color: #0c5460;
 }
 
-/* Ticket System */
+ 
 .ticket-list-item {
     padding: 15px;
     border-bottom: 1px solid #eee;
@@ -224,7 +224,7 @@
     margin-bottom: 20px;
 }
 
-/* ==================== RESPONSIVE ==================== */
+ 
 @media (max-width: 992px) {
     .wls-dashboard-container { padding: 15px; }
     .wls-card { padding: 15px; }

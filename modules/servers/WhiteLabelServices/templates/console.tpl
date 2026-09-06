@@ -86,7 +86,7 @@
         }
 
         function buildWsUrl() {
-            // Same-origin relay: PHP attaches PVEAuthCookie server-side (browser cannot on cross-domain).
+             
             const url = new URL('ajax/console_ws.php', window.location.href);
             url.searchParams.set('serviceid', String(cfg.serviceId));
             url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';

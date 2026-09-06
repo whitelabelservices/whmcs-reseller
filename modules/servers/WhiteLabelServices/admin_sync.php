@@ -1,17 +1,17 @@
 ﻿<?php
 
-// WHMCS'yi yükle
+ 
 require_once '../../../init.php';
 
 use WHMCS\Database\Capsule;
 
-// Admin authentication kontrolü
+ 
 if (!isset($_SESSION['adminid'])) {
     header('Location: /admin/login.php');
     exit;
 }
 
-// Service ID kontrolü
+ 
 $serviceId = $_GET['service_id'] ?? null;
 if (!$serviceId) {
     die('Service ID is required. Usage: admin_sync.php?service_id=12');
@@ -36,16 +36,16 @@ echo "<h1>WhiteLabelServices Synchronization</h1>";
 echo "<p><strong>Service ID:</strong> " . htmlspecialchars($serviceId) . "</p>";
 
 try {
-    // WLS modülünü yükle
+     
     require_once 'WhiteLabelServices.php';
     
-    // Service bilgilerini al
+     
     $service = Capsule::table('tblhosting')->where('id', $serviceId)->first();
     if (!$service) {
         throw new Exception('Service not found');
     }
     
-    // WhiteLabelServices service mi kontrol et
+     
     $product = Capsule::table('tblproducts')->where('id', $service->packageid)->first();
     if (!$product || $product->servertype !== 'WhiteLabelServices') {
         throw new Exception('This is not a WhiteLabelServices service');
@@ -58,13 +58,13 @@ try {
     echo "Product: " . htmlspecialchars($product->name) . "<br>";
     echo "</div>";
     
-    // Action kontrolü
+     
     $action = $_GET['action'] ?? null;
     
     if ($action === 'sync') {
         echo "<h2>Synchronizing Service...</h2>";
         
-        // Params array'ini oluştur
+         
         $params = [
             'serviceid' => $serviceId,
             'domain' => $service->domain,
@@ -73,7 +73,7 @@ try {
             'notes' => $service->notes
         ];
         
-        // Senkronize Et
+         
         $result = WhiteLabelServices_synchronizeService($params);
         
         if ($result === 'success') {
@@ -82,7 +82,7 @@ try {
             echo "Service has been synchronized with WLS API.";
             echo "</div>";
             
-            // Güncellenmiş bilgileri göster
+             
             $updatedService = Capsule::table('tblhosting')->where('id', $serviceId)->first();
             $notes = json_decode($updatedService->notes, true);
             
@@ -106,7 +106,7 @@ try {
     } elseif ($action === 'check') {
         echo "<h2>Checking VM Status...</h2>";
         
-        // Params array'ini oluştur
+         
         $params = [
             'serviceid' => $serviceId,
             'domain' => $service->domain,
@@ -115,7 +115,7 @@ try {
             'notes' => $service->notes
         ];
         
-        // VM Status Check
+         
         $result = WhiteLabelServices_checkVMStatusButton($params);
         
         if ($result === 'success') {
@@ -131,7 +131,7 @@ try {
         }
     }
     
-    // Action butonları
+     
     echo "<h2>Actions</h2>";
     echo "<a href='?service_id=" . $serviceId . "&action=sync' class='button'>🔄 Synchronize Service</a>";
     echo "<a href='?service_id=" . $serviceId . "&action=check' class='button'>🔍 Check VM Status</a>";
