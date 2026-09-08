@@ -1,4 +1,4 @@
-{debug}
+
 
 <div class="vps-client-area">
     <style>
